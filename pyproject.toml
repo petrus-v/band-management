@@ -1,0 +1,37 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "band-management"
+version = "0.1.0"
+description = "Band management web server"
+readme = "README.md"
+requires-python = ">=3.13"
+license = "Apache-2.0"
+authors = [
+  { name = "Pierre Verkest", email = "pierre@verkest.fr" },
+]
+dynamic = ["__version__"]
+
+dependencies = [
+    "anyblok",
+    "psycopg",
+    "uuid7",
+]
+
+[project.scripts]
+
+[project.entry-points.bloks]
+band_management="band_management.bloks.band_management:BandManagement"
+
+
+[dependency-groups]
+dev = [
+  "pytest",
+  "pytest-cov",
+]
+
+
+[tool.hatch.version]
+path = "src/band_management/__init__.py"
