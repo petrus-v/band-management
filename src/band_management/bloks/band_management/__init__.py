@@ -13,7 +13,7 @@ def import_declarations(reload=None):
     from . import member
     from . import music
     from . import score
-    
+
     if reload is not None:
         reload(mixins)
         reload(band_management)
@@ -31,7 +31,6 @@ class BandManagement(Blok):
     required = [
         "anyblok-core",
     ]
-
 
     @classmethod
     def import_declaration_module(cls):

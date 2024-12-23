@@ -1,7 +1,7 @@
 from anyblok import Declarations
 
-from anyblok.relationship import Many2Many, Many2One
-from anyblok.column import Integer, Selection, Text, Decimal, DateTime, String, Json
+from anyblok.relationship import Many2Many
+from anyblok.column import String
 
 register = Declarations.register
 Mixin = Declarations.Mixin
@@ -10,11 +10,10 @@ Model = Declarations.Model
 
 @register(Model.BandManagement)
 class Music(Mixin.PrimaryColumn):
-
     title: str = String(label="Title", nullable=False)
-    dance: str = String(label="Dance name")
     composer: str = String(label="Music composer(s)")
     author: str = String(label="Lyrics author(s)")
+    dance: str = String(label="Dance name")
 
     bands: list["Declarations.Model.BandManagement.Band"] = Many2Many(
         model=Declarations.Model.BandManagement.Band,
