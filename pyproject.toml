@@ -27,11 +27,13 @@ band_management="band_management.bloks.band_management:BandManagement"
 
 
 [dependency-groups]
-dev = [
+test = [
   "pytest",
   "pytest-cov",
 ]
 
-
 [tool.hatch.version]
 path = "src/band_management/__init__.py"
+
+[tool.uv]
+default-groups = ["test"]
