@@ -12,7 +12,3 @@ Model = Declarations.Model
 class Instrument(Mixin.PrimaryColumn):
 
     name: str = String(label="Name", nullable=False)
-    tone: "Model.BandManagement.Tone" = Many2One(
-        model="Model.BandManagement.Tone",
-        label="Instrument Tone, ie: a Trumpet is commonly in B♭ tone.",
-    )
