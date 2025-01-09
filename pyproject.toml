@@ -16,6 +16,9 @@ dynamic = ["__version__"]
 
 dependencies = [
     "anyblok",
+    "anyblok-fastapi",
+    "python-multipart",
+    "jinja2",
     "psycopg",
     "uuid7",
 ]
@@ -23,13 +26,16 @@ dependencies = [
 [project.scripts]
 
 [project.entry-points.bloks]
-band_management="band_management.bloks.band_management:BandManagement"
+band-management-base="band_management.bloks.bm_base:BandManagementBase"
+band-management-responsive-webapp="band_management.bloks.bm_responsive_webapp:BandManagementResponsiveWebApp"
+band-management="band_management.bloks.band_management:BandManagement"
 
 
 [dependency-groups]
 test = [
   "pytest",
   "pytest-cov",
+  "httpx>=0.28.1",
 ]
 
 [tool.hatch.version]
@@ -37,3 +43,6 @@ path = "src/band_management/__init__.py"
 
 [tool.uv]
 default-groups = ["test"]
+
+[tool.uv.sources]
+anyblok-fastapi = { git = "git+https://github.com/AnyBlok/AnyBlok_fastapi", branch="master" }

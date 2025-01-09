@@ -5,31 +5,27 @@ VERSION = __version__
 
 
 def import_declarations(reload=None):
-    from . import mixins
-    from . import band_management
-    from . import instrument
-    from . import band
-    from . import musician
-    from . import member
-    from . import music
-    from . import score
+    # from . import mixins
 
     if reload is not None:
-        reload(mixins)
-        reload(band_management)
-        reload(instrument)
-        reload(band)
-        reload(musician)
-        reload(member)
-        reload(score)
-        reload(music)
+        # reload(mixins)
+        pass
 
 
 class BandManagement(Blok):
+    """Main blok that install the entire app
+    when you install this one
+
+    This will mainly contains integration blok tests
+    and may contains some data to setup and migration
+    tests.
+    """
+
     version = VERSION
     author = "Pierre Verkest"
     required = [
-        "anyblok-core",
+        "band-management-base",
+        "band-management-responsive-webapp",
     ]
 
     @classmethod

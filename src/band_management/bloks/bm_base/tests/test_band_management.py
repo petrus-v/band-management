@@ -1,3 +1,9 @@
+import pytest
+
+
+from sqlalchemy.exc import IntegrityError
+
+
 def test_band_management(bm):
     violin = bm.Instrument.insert(name="Violon")
     accordion = bm.Instrument.insert(name="Accordéon Sol/Do")
@@ -8,7 +14,7 @@ def test_band_management(bm):
     angele = bm.Musician.insert(name="Angele")
     mh = bm.Musician.insert(name="Marie-Hélène")
 
-    pamh_band = bm.Band.insert(name="PAMH")
+    pamh_band = bm.Band.query().filter(bm.Band.name.ilike("PAMH")).one()
 
     pierre_in_pahm = bm.Member.insert(musician=pierre, band=pamh_band)
     pierre_in_pahm.instruments.append(accordion)
@@ -33,3 +39,10 @@ def test_band_management(bm):
         music=music_zelda,
     )
     pamh_band.musics.append(music_zelda)
+
+
+def test_create_duplicate_band_name_raise(anyblok, bm):
+    pamh_band = bm.Band.query().filter(bm.Band.name.ilike("PAMH")).one()
+    with pytest.raises(IntegrityError, match="anyblok_uq_b_band__name"):
+        bm.Band.insert(name=pamh_band.name)
+        # anyblok.flush()

@@ -1,0 +1,333 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>BandZum</title>
+    <link rel="icon" type="image/png" href="./static/assets/favicon.png" />
+    <link
+      rel="stylesheet"
+      href="https://use.fontawesome.com/releases/v5.15.4/css/all.css"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css" />
+    <link rel="stylesheet" href="./static/css/style.css" />
+    <link rel="stylesheet" href="./static/css/navbar.css" />
+    <script src="https://unpkg.com/htmx.org"></script>
+  </head>
+
+  <body data-theme="dark">
+    <header>
+      <nav class="navbar is-primary is-fixed-top">
+        <div class="navbar-brand">
+          <a
+            class="navbar-burger ml-0"
+            aria-label="menu"
+            id="aside-burger"
+            role="button"
+            data-target="navAsideMenu"
+          >
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+          </a>
+          <a class="navbar-item is-hidden-touch" href="cover.html">BandZum</a>
+          <a
+            class="navbar-burger"
+            aria-label="menu"
+            id="top-burger"
+            role="button"
+            data-target="navMenu"
+          >
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+          </a>
+          <div>
+            <div id="navMenu" class="navbar-menu">
+              <div class="navbar-start">
+                <div class="navbar-item is-pulled-right">
+                  <div class="control">
+                    <input class="input" placeholder="Search" />
+                  </div>
+                </div>
+              </div>
+              <div class="navbar-end">
+                <div class="navbar-item is-pulled-right">
+                  <div class="field has-addons">
+                    <p class="control">
+                      <a class="button is-small is-light" id="btn-dark-mode">
+                        <span class="icon">
+                          <i class="fa fa-moon"></i>
+                        </span>
+                      </a>
+                    </p>
+                    <p class="control">
+                      <a class="button is-small is-outlined" id="btn-light-mode">
+                        <span class="icon">
+                          <i class="fa fa-sun"></i>
+                        </span>
+                      </a>
+                    </p>
+                  </div>
+                </div>
+                <div class="navbar-item is-pulled-right">
+                  <div class="field is-grouped">
+                    <div class="field is-grouped">
+                      <p class="control">
+                        <a class="button is-small is-outlined is-light">
+                          <span class="icon">
+                            <i class="fa fa-user-plus"></i>
+                          </span>
+                          <span> Register </span>
+                        </a>
+                      </p>
+                      <p class="control">
+                        <a class="button is-small is-primary is-light">
+                          <span class="icon">
+                            <i class="fa fa-user"></i>
+                          </span>
+                          <span>Login</span>
+                        </a>
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+    <div class="container" id="main-container">
+      <div class="columns">
+        <aside id="sideBarMenuLeft" class="menu column is-3">
+          <p class="menu-label">General</p>
+          <ul class="menu-list">
+            <li><a>Dashboard</a></li>
+            <li><a>Customers</a></li>
+          </ul>
+          <p class="menu-label">Administration</p>
+          <ul class="menu-list">
+            <li><a>Team Settings</a></li>
+            <li>
+              <a class="is-active">Manage Your Team</a>
+              <ul>
+                <li><a>Members</a></li>
+                <li><a>Plugins</a></li>
+                <li><a>Add a member</a></li>
+              </ul>
+            </li>
+            <li><a>Invitations</a></li>
+            <li><a>Cloud Storage Environment Settings</a></li>
+            <li><a>Authentication</a></li>
+          </ul>
+          <p class="menu-label">Transactions</p>
+          <ul class="menu-list">
+            <li><a>Payments</a></li>
+            <li><a>Transfers</a></li>
+            <li><a>Balance</a></li>
+          </ul>
+        </aside>
+        <main class="column">
+          <div class="card">
+            <div class="card-content">
+              <p class="title">AAA AAA</p>
+              <p class="subtitle">...</p>
+            </div>
+            <footer class="card-footer">
+              <a class="card-footer-item" href="band/abcds">
+                <span> Edit </span>
+              </a>
+              <p class="card-footer-item">
+                <span> Test </span>
+              </p>
+            </footer>
+          </div>
+          <div class="card">
+            <div class="card-content">
+              <p class="title">ABD</p>
+              <p class="subtitle">...</p>
+            </div>
+            <footer class="card-footer">
+              <a class="card-footer-item" href="band/abcds">
+                <span> Edit </span>
+              </a>
+              <p class="card-footer-item">
+                <span> Test </span>
+              </p>
+            </footer>
+          </div>
+          <div class="card">
+            <div class="card-content">
+              <p class="title">ABD</p>
+              <p class="subtitle">...</p>
+            </div>
+            <footer class="card-footer">
+              <a class="card-footer-item" href="band/abcds">
+                <span> Edit </span>
+              </a>
+              <p class="card-footer-item">
+                <span> Test </span>
+              </p>
+            </footer>
+          </div>
+          <div class="card">
+            <div class="card-content">
+              <p class="title">ABD</p>
+              <p class="subtitle">...</p>
+            </div>
+            <footer class="card-footer">
+              <a class="card-footer-item" href="band/abcds">
+                <span> Edit </span>
+              </a>
+              <p class="card-footer-item">
+                <span> Test </span>
+              </p>
+            </footer>
+          </div>
+          <div class="card">
+            <div class="card-content">
+              <p class="title">ABD</p>
+              <p class="subtitle">...</p>
+            </div>
+            <footer class="card-footer">
+              <a class="card-footer-item" href="band/abcds">
+                <span> Edit </span>
+              </a>
+              <p class="card-footer-item">
+                <span> Test </span>
+              </p>
+            </footer>
+          </div>
+          <div class="card">
+            <div class="card-content">
+              <p class="title">ABD</p>
+              <p class="subtitle">...</p>
+            </div>
+            <footer class="card-footer">
+              <a class="card-footer-item" href="band/abcds">
+                <span> Edit </span>
+              </a>
+              <p class="card-footer-item">
+                <span> Test </span>
+              </p>
+            </footer>
+          </div>
+          <div class="card">
+            <div class="card-content">
+              <p class="title">ABD</p>
+              <p class="subtitle">...</p>
+            </div>
+            <footer class="card-footer">
+              <a class="card-footer-item" href="band/abcds">
+                <span> Edit </span>
+              </a>
+              <p class="card-footer-item">
+                <span> Test </span>
+              </p>
+            </footer>
+          </div>
+          <div class="card">
+            <div class="card-content">
+              <p class="title">ABD</p>
+              <p class="subtitle">...</p>
+            </div>
+            <footer class="card-footer">
+              <a class="card-footer-item" href="band/abcds">
+                <span> Edit </span>
+              </a>
+              <p class="card-footer-item">
+                <span> Test </span>
+              </p>
+            </footer>
+          </div>
+          <div class="card">
+            <div class="card-content">
+              <p class="title">ABD</p>
+              <p class="subtitle">...</p>
+            </div>
+            <footer class="card-footer">
+              <a class="card-footer-item" href="band/abcds">
+                <span> Edit </span>
+              </a>
+              <p class="card-footer-item">
+                <span> Test </span>
+              </p>
+            </footer>
+          </div>
+          <div class="card">
+            <div class="card-content">
+              <p class="title">ABD</p>
+              <p class="subtitle">...</p>
+            </div>
+            <footer class="card-footer">
+              <a class="card-footer-item" href="band/abcds">
+                <span> Edit </span>
+              </a>
+              <p class="card-footer-item">
+                <span> Test </span>
+              </p>
+            </footer>
+          </div>
+          <div class="card">
+            <div class="card-content">
+              <p class="title">ABD</p>
+              <p class="subtitle">...</p>
+            </div>
+            <footer class="card-footer">
+              <a class="card-footer-item" href="band/abcds">
+                <span> Edit </span>
+              </a>
+              <p class="card-footer-item">
+                <span> Test </span>
+              </p>
+            </footer>
+          </div>
+          <div class="card">
+            <div class="card-content">
+              <p class="title">ZZZ</p>
+              <p class="subtitle">...</p>
+            </div>
+            <footer class="card-footer">
+              <a class="card-footer-item" href="band/abcds">
+                <span> Edit </span>
+              </a>
+              <p class="card-footer-item">
+                <span> Test </span>
+              </p>
+            </footer>
+          </div>
+        </main>
+      </div>
+    </div>
+
+    <div class="overlay"></div>
+
+    <footer class="footer">
+      <nav class="navbar is-fixed-bottom is-primary" role="navigation" aria-label="main navigation">
+        <div class="navbar-start">
+          <div class="navbar-item">
+            <button class="button is-outlined">
+              <span class="icon">
+                <i class="fa fa-undo"></i>
+              </span>
+              <span>Cancel</span>
+            </button>
+            <button class="button is-light is-pulled-right">
+              <span class="icon">
+                <i class="fa fa-save"></i>
+              </span>
+              <span>Save</span>
+            </button>
+            <!-- </div> -->
+          </div>
+        </div>
+      </nav>
+    </footer>
+    <script async type="text/javascript" src="./static/js/navbar.js"></script>
+    <script async type="text/javascript" src="./static/js/theme.js"></script>
+  </body>
+</html>

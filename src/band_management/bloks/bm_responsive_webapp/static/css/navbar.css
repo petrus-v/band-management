@@ -1,0 +1,86 @@
+footer.footer {
+  padding: 0rem !important;
+}
+
+@media (min-width: 1024px) {
+  aside#sideBarMenuLeft {
+    transform: translateX(0);
+  }
+}
+
+@media (max-width: 1024px) {
+  aside#sideBarMenuLeft {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 250px;
+    height: 100%;
+    overflow-y: auto;
+    transform: translateX(-250px);
+    transition: transform 0.3s ease;
+    z-index: 2000;
+  }
+
+  #sideBarMenuLeft.active {
+    transform: translateX(0);
+  }
+
+  .overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: none;
+    z-index: 1500;
+  }
+
+  .overlay.active {
+    display: block;
+  }
+}
+
+/* Left menu style */
+:root {
+  --custom-menu-background-color-dark: hsl(0, 0%, 14%);
+  --custom-menu-background-color-hover-dark: hsl(0, 0%, 29%);
+  --custom-menu-background-color-active-dark: hsl(217, 71%, 53%);
+  --custom-menu-background-color-light: hsl(0, 0%, 96%);
+  --custom-menu-background-color-hover-light: hsl(0, 0%, 71%);
+  --custom-menu-background-color-active-light: hsl(217, 71%, 53%);
+}
+
+[data-theme="light"],
+.theme-light {
+  --custom-menu-theme-background-color: var(--custom-menu-background-color-light);
+  --custom-menu-theme-background-color-hover: var(--custom-menu-background-color-hover-light);
+  --custom-menu-theme-background-color-active: var(--custom-menu-background-color-active-light);
+}
+
+[data-theme="dark"],
+.theme-dark {
+  --custom-menu-theme-background-color: var(--custom-menu-background-color-dark);
+  --custom-menu-theme-background-color-hover: var(--custom-menu-background-color-hover-dark);
+  --custom-menu-theme-background-color-active: var(--custom-menu-background-color-active-dark);
+}
+
+aside {
+  background-color: var(--custom-menu-theme-background-color);
+}
+
+.menu-label {
+  /* color: black; */
+}
+
+.menu-list {
+  --bulma-menu-item-radius: 0px;
+}
+
+.menu-list a:hover {
+  background-color: var(--custom-menu-theme-background-color-hover);
+}
+
+.menu-list a.is-active {
+  background-color: var(--custom-menu-theme-background-color-active);
+}
