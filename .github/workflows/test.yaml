@@ -45,7 +45,7 @@ jobs:
         run: uv sync --all-extras --dev
 
       - name: Init database
-        run: uv run anyblok_createdb -c app.ci.cfg
+        run: uv run anyblok_createdb --with-demo -c app.ci.cfg
 
       - name: Run tests
         # For example, using `pytest`

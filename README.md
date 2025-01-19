@@ -6,8 +6,9 @@ An application helping managing **band** focused around
 **band's music scores**.
 
 
-## Setup dev env
+## Setup development environment
 
+> **note**: I'm using linux machine with `build-essential` and postgresql client installed.
 
 * clone the project
 
@@ -33,6 +34,10 @@ uv run anyblok_createdb -c app.test.cfg
 ```
 
 * launch test
+
+```bash
+ANYBLOK_CONFIG_FILE=app.test.cfg uv run pytest -v -s src/
+```
 
 * launch linters
 

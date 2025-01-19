@@ -1,0 +1,47 @@
+/* @media (prefers-color-scheme: light) {
+    :root {
+        --custom-background-color: var(--has-background-light);
+    }
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --custom-background-color: var(--has-background-dark);
+    }
+} */
+
+:root {
+  --custom-background-color-dark: hsl(0, 0%, 14%);
+  --custom-background-color-light: hsl(0, 0%, 96%);
+}
+
+[data-theme="light"],
+.theme-light {
+  --custom-theme-background-color: var(--custom-background-color-light);
+}
+
+[data-theme="dark"],
+.theme-dark {
+  /* --custom-background-color: hsl(0, 0%, 14%); */
+  --custom-theme-background-color: var(--custom-background-color-dark);
+}
+
+html {
+  background-color: var(--custom-theme-background-color) !important;
+}
+
+body {
+  background-color: var(--custom-theme-background-color);
+}
+
+body > header {
+  background-color: var(--custom-theme-background-color);
+}
+
+#main-container {
+  background-color: var(--custom-theme-background-color);
+}
+
+body > footer {
+  background-color: var(--custom-theme-background-color);
+}

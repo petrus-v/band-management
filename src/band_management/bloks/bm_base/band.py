@@ -9,4 +9,4 @@ Model = Declarations.Model
 
 @register(Model.BandManagement)
 class Band(Mixin.PrimaryColumn):
-    name: str = String(label="Title", nullable=False)
+    name: str = String(label="Title", nullable=False, unique=True)

@@ -1,0 +1,12 @@
+{% macro render_menu(title, menus=[]) -%}
+<p class="menu-label">{{ title }}</p>
+<ul class="menu-list">
+  {%- for menu in menus %}
+  <li>
+    <a href="{{ menu.path }}" class="{{ 'is-active' if request.path.lower() == menu.path else ''}}"
+      >{{ menu.name }}</a
+    >
+  </li>
+  {%- endfor %}
+</ul>
+{%- endmacro %}

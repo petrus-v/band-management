@@ -1,0 +1,24 @@
+{% extends "layouts/base.html" %} {% block top_menu_end %}
+<div class="navbar-item is-pulled-right">
+  <div class="field is-grouped">
+    <p class="control">
+      <a href="/profile" class="button is-small is-light">
+        <span class="icon">
+          <i class="fa fa-user-cog"></i>
+        </span>
+        <span> Profile </span>
+      </a>
+    </p>
+    <p class="control">
+      <a href="/" class="button is-small is-outlined is-light">
+        <span class="icon">
+          <i class="fa fa-sign-out-alt"></i>
+        </span>
+        <span>Logout</span>
+      </a>
+    </p>
+  </div>
+</div>
+{% endblock top_menu_end %} {% block side_menu %} {{ render_menu( 'General', [ {'name': 'Home',
+'path': '/home'}, {'name': 'Bands', 'path':'/bands'}, {'name': 'Musics', 'path':'/musics'}, ]) }} {%
+endblock side_menu %}

@@ -1,0 +1,33 @@
+{% extends "layouts/connected.html" %} {% block main %}
+<div>
+  <form id="band-form" hx-put="/band/{{ band.uuid }}" hx-target="body">
+    {% include "bands/band-form.html" %}
+  </form>
+</div>
+{% endblock %} {% block footer %}
+<footer class="footer">
+  <nav class="navbar is-spaced is-fixed-bottom" role="navigation" aria-label="main navigation">
+    <div class="navbar">
+      <a class="navbar-item" href="/bands"> Cancel </a>
+      <input type="submit" form="band-form" class="navbar-item" value="Save" />
+    </div>
+  </nav>
+</footer>
+{% endblock footer %} {% block footer_navbar_items %}
+<div class="navbar-start">
+  <div class="navbar-item">
+    <a href="/bands" class="button is-outlined">
+      <span class="icon">
+        <i class="fa fa-undo"></i>
+      </span>
+      <span>Cancel</span>
+    </a>
+    <button type="submit" form="band-form" class="button is-light is-pulled-right">
+      <span class="icon">
+        <i class="fa fa-save"></i>
+      </span>
+      <span>Save</span>
+    </button>
+  </div>
+</div>
+{% endblock footer_navbar_items %}
