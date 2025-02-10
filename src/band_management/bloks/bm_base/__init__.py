@@ -53,11 +53,82 @@ class BandManagementBase(Blok):
         """Called on install or update to set or update demo data"""
 
         if not latest_version:
-            bm = self.anyblok.BandManagement
-            bm.Band.insert(name="PAMH")
-            bm.Band.insert(name="Tribarteurs")
-            bm.Band.insert(name="Manque pas d'air")
-            bm.Band.insert(name="Trad'amuse")
+            BM = self.anyblok.BandManagement
+            pamh_band = BM.Band.insert(name="PAMH")
+            trib_band = BM.Band.insert(name="Tribardeurs")
+            BM.Band.insert(name="Manque pas d'air")
+            BM.Band.insert(name="Trad'amuse")
+
+            musicain_pv = BM.Musician.insert(
+                name="Pierre Verkest", email="pierre@verkest.fr", lang="fr"
+            )
+            musicain_joe = BM.Musician.insert(
+                name="Joe", email="joe@test.fr", lang="en"
+            )
+            musicain_doe = BM.Musician.insert(name="Doe", email="doe@test.fr")
+
+            voice = BM.Instrument.insert(name="Voice")
+            BM.Instrument.insert(name="Voice Tenor")
+            BM.Instrument.insert(name="Voice Soprano")
+            BM.Instrument.insert(name="Voice Alto")
+            gc_accordion = BM.Instrument.insert(name="Accordion G/C")
+            BM.Instrument.insert(name="Accordion L/D")
+            chromatic_accordion = BM.Instrument.insert(
+                name="Chromatic button accordion"
+            )
+            BM.Instrument.insert(name="Chromatic piano accordion")
+            BM.Instrument.insert(name="Bayan")
+
+            violin = BM.Instrument.insert(name="Violon")
+            classical_guitare = BM.Instrument.insert(name="Classical Guitar")
+            BM.Instrument.insert(name="Acoustic Guitar")
+            BM.Instrument.insert(name="Ukulele")
+            banjos = BM.Instrument.insert(name="Banjos")
+
+            pierre_in_pahm = BM.Member.insert(musician=musicain_pv, band=pamh_band)
+            pierre_in_pahm.instruments.append(gc_accordion)
+            joe_in_pahm = BM.Member.insert(musician=musicain_joe, band=pamh_band)
+            joe_in_pahm.instruments.append(violin)
+
+            pierre_in_trib = BM.Member.insert(musician=musicain_pv, band=trib_band)
+            pierre_in_trib.instruments.append(gc_accordion)
+            pierre_in_trib.instruments.append(voice)
+            joe_in_trib = BM.Member.insert(musician=musicain_joe, band=trib_band)
+            joe_in_trib.instruments.append(violin)
+
+            doe_in_trib = BM.Member.insert(musician=musicain_doe, band=trib_band)
+            doe_in_trib.instruments.append(banjos)
+            doe_in_trib.instruments.append(classical_guitare)
+            doe_in_trib.instruments.append(chromatic_accordion)
+
+            music_zelda = BM.Music.insert(
+                title="Zelda",
+                dance="Mixer",
+                composer="Philippe Plard",
+            )
+            BM.Score.insert(
+                name="Voice 1 - Zelda",
+                score_source_writer="Manqu'pas d'airs",
+                music=music_zelda,
+            )
+            BM.Score.insert(
+                name="Voice 2 - Zelda",
+                score_source_writer="Manqu'pas d'airs",
+                music=music_zelda,
+            )
+            music_esperanza = BM.Music.insert(
+                title="Esperanza",
+                dance="Scottish",
+                composer="Marc Perrone",
+            )
+            BM.Score.insert(
+                name="Voice 1",
+                score_source_writer="Manqu'pas d'airs",
+                music=music_esperanza,
+            )
+            pamh_band.musics.append(music_zelda)
+            trib_band.musics.append(music_zelda)
+            trib_band.musics.append(music_esperanza)
 
         if latest_version and latest_version < "0.2.0":
             # do something while moving to version 0.2.0

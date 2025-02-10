@@ -18,8 +18,8 @@ help:
 install: ## install python project dependencies
 	uv sync
 
-setup:
-	uv run anyblok_createdb -c app.cfg || uv run anyblok_updatedb -c app.cfg
+setup-demo:
+	uv run anyblok_createdb --with-demo -c app.cfg || uv run anyblok_updatedb -c app.cfg
 
 setup-tests: ## install python project dependencies for tests
 	uv run anyblok_createdb --with-demo -c app.test.cfg || uv run anyblok_updatedb -c app.test.cfg
