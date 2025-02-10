@@ -1,6 +1,6 @@
 from anyblok.blok import Blok
 from band_management import __version__
-from fastapi.responses import HTMLResponse
+from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.routing import APIRoute, Mount
 from fastapi.staticfiles import StaticFiles
 from pathlib import Path
@@ -21,6 +21,7 @@ class BandManagementResponsiveWebApp(Blok):
     author = "Pierre Verkest"
     required = [
         "band-management-base",
+        "http-auth-base",
     ]
 
     @classmethod
@@ -55,6 +56,24 @@ class BandManagementResponsiveWebApp(Blok):
                 "GET/login": APIRoute(
                     "/login",
                     main.login,
+                    methods=["GET"],
+                    response_class=HTMLResponse,
+                ),
+                "POST/login": APIRoute(
+                    "/login",
+                    main.login_post,
+                    methods=["POST"],
+                    response_class=RedirectResponse,
+                ),
+                "POST/logout": APIRoute(
+                    "/logout",
+                    main.logout_post,
+                    methods=["POST"],
+                    response_class=RedirectResponse,
+                ),
+                "GET/register": APIRoute(
+                    "/register",
+                    main.register,
                     methods=["GET"],
                     response_class=HTMLResponse,
                 ),
@@ -114,6 +133,18 @@ class BandManagementResponsiveWebApp(Blok):
                 "GET/profile": APIRoute(
                     "/profile",
                     main.profile,
+                    methods=["GET"],
+                    response_class=HTMLResponse,
+                ),
+                "GET/credits": APIRoute(
+                    "/credits",
+                    main.credits,
+                    methods=["GET"],
+                    response_class=HTMLResponse,
+                ),
+                "GET/terms": APIRoute(
+                    "/terms",
+                    main.terms,
                     methods=["GET"],
                     response_class=HTMLResponse,
                 ),

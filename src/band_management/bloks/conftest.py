@@ -12,3 +12,11 @@ def anyblok(rollback_registry):
 def band_management(anyblok):
     """Alias rollback registry"""
     return anyblok.BandManagement
+
+
+@pytest.fixture(name="joe_user")
+def joe_user(bm):
+    joe_musician = (
+        bm.Musician.query().filter(bm.Musician.email.ilike("joe@test.fr")).one()
+    )
+    return joe_musician.user

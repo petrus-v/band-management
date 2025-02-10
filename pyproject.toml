@@ -21,11 +21,19 @@ dependencies = [
     "jinja2",
     "psycopg",
     "uuid7",
+    "pydantic[email]",
+    "pydantic-extra-types",
+    "pycountry",
+    "bcrypt<4.0.0",
+    "python-jose[cryptography]",
+    #  "libpass",
+    "passlib",
 ]
 
 [project.scripts]
 
 [project.entry-points.bloks]
+http-auth-base="band_management.bloks.http_auth_base:HTTPAuthBase"
 band-management-base="band_management.bloks.bm_base:BandManagementBase"
 band-management-responsive-webapp="band_management.bloks.bm_responsive_webapp:BandManagementResponsiveWebApp"
 band-management="band_management.bloks.band_management:BandManagement"
@@ -36,6 +44,7 @@ test = [
   "pytest",
   "pytest-cov",
   "httpx>=0.28.1",
+  "pytest-asyncio",
 ]
 
 [tool.hatch.version]
@@ -46,3 +55,9 @@ default-groups = ["test"]
 
 [tool.uv.sources]
 anyblok-fastapi = { git = "git+https://github.com/AnyBlok/AnyBlok_fastapi", branch="master" }
+
+[tool.coverage.run]
+omit = [
+  "__init__.py",
+  "*/tests/*",
+]

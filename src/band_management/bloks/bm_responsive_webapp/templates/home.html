@@ -1,3 +1,40 @@
-{% extends "layouts/connected.html" %} {% block main %}
-<h1>home</h1>
+{% extends "layouts/layout.html" %} {% block main %}
+
+<section>
+  {%- for member in musician.members: %}
+  <article class="message">
+    <div class="message-header">
+      <p>{{member.band.name}}</p>
+      <!-- <button class="delete" aria-label="delete"></button> -->
+    </div>
+    <div class="message-body">
+      <div class="field is-grouped is-grouped-multiline">
+        {%- for instrument in member.instruments: %}
+        <div class="control">
+          <div class="tags has-addons">
+            <a class="tag is-link">{{ instrument.name }}</a>
+            <!-- <a class="tag is-delete"></a> -->
+          </div>
+        </div>
+        {%- endfor %}
+      </div>
+      <p>musicians: {{member.band.musicians_count}}</p>
+      <div class="field is-grouped is-grouped-multiline">
+        {%- for band_member in member.band.members: %}
+        <div class="control">
+          <div class="tags has-addons">
+            <a class="tag {{'is-link' if member != band_member else 'is-primary'}}"
+              >{{ band_member.musician.name }}</a
+            >
+            <!-- <a class="tag is-delete"></a> -->
+          </div>
+        </div>
+        {%- endfor %}
+      </div>
+      <p>musics: {{member.band.musics_count}}</p>
+    </div>
+  </article>
+  {%- endfor %}
+</section>
+
 {% endblock %}

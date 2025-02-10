@@ -1,9 +1,10 @@
+{% if not request.headers.get('HX-Boosted') %}
 <!doctype html>
 <html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Amne'zik</title>
+    <title>Amné'Zik</title>
     <link rel="icon" type="image/png" href="/static/assets/favicon.png" />
     <link
       rel="stylesheet"
@@ -15,8 +16,9 @@
     <link rel="stylesheet" href="/static/css/navbar.css" />
     <script src="https://unpkg.com/htmx.org"></script>
   </head>
+  {% endif %}
 
-  <body data-theme="{{request.cookies.theme == 'light' and 'light' or 'dark'}}">
+  <body hx-boost="true" data-theme="{{request.cookies.theme == 'light' and 'light' or 'dark'}}">
     <header>
       <nav class="navbar is-primary is-fixed-top">
         <div class="navbar-brand">
@@ -32,7 +34,9 @@
             <span aria-hidden="true"></span>
             <span aria-hidden="true"></span>
           </a>
-          <a class="navbar-item is-hidden-touch" href="/">BandZum</a>
+          <a class="navbar-item is-hidden-touch" href="/">Amné'Zik</a>
+          {% block top_menu_start %} {% endblock %}
+
           <a
             class="navbar-burger"
             aria-label="menu"
@@ -45,36 +49,30 @@
             <span aria-hidden="true"></span>
             <span aria-hidden="true"></span>
           </a>
-          <div>
-            <div id="navMenu" class="navbar-menu">
-              <div class="navbar-start">{% block top_menu_start %} {% endblock %}</div>
-              <div class="navbar-end">
-                <!-- hide this block until we find out a good idea
-                                 to properly send current user theme (light or dark)
-                                 style="display: none;">
-                             -->
-                <div class="navbar-item is-pulled-right">
-                  <div class="field has-addons">
-                    <p class="control">
-                      <a class="button is-small is-light" id="btn-dark-mode">
-                        <span class="icon">
-                          <i class="fa fa-moon"></i>
-                        </span>
-                      </a>
-                    </p>
-                    <p class="control">
-                      <a class="button is-small is-outlined" id="btn-light-mode">
-                        <span class="icon">
-                          <i class="fa fa-sun"></i>
-                        </span>
-                      </a>
-                    </p>
-                  </div>
-                </div>
-                {% block top_menu_end %} {% endblock %}
-              </div>
+        </div>
+
+        <div class="navbar-end navbar-menu is-pulled-right" id="navMenu">
+          <div class="navbar-item">
+            <div class="field has-addons">
+              <p class="control">
+                <a class="button is-small is-light" id="btn-dark-mode">
+                  <span class="icon">
+                    <i class="fa fa-moon"></i>
+                  </span>
+                </a>
+              </p>
+              <p class="control">
+                <a class="button is-small is-outlined" id="btn-light-mode">
+                  <span class="icon">
+                    <i class="fa fa-sun"></i>
+                  </span>
+                </a>
+              </p>
             </div>
           </div>
+          <hr class="navbar-divider" />
+          {% from "macros/navbar-item.html" import render_navbar_item with context %} {% block
+          top_menu_end %} {% endblock %}
         </div>
       </nav>
     </header>
@@ -99,4 +97,6 @@
     <script async type="text/javascript" src="/static/js/navbar.js"></script>
     <script async type="text/javascript" src="/static/js/theme.js"></script>
   </body>
+  {% if not request.headers.get('HX-Boosted') %}
 </html>
+{% endif %}

@@ -1,22 +1,14 @@
 {% extends "layouts/base.html" %} {% block top_menu_end %}
-<div class="navbar-item is-pulled-right">
+<div class="navbar-item">
   <div class="field is-grouped">
-    <p class="control">
-      <a href="/profile" class="button is-small is-light">
-        <span class="icon">
-          <i class="fa fa-user-cog"></i>
-        </span>
-        <span> Profile </span>
-      </a>
-    </p>
-    <p class="control">
-      <a href="/" class="button is-small is-outlined is-light">
-        <span class="icon">
-          <i class="fa fa-sign-out-alt"></i>
-        </span>
-        <span>Logout</span>
-      </a>
-    </p>
+    <div class="navbar-item has-dropdown is-hoverable">
+      <a class="navbar-link is-hidden-touch"> {{ musician.name }} </a>
+
+      <div class="navbar-dropdown">
+        {{ render_navbar_item('/profile', 'Profile', 'fa-user-cog')}} {{
+        render_navbar_item('/logout', 'Logout', 'a-sign-out-alt', method='post')}}
+      </div>
+    </div>
   </div>
 </div>
 {% endblock top_menu_end %} {% block side_menu %} {{ render_menu( 'General', [ {'name': 'Home',

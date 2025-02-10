@@ -1,3 +1,9 @@
-{% extends "layouts/connected.html" %} {% block main %}
-<h1>Profile</h1>
+{% extends "layouts/layout.html" %} {% block main %}
+<section>
+  <h1 class="title is-1">Profiles</h1>
+  <ul>
+    <li><b>name: </b>{{ musician.name}}</li>
+    <li><b>lang: </b>{{ musician.lang}}</li>
+  </ul>
+</section>
 {% endblock %}

@@ -84,3 +84,7 @@ aside {
 .menu-list a.is-active {
   background-color: var(--custom-menu-theme-background-color-active);
 }
+
+.navbar-item .is-active {
+  background-color: var(--custom-menu-theme-background-color-active);
+}
