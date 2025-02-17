@@ -108,12 +108,14 @@ class BandManagementBase(Blok):
             )
             BM.Score.insert(
                 name="Voice 1 - Zelda",
-                score_source_writer="Manqu'pas d'airs",
+                source_writer_credits="Manqu'pas d'airs",
+                imported_by=musicain_joe,
                 music=music_zelda,
             )
             BM.Score.insert(
                 name="Voice 2 - Zelda",
-                score_source_writer="Manqu'pas d'airs",
+                source_writer_credits="Manqu'pas d'airs",
+                imported_by=musicain_pv,
                 music=music_zelda,
             )
             music_esperanza = BM.Music.insert(
@@ -123,7 +125,8 @@ class BandManagementBase(Blok):
             )
             BM.Score.insert(
                 name="Voice 1",
-                score_source_writer="Manqu'pas d'airs",
+                source_writer_credits="Manqu'pas d'airs",
+                imported_by=musicain_pv,
                 music=music_esperanza,
             )
             pamh_band.musics.append(music_zelda)

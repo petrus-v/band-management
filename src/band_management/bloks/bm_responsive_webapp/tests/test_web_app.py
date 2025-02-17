@@ -44,11 +44,6 @@ def test_valid_token_unknow_user_return_401(anonymous):
 
 
 def test_notken_return_401(anonymous):
-    # token = create_access_token(
-    #     data=TokenDataSchema(sub=str(uuid7()), scopes=["musician-auth"]),
-    #     expires_delta=timedelta(minutes=10),
-    # )
-    anonymous.cookies.pop("auth-token")
     response = anonymous.get("/bands")
     assert response.status_code == 401
     assert response.json()["detail"] == "Missing permissions"
@@ -107,8 +102,8 @@ def test_anonymous_band_management_login_credentials(anonymous):
     assert response.status_code == 401, response.text
 
 
-def test_logout(anonymous):
-    response = anonymous.post(
+def test_logout(connected_musician):
+    response = connected_musician.post(
         "/logout",
     )
     assert response.status_code == 200, response.text
@@ -156,6 +151,115 @@ def test_connected_musician_update_band(bm, connected_musician):
     assert response.status_code == 200, response.text
     band.refresh()
     assert band.name == "other"
+
+
+def test_connected_musician_get_scores(connected_musician):
+    response = connected_musician.get("/scores")
+    assert response.status_code == 200, response.text
+
+
+def test_connected_musician_search_scores(bm, connected_musician):
+    response = connected_musician.post("/scores", data={"search": "ze"})
+    assert response.status_code == 200, response.text
+
+
+@pytest.mark.asyncio
+async def test_connected_musician_post_score(
+    storage_directory, fake_score_file, bm, connected_musician
+):
+    with open(fake_score_file, "rb") as f:
+        response = connected_musician.post(
+            "/score/",
+            data={},
+            files={"score_file": ("zelda-voice-3.pdf", f, "plop")},
+        )
+    assert response.status_code == 201, response.text
+
+    score = bm.Score.query().filter(bm.Score.name.like("Zelda voice 3")).one()
+    reference = str(score.uuid)
+    relative_path = f"{reference[:2]}/{reference[2:]}"
+    assert (storage_directory / relative_path).exists()
+    assert (storage_directory / relative_path).is_file()
+    assert score.name == "Zelda voice 3"
+    assert score.storage_file_metadata == {
+        "mime_type": "plop",
+        "original_filename": "zelda-voice-3.pdf",
+        "relative_path": relative_path,
+        "size": 4,
+    }
+
+
+@pytest.mark.asyncio
+async def test_connected_musician_post_score_guess_mime_type(
+    storage_directory, fake_score_file, bm, connected_musician
+):
+    with open(fake_score_file, "rb") as f:
+        response = connected_musician.post(
+            "/score/",
+            data={},
+            files={"score_file": ("zelda-voice-3.pdf", f, "")},
+        )
+    assert response.status_code == 201, response.text
+
+    score = bm.Score.query().filter(bm.Score.name.like("Zelda voice 3")).one()
+    reference = str(score.uuid)
+    relative_path = f"{reference[:2]}/{reference[2:]}"
+    assert (storage_directory / relative_path).exists()
+    assert (storage_directory / relative_path).is_file()
+    assert score.name == "Zelda voice 3"
+    assert score.storage_file_metadata == {
+        "mime_type": "application/pdf",
+        "original_filename": "zelda-voice-3.pdf",
+        "relative_path": relative_path,
+        "size": 4,
+    }
+
+
+@pytest.mark.asyncio
+async def test_get_score_media_no_user_found_raises(anonymous, imported_score):
+    token = create_access_token(
+        data=TokenDataSchema(sub=str(uuid7()), scopes=["musician-auth"]),
+        expires_delta=timedelta(minutes=10),
+    )
+    anonymous.cookies["auth-token"] = f"{token}"
+    response = anonymous.get(f"/score/{imported_score.uuid}/media")
+    assert response.status_code == 401, response.text
+    assert response.json()["detail"] == "Not enough permissions"
+
+
+@pytest.mark.asyncio
+async def test_get_score_media_anonymous_raises(anonymous, imported_score):
+    response = anonymous.get(f"/score/{imported_score.uuid}/media")
+    assert response.status_code == 401, response.text
+
+
+@pytest.mark.asyncio
+async def test_get_score_media(imported_score, connected_musician):
+    response = connected_musician.get(f"/score/{imported_score.uuid}/media")
+    assert response.status_code == 200, response.text
+
+
+def test_connected_musician_prepare_score(bm, connected_musician):
+    response = connected_musician.get("/score/prepare")
+    assert response.status_code == 200, response.text
+
+
+def test_connected_musician_get_score(bm, connected_musician):
+    score = bm.Band.insert(name="test")
+    response = connected_musician.get(f"/score/{score.uuid}")
+    assert response.status_code == 200, response.text
+
+
+def test_connected_musician_update_score(bm, connected_musician, joe_user):
+    score = bm.Score.insert(name="test", imported_by=joe_user.musician)
+    score.refresh()
+    response = connected_musician.put(
+        f"/score/{score.uuid}",
+        data={"score_name": "other", "source_writer_credits": ""},
+    )
+    assert response.status_code == 200, response.text
+    score.refresh()
+    assert score.name == "other"
 
 
 def test_connected_musician_get_musics(connected_musician):

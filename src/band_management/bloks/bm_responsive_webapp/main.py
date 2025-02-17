@@ -2,6 +2,8 @@ import logging
 from typing import Annotated, Optional
 from anyblok_fastapi.fastapi import get_registry, registry_transaction
 from fastapi import Depends, Request, Form
+from fastapi import File, UploadFile
+from fastapi.responses import FileResponse
 from fastapi.templating import Jinja2Templates
 from fastapi.responses import RedirectResponse
 from pathlib import Path
@@ -15,6 +17,8 @@ from fastapi.security import (
 from jose import JWTError, jwt
 from fastapi import HTTPException, status
 from pydantic import ValidationError
+from band_management.storage import storage_factory
+
 from band_management.bloks.http_auth_base.auth_api import SECRET_KEY, ALGORITHM
 from band_management.bloks.http_auth_base.schemas.auth import (
     TokenDataSchema,
@@ -68,16 +72,22 @@ async def get_authenticated_musician(
     return token_data
 
 
-def _prepare_context(anyblok, request, token_data):
+def _get_musician_from_token(anyblok, token_data):
     musician = None
     if token_data:
         user = anyblok.Auth.User.query().get(token_data.sub)
-        if not user:
+        if user:
+            musician = user.musician
+        if not musician:
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
                 detail="Not enough permissions",
             )
-        musician = user.musician
+    return musician
+
+
+def _prepare_context(anyblok, request, token_data):
+    musician = _get_musician_from_token(anyblok, token_data)
     return {
         "is_authenticated": True if musician else False,
         "musician": musician,
@@ -247,14 +257,13 @@ def add_band(
     with registry_transaction(ab_registry) as anyblok:
         BM = anyblok.BandManagement
         BM.Band.insert(name=band_name)
-        anyblok.flush()
-        return RedirectResponse(
-            "/bands",
-            status_code=201,
-            headers={
-                "HX-Redirect": "/bands",
-            },
-        )
+    return RedirectResponse(
+        "/bands",
+        status_code=201,
+        headers={
+            "HX-Redirect": "/bands",
+        },
+    )
 
 
 def update_band(
@@ -270,13 +279,13 @@ def update_band(
         BM = anyblok.BandManagement
         band = BM.Band.query().get(band_uuid)
         band.name = band_name
-        return RedirectResponse(
-            "/bands",
-            status_code=200,
-            headers={
-                "HX-Redirect": "/bands",
-            },
-        )
+    return RedirectResponse(
+        "/bands",
+        status_code=200,
+        headers={
+            "HX-Redirect": "/bands",
+        },
+    )
 
 
 def search_bands(
@@ -299,6 +308,162 @@ def search_bands(
             },
         )
         return response
+
+
+def scores(
+    request: Request,
+    token_data: Annotated[
+        TokenDataSchema, Security(get_authenticated_musician, scopes=["musician-auth"])
+    ],
+    ab_registry: "Registry" = Depends(get_registry),
+):
+    with registry_transaction(ab_registry) as anyblok:
+        return templates.TemplateResponse(
+            name="scores.html",
+            request=request,
+            context={**_prepare_context(anyblok, request, token_data)},
+        )
+
+
+def search_scores(
+    request: Request,
+    search: Annotated[str, Form()],
+    token_data: Annotated[
+        TokenDataSchema, Security(get_authenticated_musician, scopes=["musician-auth"])
+    ],
+    ab_registry: "Registry" = Depends(get_registry),
+):
+    with registry_transaction(ab_registry) as anyblok:
+        BM = anyblok.BandManagement
+        scores = (
+            BM.Score.query()
+            .join(BM.Music, isouter=True)
+            .filter(BM.Score.name.ilike(f"%{search}%"))
+            .all()
+        )
+        response = templates.TemplateResponse(
+            name="scores/search-result.html",
+            request=request,
+            context={
+                **_prepare_context(anyblok, request, token_data),
+                "scores": scores,
+            },
+        )
+        return response
+
+
+def prepare_score(
+    request: Request,
+    token_data: Annotated[
+        TokenDataSchema, Security(get_authenticated_musician, scopes=["musician-auth"])
+    ],
+    ab_registry: "Registry" = Depends(get_registry),
+):
+    with registry_transaction(ab_registry) as anyblok:
+        BM = anyblok.BandManagement
+        score = BM.Score(name="Default Score")
+        return templates.TemplateResponse(
+            name="score-prepare.html",
+            request=request,
+            context={
+                **_prepare_context(anyblok, request, token_data),
+                "score": score,
+            },
+        )
+
+
+def score(
+    score_uuid: str,
+    request: Request,
+    token_data: Annotated[
+        TokenDataSchema, Security(get_authenticated_musician, scopes=["musician-auth"])
+    ],
+    ab_registry: "Registry" = Depends(get_registry),
+):
+    with registry_transaction(ab_registry) as anyblok:
+        BM = anyblok.BandManagement
+        score = BM.Score.query().get(score_uuid)
+        return templates.TemplateResponse(
+            name="score-update.html",
+            request=request,
+            context={
+                **_prepare_context(anyblok, request, token_data),
+                "score": score,
+            },
+        )
+
+
+async def score_media(
+    score_uuid: str,
+    request: Request,
+    token_data: Annotated[
+        TokenDataSchema, Security(get_authenticated_musician, scopes=["musician-auth"])
+    ],
+    ab_registry: "Registry" = Depends(get_registry),
+):
+    with registry_transaction(ab_registry) as anyblok:
+        BM = anyblok.BandManagement
+        score = BM.Score.query().get(score_uuid)
+        _get_musician_from_token(anyblok, token_data)
+        # TODO: make sure musician is allowed to read this score
+        StorageClass = storage_factory()
+        medium = StorageClass(
+            reference=score.uuid, storage_metadata=score.storage_file_metadata
+        )
+        return FileResponse(medium.path, media_type=medium.storage_metadata.mime_type)
+
+
+async def add_score(
+    request: Request,
+    score_file: Annotated[UploadFile, File(description="Score to upload")],
+    token_data: Annotated[
+        TokenDataSchema, Security(get_authenticated_musician, scopes=["musician-auth"])
+    ],
+    ab_registry: "Registry" = Depends(get_registry),
+):
+    StorageClass = storage_factory()
+    score = StorageClass()
+    await score.save(score_file)
+    with registry_transaction(ab_registry) as anyblok:
+        musician = _get_musician_from_token(anyblok, token_data)
+        BM = anyblok.BandManagement
+        BM.Score.insert(
+            uuid=score.reference,
+            name=BM.Score.name_from_filename(score.storage_metadata.original_filename),
+            imported_by=musician,
+            storage_file_metadata=score.file_metadata,
+        )
+        return RedirectResponse(
+            "/scores",
+            status_code=201,
+            headers={
+                "HX-Redirect": f"/score/{score.reference}",
+            },
+        )
+
+
+def update_score(
+    request: Request,
+    score_uuid: str,
+    score_name: Annotated[str, Form()],
+    source_writer_credits: Annotated[str, Form()],
+    token_data: Annotated[
+        TokenDataSchema, Security(get_authenticated_musician, scopes=["musician-auth"])
+    ],
+    ab_registry: "Registry" = Depends(get_registry),
+):
+    with registry_transaction(ab_registry) as anyblok:
+        BM = anyblok.BandManagement
+        score = BM.Score.query().get(score_uuid)
+        score.name = score_name
+        score.source_writer_credits = source_writer_credits
+        return RedirectResponse(
+            "/scores",
+            status_code=200,
+            headers={
+                "HX-Redirect": "/scores",
+            },
+        )
 
 
 def musics(
