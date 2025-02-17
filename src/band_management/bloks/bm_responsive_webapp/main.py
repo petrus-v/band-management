@@ -413,31 +413,46 @@ async def score_media(
         return FileResponse(medium.path, media_type=medium.storage_metadata.mime_type)
 
 
-async def add_score(
+async def add_scores(
     request: Request,
-    score_file: Annotated[UploadFile, File(description="Score to upload")],
+    score_files: Annotated[
+        list[UploadFile], File(description="Multipple Score file to upload")
+    ],
     token_data: Annotated[
         TokenDataSchema, Security(get_authenticated_musician, scopes=["musician-auth"])
     ],
     ab_registry: "Registry" = Depends(get_registry),
 ):
-    StorageClass = storage_factory()
-    score = StorageClass()
-    await score.save(score_file)
-    with registry_transaction(ab_registry) as anyblok:
-        musician = _get_musician_from_token(anyblok, token_data)
-        BM = anyblok.BandManagement
-        BM.Score.insert(
-            uuid=score.reference,
-            name=BM.Score.name_from_filename(score.storage_metadata.original_filename),
-            imported_by=musician,
-            storage_file_metadata=score.file_metadata,
+    for score_file in score_files:
+        StorageClass = storage_factory()
+        score = StorageClass()
+        await score.save(score_file)
+        with registry_transaction(ab_registry) as anyblok:
+            musician = _get_musician_from_token(anyblok, token_data)
+            BM = anyblok.BandManagement
+            BM.Score.insert(
+                uuid=score.reference,
+                name=BM.Score.name_from_filename(
+                    score.storage_metadata.original_filename
+                ),
+                imported_by=musician,
+                storage_file_metadata=score.file_metadata,
+            )
+
+    if len(score_files) == 1:
+        return RedirectResponse(
+            f"/score/{score.reference}",
+            status_code=201,
+            headers={
+                "HX-Redirect": f"/score/{score.reference}",
+            },
         )
+    else:
         return RedirectResponse(
             "/scores",
             status_code=201,
             headers={
-                "HX-Redirect": f"/score/{score.reference}",
+                "HX-Redirect": "/scores",
             },
         )
 

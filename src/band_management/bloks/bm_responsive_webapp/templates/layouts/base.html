@@ -76,6 +76,7 @@
         </div>
       </nav>
     </header>
+
     <div class="container" id="main-container">
       <div class="columns">
         <aside id="sideBarMenuLeft" class="menu column is-3">
@@ -91,7 +92,7 @@
 
     <footer class="footer">
       <nav class="navbar is-fixed-bottom is-primary">
-        {% block footer_navbar_items %} {% endblock %}
+        {% block progressbar %} {% endblock %} {% block footer_navbar_items %} {% endblock %}
       </nav>
     </footer>
     <script async type="text/javascript" src="/static/js/navbar.js"></script>

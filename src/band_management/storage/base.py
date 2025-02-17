@@ -52,7 +52,7 @@ class IStorage(ABC):
 
     @property
     def file_metadata(self):
-        return self.storage_metadata.dict()
+        return self.storage_metadata.model_dump()
 
 
 class FileSystemStorage(IStorage):

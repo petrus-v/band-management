@@ -147,7 +147,7 @@ class BandManagementResponsiveWebApp(Blok):
                     routes=[
                         APIRoute(
                             "/",
-                            main.add_score,
+                            main.add_scores,
                             methods=["POST"],
                             response_class=HTMLResponse,
                         ),

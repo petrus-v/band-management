@@ -171,7 +171,9 @@ async def test_connected_musician_post_score(
         response = connected_musician.post(
             "/score/",
             data={},
-            files={"score_file": ("zelda-voice-3.pdf", f, "plop")},
+            files=[
+                ("score_files", ("zelda-voice-3.pdf", f, "plop")),
+            ],
         )
     assert response.status_code == 201, response.text
 
@@ -197,7 +199,9 @@ async def test_connected_musician_post_score_guess_mime_type(
         response = connected_musician.post(
             "/score/",
             data={},
-            files={"score_file": ("zelda-voice-3.pdf", f, "")},
+            files=[
+                ("score_files", ("zelda-voice-3.pdf", f, "")),
+            ],
         )
     assert response.status_code == 201, response.text
 
@@ -213,6 +217,40 @@ async def test_connected_musician_post_score_guess_mime_type(
         "relative_path": relative_path,
         "size": 4,
     }
+    assert response.headers["hx-redirect"] == f"/score/{reference}", response.text
+
+
+@pytest.mark.asyncio
+async def test_connected_musician_post_multiple_files(
+    storage_directory, fake_score_file, bm, connected_musician
+):
+    with open(fake_score_file, "rb") as f:
+        response = connected_musician.post(
+            "/score/",
+            data={},
+            files=[
+                ("score_files", ("Au-coin-du-feux-voice-1.pdf", f, "plop")),
+                ("score_files", ("Au-coin-du-feux-voice-2.pdf", f, "plop")),
+            ],
+        )
+    assert response.status_code == 201, response.text
+
+    score_voice1 = (
+        bm.Score.query().filter(bm.Score.name.like("Au coin du feux voice 1")).one()
+    )
+    score_voice2 = (
+        bm.Score.query().filter(bm.Score.name.like("Au coin du feux voice 2")).one()
+    )
+    reference = str(score_voice1.uuid)
+    relative_path = f"{reference[:2]}/{reference[2:]}"
+    assert (storage_directory / relative_path).exists()
+    assert (storage_directory / relative_path).is_file()
+    reference = str(score_voice2.uuid)
+    relative_path = f"{reference[:2]}/{reference[2:]}"
+    assert (storage_directory / relative_path).exists()
+    assert (storage_directory / relative_path).is_file()
+
+    assert response.headers["hx-redirect"] == "/scores", response.text
 
 
 @pytest.mark.asyncio
