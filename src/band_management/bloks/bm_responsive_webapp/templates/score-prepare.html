@@ -1,0 +1,42 @@
+{% extends "layouts/layout.html" %} {% block main %}
+
+<div>
+  <form id="score-form" hx-encoding="multipart/form-data" hx-post="/score" hx-target="body">
+    {% include "scores/score-form.html" %}
+  </form>
+</div>
+{% endblock main %} {% block progressbar %}
+<progress
+  id="score-import-progress"
+  class="progress is-small is-warning"
+  value="0"
+  max="100"
+  style="position: absolute; top: 0; left: 0; right: 0; margin: 0; height: 4px"
+></progress>
+{% endblock progressbar %} {% block footer_navbar_items %}
+<div class="navbar-start">
+  <div class="navbar-item">
+    <a href="/scores" class="button is-outlined">
+      <span class="icon">
+        <i class="fa fa-undo"></i>
+      </span>
+      <span>Cancel</span>
+    </a>
+    <button type="submit" form="score-form" class="button is-light is-pulled-right">
+      <span class="icon">
+        <i class="fa fa-save"></i>
+      </span>
+      <span>Import</span>
+    </button>
+
+    <script>
+      htmx.on("#score-form", "htmx:xhr:progress", function (evt) {
+        htmx
+          .find("#score-import-progress")
+          .setAttribute("value", (evt.detail.loaded / evt.detail.total) * 100);
+      });
+    </script>
+  </div>
+</div>
+
+{% endblock footer_navbar_items %}

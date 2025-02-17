@@ -12,5 +12,5 @@
   </div>
 </div>
 {% endblock top_menu_end %} {% block side_menu %} {{ render_menu( 'General', [ {'name': 'Home',
-'path': '/home'}, {'name': 'Bands', 'path':'/bands'}, {'name': 'Musics', 'path':'/musics'}, ]) }} {%
-endblock side_menu %}
+'path': '/home'}, {'name': 'Bands', 'path':'/bands'}, {'name': 'Musics', 'path':'/musics'}, ]) }} {{
+render_menu( 'Scores', [ {'name': 'Import', 'path': '/scores'}, ]) }} {% endblock side_menu %}

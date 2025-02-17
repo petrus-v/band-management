@@ -30,13 +30,15 @@ def test_band_management(bm):
     )
     bm.Score.insert(
         name="Voice 1 - Zelda",
-        score_source_writer="Manqu'pas d'airs",
+        source_writer_credits="Manqu'pas d'airs",
         music=music_zelda,
+        imported_by=pierre,
     )
     bm.Score.insert(
         name="Voice 2 - Zelda",
-        score_source_writer="Manqu'pas d'airs",
+        source_writer_credits="Manqu'pas d'airs",
         music=music_zelda,
+        imported_by=joe,
     )
     pamh_band.musics.append(music_zelda)
 

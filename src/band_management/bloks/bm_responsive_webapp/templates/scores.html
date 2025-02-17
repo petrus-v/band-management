@@ -1,0 +1,28 @@
+{% extends "layouts/layout.html" %} {% block top_menu_start %}
+<div class="navbar-item is-pulled-right">
+  <div class="control">
+    <input
+      class="form-control"
+      type="search"
+      name="search"
+      placeholder="Begin Typing To Search scores..."
+      hx-post="scores"
+      hx-trigger="input changed delay:500ms, keyup[key=='Enter'], load"
+      hx-target="#search-results"
+    />
+  </div>
+</div>
+{% endblock %} {% block main %}
+<div id="search-results"></div>
+{% endblock %} {% block footer_navbar_items %}
+<div class="navbar-end">
+  <div class="navbar-item">
+    <a href="/score/prepare" class="button is-light is-pulled-right">
+      <span class="icon">
+        <i class="fa fa-upload"></i>
+      </span>
+      <span>Import</span>
+    </a>
+  </div>
+</div>
+{% endblock %}

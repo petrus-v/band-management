@@ -1,6 +1,6 @@
 from anyblok.blok import Blok
 from band_management import __version__
-from fastapi.responses import HTMLResponse, RedirectResponse
+from fastapi.responses import HTMLResponse, RedirectResponse, FileResponse
 from fastapi.routing import APIRoute, Mount
 from fastapi.staticfiles import StaticFiles
 from pathlib import Path
@@ -129,6 +129,53 @@ class BandManagementResponsiveWebApp(Blok):
                     main.musics,
                     methods=["GET"],
                     response_class=HTMLResponse,
+                ),
+                "GET/scores": APIRoute(
+                    "/scores",
+                    main.scores,
+                    methods=["GET"],
+                    response_class=HTMLResponse,
+                ),
+                "POST/scores": APIRoute(
+                    "/scores",
+                    main.search_scores,
+                    methods=["POST"],
+                    response_class=HTMLResponse,
+                ),
+                "MOUNT/score/": Mount(
+                    "/score",
+                    routes=[
+                        APIRoute(
+                            "/",
+                            main.add_scores,
+                            methods=["POST"],
+                            response_class=HTMLResponse,
+                        ),
+                        APIRoute(
+                            "/prepare",
+                            main.prepare_score,
+                            methods=["GET"],
+                            response_class=HTMLResponse,
+                        ),
+                        APIRoute(
+                            "/{score_uuid}",
+                            main.score,
+                            methods=["GET"],
+                            response_class=HTMLResponse,
+                        ),
+                        APIRoute(
+                            "/{score_uuid}/media",
+                            main.score_media,
+                            methods=["GET"],
+                            response_class=FileResponse,
+                        ),
+                        APIRoute(
+                            "/{score_uuid}",
+                            main.update_score,
+                            methods=["PUT"],
+                            response_class=HTMLResponse,
+                        ),
+                    ],
                 ),
                 "GET/profile": APIRoute(
                     "/profile",

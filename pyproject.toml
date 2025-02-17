@@ -28,6 +28,7 @@ dependencies = [
     "python-jose[cryptography]",
     #  "libpass",
     "passlib",
+    "aiofile",
 ]
 
 [project.scripts]
