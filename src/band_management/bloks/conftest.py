@@ -14,9 +14,14 @@ def band_management(anyblok):
     return anyblok.BandManagement
 
 
-@pytest.fixture(name="joe_user")
-def joe_user(bm):
+@pytest.fixture(name="joe_musician")
+def joe_musician(bm):
     joe_musician = (
         bm.Musician.query().filter(bm.Musician.email.ilike("joe@test.fr")).one()
     )
+    return joe_musician
+
+
+@pytest.fixture(name="joe_user")
+def joe_user(joe_musician):
     return joe_musician.user

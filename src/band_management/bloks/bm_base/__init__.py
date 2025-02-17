@@ -56,8 +56,7 @@ class BandManagementBase(Blok):
             BM = self.anyblok.BandManagement
             pamh_band = BM.Band.insert(name="PAMH")
             trib_band = BM.Band.insert(name="Tribardeurs")
-            BM.Band.insert(name="Manque pas d'air")
-            BM.Band.insert(name="Trad'amuse")
+            tradamuse_band = BM.Band.insert(name="Trad'amuse")
 
             musicain_pv = BM.Musician.insert(
                 name="Pierre Verkest", email="pierre@verkest.fr", lang="fr"
@@ -85,12 +84,18 @@ class BandManagementBase(Blok):
             BM.Instrument.insert(name="Ukulele")
             banjos = BM.Instrument.insert(name="Banjos")
 
-            pierre_in_pahm = BM.Member.insert(musician=musicain_pv, band=pamh_band)
+            pierre_in_pahm = BM.Member.insert(
+                is_admin=True, musician=musicain_pv, band=pamh_band
+            )
             pierre_in_pahm.instruments.append(gc_accordion)
             joe_in_pahm = BM.Member.insert(musician=musicain_joe, band=pamh_band)
             joe_in_pahm.instruments.append(violin)
 
-            pierre_in_trib = BM.Member.insert(musician=musicain_pv, band=trib_band)
+            pierre_in_trib = BM.Member.insert(
+                is_admin=True,
+                musician=musicain_pv,
+                band=trib_band,
+            )
             pierre_in_trib.instruments.append(gc_accordion)
             pierre_in_trib.instruments.append(voice)
             joe_in_trib = BM.Member.insert(musician=musicain_joe, band=trib_band)
@@ -100,6 +105,8 @@ class BandManagementBase(Blok):
             doe_in_trib.instruments.append(banjos)
             doe_in_trib.instruments.append(classical_guitare)
             doe_in_trib.instruments.append(chromatic_accordion)
+
+            BM.Member.insert(is_admin=True, musician=musicain_doe, band=tradamuse_band)
 
             music_zelda = BM.Music.insert(
                 title="Zelda",

@@ -16,7 +16,7 @@ def test_band_management(bm):
 
     pamh_band = bm.Band.query().filter(bm.Band.name.ilike("PAMH")).one()
 
-    pierre_in_pahm = bm.Member.insert(musician=pierre, band=pamh_band)
+    pierre_in_pahm = bm.Member.insert(musician=pierre, band=pamh_band, is_admin=True)
     pierre_in_pahm.instruments.append(accordion)
     joe_in_pahm = bm.Member.insert(musician=joe, band=pamh_band)
     joe_in_pahm.instruments.append(violin)
