@@ -4,6 +4,8 @@ from anyblok import Declarations
 from anyblok.relationship import Many2One
 from anyblok.column import Text, Json
 
+import sqlalchemy as sa
+
 
 register = Declarations.register
 Mixin = Declarations.Mixin
@@ -33,3 +35,32 @@ class Score(Mixin.PrimaryColumn):
     def name_from_filename(cls, filename: str) -> str:
         """Normalize score name from file name"""
         return PurePath(filename).stem.replace("-", " ").replace("_", " ").capitalize()
+
+    @classmethod
+    def query_for_musician(cls, musician, query=None, with_draft_score=True):
+        BM = cls.anyblok.BandManagement
+        if not query:
+            query = cls.query()
+
+        query = query.join(BM.Score.music, isouter=with_draft_score)
+        query = query.join(BM.Music.bands, isouter=with_draft_score)
+        query = query.filter(
+            sa.or_(
+                BM.Band.uuid.in_(musician.active_bands.uuid),
+                sa.and_(
+                    BM.Band.uuid.is_(None),
+                    BM.Score.imported_by == musician,
+                ),
+            )
+        )
+        query = query.distinct(
+            BM.Score.uuid,
+            BM.Score.name,
+            BM.Music.title,
+        )
+        query = query.order_by(
+            sa.nulls_first(BM.Music.title),
+            BM.Score.name,
+        )
+
+        return query

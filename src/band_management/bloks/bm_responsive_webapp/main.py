@@ -159,9 +159,7 @@ def login_post(
 
 def logout_post(
     request: Request,
-    token_data: Annotated[
-        TokenDataSchema, Security(get_authenticated_musician, scopes=["musician-auth"])
-    ],
+    token_data: Annotated[TokenDataSchema, Security(get_authenticated_musician)],
     anyblok_registry: Annotated["Registry", Depends(get_registry)],
 ):
     response = RedirectResponse(
@@ -221,6 +219,34 @@ def prepare_band(
             context={
                 **_prepare_context(anyblok, request, token_data),
                 "band": band,
+            },
+        )
+
+
+def toggle_musician_active_band(
+    musician_uuid: str,
+    band_uuid: str,
+    request: Request,
+    token_data: Annotated[
+        TokenDataSchema, Security(get_authenticated_musician, scopes=["musician-auth"])
+    ],
+    ab_registry: "Registry" = Depends(get_registry),
+):
+    with registry_transaction(ab_registry) as anyblok:
+        musician = _get_musician_from_token(anyblok, token_data)
+        if musician_uuid != str(musician.uuid):
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Your are not allowed to update other user active bands",
+            )
+
+        musician.toggle_musician_active_band(band_uuid)
+        return RedirectResponse(
+            request.headers.get("HX-Current-URL", "/"),
+            status_code=201,
+            headers={
+                # "HX-Redirect": "/bands",
+                "HX-Refresh": "true",
             },
         )
 
@@ -297,8 +323,12 @@ def search_bands(
     ab_registry: "Registry" = Depends(get_registry),
 ):
     with registry_transaction(ab_registry) as anyblok:
+        musician = _get_musician_from_token(anyblok, token_data)
         BM = anyblok.BandManagement
-        bands = BM.Band.query().filter(BM.Band.name.ilike(f"%{search}%")).all()
+        bands_query = BM.Band.query()
+        bands_query = bands_query.filter(BM.Band.name.ilike(f"%{search}%"))
+        bands_query = bands_query.filter(BM.Band.uuid.in_(musician.active_bands.uuid))
+        bands = bands_query.all()
         response = templates.TemplateResponse(
             name="bands/search-result.html",
             request=request,
@@ -334,13 +364,15 @@ def search_scores(
     ab_registry: "Registry" = Depends(get_registry),
 ):
     with registry_transaction(ab_registry) as anyblok:
+        musician = _get_musician_from_token(anyblok, token_data)
         BM = anyblok.BandManagement
-        scores = (
-            BM.Score.query()
-            .join(BM.Music, isouter=True)
-            .filter(BM.Score.name.ilike(f"%{search}%"))
-            .all()
-        )
+        score_query = BM.Score.query_for_musician(musician)
+
+        if search:
+            score_query = score_query.filter(BM.Score.name.ilike(f"%{search}%"))
+
+        scores = score_query.all()
+
         response = templates.TemplateResponse(
             name="scores/search-result.html",
             request=request,

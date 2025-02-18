@@ -58,13 +58,15 @@ class BandManagementBase(Blok):
             trib_band = BM.Band.insert(name="Tribardeurs")
             tradamuse_band = BM.Band.insert(name="Trad'amuse")
 
-            musicain_pv = BM.Musician.insert(
-                name="Pierre Verkest", email="pierre@verkest.fr", lang="fr"
+            musician_pv = BM.Musician.insert(
+                name="Pierre Verkest",
+                email="pierre@verkest.fr",
+                lang="fr",
             )
-            musicain_joe = BM.Musician.insert(
+            musician_joe = BM.Musician.insert(
                 name="Joe", email="joe@test.fr", lang="en"
             )
-            musicain_doe = BM.Musician.insert(name="Doe", email="doe@test.fr")
+            musician_doe = BM.Musician.insert(name="Doe", email="doe@test.fr")
 
             voice = BM.Instrument.insert(name="Voice")
             BM.Instrument.insert(name="Voice Tenor")
@@ -85,28 +87,76 @@ class BandManagementBase(Blok):
             banjos = BM.Instrument.insert(name="Banjos")
 
             pierre_in_pahm = BM.Member.insert(
-                is_admin=True, musician=musicain_pv, band=pamh_band
+                is_admin=True, musician=musician_pv, band=pamh_band
             )
+            musician_pv.active_bands.append(pamh_band)
             pierre_in_pahm.instruments.append(gc_accordion)
-            joe_in_pahm = BM.Member.insert(musician=musicain_joe, band=pamh_band)
+            joe_in_pahm = BM.Member.insert(musician=musician_joe, band=pamh_band)
             joe_in_pahm.instruments.append(violin)
 
             pierre_in_trib = BM.Member.insert(
                 is_admin=True,
-                musician=musicain_pv,
+                musician=musician_pv,
                 band=trib_band,
             )
             pierre_in_trib.instruments.append(gc_accordion)
             pierre_in_trib.instruments.append(voice)
-            joe_in_trib = BM.Member.insert(musician=musicain_joe, band=trib_band)
+            joe_in_trib = BM.Member.insert(musician=musician_joe, band=trib_band)
             joe_in_trib.instruments.append(violin)
 
-            doe_in_trib = BM.Member.insert(musician=musicain_doe, band=trib_band)
+            doe_in_trib = BM.Member.insert(musician=musician_doe, band=trib_band)
             doe_in_trib.instruments.append(banjos)
             doe_in_trib.instruments.append(classical_guitare)
             doe_in_trib.instruments.append(chromatic_accordion)
 
-            BM.Member.insert(is_admin=True, musician=musicain_doe, band=tradamuse_band)
+            BM.Member.insert(is_admin=True, musician=musician_doe, band=tradamuse_band)
+
+            # Score not link yet to music
+            BM.Score.insert(
+                name="Polka pomme",
+                imported_by=musician_joe,
+            )
+            BM.Score.insert(
+                name="Au coin du feux",
+                imported_by=musician_doe,
+            )
+
+            # Score link to music but no band
+
+            music_jet_lama = BM.Music.insert(
+                title="Le Jet du Lama",
+                dance="Chapelloise",
+                composer="Philippe Plard",
+            )
+            BM.Score.insert(
+                name="Voice 1 - G/C accordéon",
+                imported_by=musician_joe,
+                music=music_jet_lama,
+            )
+
+            music_elle = BM.Music.insert(
+                title="Elle",
+                dance="Valse 5 temps",
+                composer="Rémi Geffroy",
+            )
+            BM.Score.insert(
+                name="voice 1 - G/C accordéon",
+                imported_by=musician_doe,
+                music=music_elle,
+            )
+
+            # Scores linked to musics/bands
+            music_envole = BM.Music.insert(
+                title="L'envole",
+                dance="Valse",
+                composer="Pierre Verkest",
+            )
+            BM.Score.insert(
+                name="Voice 1",
+                source_writer_credits="Marie-Hélène",
+                imported_by=musician_joe,
+                music=music_envole,
+            )
 
             music_zelda = BM.Music.insert(
                 title="Zelda",
@@ -116,13 +166,13 @@ class BandManagementBase(Blok):
             BM.Score.insert(
                 name="Voice 1 - Zelda",
                 source_writer_credits="Manqu'pas d'airs",
-                imported_by=musicain_joe,
+                imported_by=musician_joe,
                 music=music_zelda,
             )
             BM.Score.insert(
                 name="Voice 2 - Zelda",
                 source_writer_credits="Manqu'pas d'airs",
-                imported_by=musicain_pv,
+                imported_by=musician_pv,
                 music=music_zelda,
             )
             music_esperanza = BM.Music.insert(
@@ -133,12 +183,14 @@ class BandManagementBase(Blok):
             BM.Score.insert(
                 name="Voice 1",
                 source_writer_credits="Manqu'pas d'airs",
-                imported_by=musicain_pv,
+                imported_by=musician_pv,
                 music=music_esperanza,
             )
             pamh_band.musics.append(music_zelda)
-            trib_band.musics.append(music_zelda)
+            pamh_band.musics.append(music_envole)
+            tradamuse_band.musics.append(music_zelda)
             trib_band.musics.append(music_esperanza)
+            trib_band.musics.append(music_zelda)
 
         if latest_version and latest_version < "0.2.0":
             # do something while moving to version 0.2.0

@@ -11,6 +11,8 @@
     </div>
   </div>
 </div>
-{% endblock top_menu_end %} {% block side_menu %} {{ render_menu( 'General', [ {'name': 'Home',
-'path': '/home'}, {'name': 'Bands', 'path':'/bands'}, {'name': 'Musics', 'path':'/musics'}, ]) }} {{
-render_menu( 'Scores', [ {'name': 'Import', 'path': '/scores'}, ]) }} {% endblock side_menu %}
+{% endblock top_menu_end %} {% block side_menu %} {% from "macros/menu-item.html" import
+render_musician_bands_menu with context %} {{render_musician_bands_menu('Active bands', musician)}}
+{{ render_menu( 'General', [ {'name': 'Home', 'path': '/home'}, {'name': 'Bands', 'path':'/bands'},
+{'name': 'Musics', 'path':'/musics'}, ]) }} {{ render_menu( 'Scores', [ {'name': 'Import', 'path':
+'/scores'}, ]) }} {% endblock side_menu %}

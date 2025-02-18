@@ -1,12 +1,23 @@
 {% extends "layouts/layout.html" %} {% block main %}
 
 <section>
-  {%- for member in musician.members: %}
+  {%- for member in musician.members: %} {%- set is_active_band = member.band in
+  musician.active_bands %}
   <article class="message">
-    <div class="message-header">
+    <div
+      class="message-header"
+      hx-put="/musician/{{musician.uuid}}/toggle-active-band/{{member.band.uuid}}"
+    >
       <p>{{member.band.name}}</p>
-      <!-- <button class="delete" aria-label="delete"></button> -->
+      <span class="icon is-small is-pulled-right">
+        {%- if is_active_band %}
+        <i class="fas fa-angle-down"></i>
+        {%- else %}
+        <i class="fas fa-angle-right"></i>
+        {%- endif %}
+      </span>
     </div>
+    {%- if is_active_band %}
     <div class="message-body">
       <div class="field is-grouped is-grouped-multiline">
         {%- for instrument in member.instruments: %}
@@ -33,6 +44,7 @@
       </div>
       <p>musics: {{member.band.musics_count}}</p>
     </div>
+    {%- endif %}
   </article>
   {%- endfor %}
 </section>

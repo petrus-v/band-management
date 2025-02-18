@@ -47,6 +47,12 @@ class BandManagementResponsiveWebApp(Blok):
 
         routes.update(
             {
+                "PUT/musician/{musician_uuid}/toggle-active-band/{band_uuid}": APIRoute(
+                    "/musician/{musician_uuid}/toggle-active-band/{band_uuid}",
+                    main.toggle_musician_active_band,
+                    methods=["PUT"],
+                    response_class=HTMLResponse,
+                ),
                 "GET/": APIRoute(
                     "/",
                     main.index,
