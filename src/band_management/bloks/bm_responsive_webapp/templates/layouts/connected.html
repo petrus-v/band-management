@@ -11,6 +11,25 @@
     </div>
   </div>
 </div>
-{% endblock top_menu_end %} {% block side_menu %} {{ render_menu( 'General', [ {'name': 'Home',
+{% endblock top_menu_end %} {% block side_menu %}
+
+<p class="menu-label">Bands</p>
+<ul class="menu-list">
+  {%- for member in musician.members: %}
+  <li>
+    <a class="{{ 'is-active' if member.band in musician.active_bands else ''}}"
+      hx-post="/musician/{{musician.uuid}}/toggle-active-band/{{musician.uuid}}">{{
+      member.band.name
+      }}</a>
+  </li>
+  {%- endfor %}
+</ul>
+
+
+{{ render_menu( 'General', [ {'name': 'Home',
 'path': '/home'}, {'name': 'Bands', 'path':'/bands'}, {'name': 'Musics', 'path':'/musics'}, ]) }} {{
-render_menu( 'Scores', [ {'name': 'Import', 'path': '/scores'}, ]) }} {% endblock side_menu %}
+render_menu( 'Scores', [ {'name': 'Import', 'path': '/scores'}, ]) }}
+
+
+
+{% endblock side_menu %}

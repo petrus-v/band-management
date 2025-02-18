@@ -2,9 +2,6 @@ footer.footer {
   padding: 0rem !important;
   padding-top: 4px;
 }
-/* footer > progress {
-
-} */
 
 @media (min-width: 1024px) {
   aside#sideBarMenuLeft {
