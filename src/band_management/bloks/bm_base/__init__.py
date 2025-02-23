@@ -59,7 +59,9 @@ class BandManagementBase(Blok):
             tradamuse_band = BM.Band.insert(name="Trad'amuse")
 
             musician_pv = BM.Musician.insert(
-                name="Pierre Verkest", email="pierre@verkest.fr", lang="fr",
+                name="Pierre Verkest",
+                email="pierre@verkest.fr",
+                lang="fr",
             )
             musician_joe = BM.Musician.insert(
                 name="Joe", email="joe@test.fr", lang="en"
@@ -109,6 +111,53 @@ class BandManagementBase(Blok):
 
             BM.Member.insert(is_admin=True, musician=musician_doe, band=tradamuse_band)
 
+            # Score not link yet to music
+            BM.Score.insert(
+                name="Polka pomme",
+                imported_by=musician_joe,
+            )
+            BM.Score.insert(
+                name="Au coin du feux",
+                imported_by=musician_doe,
+            )
+
+            # Score link to music but no band
+
+            music_jet_lama = BM.Music.insert(
+                title="Le Jet du Lama",
+                dance="Chapelloise",
+                composer="Philippe Plard",
+            )
+            BM.Score.insert(
+                name="Voice 1 - G/C accordéon",
+                imported_by=musician_joe,
+                music=music_jet_lama,
+            )
+
+            music_elle = BM.Music.insert(
+                title="Elle",
+                dance="Valse 5 temps",
+                composer="Rémi Geffroy",
+            )
+            BM.Score.insert(
+                name="voice 1 - G/C accordéon",
+                imported_by=musician_doe,
+                music=music_elle,
+            )
+
+            # Scores linked to musics/bands
+            music_envole = BM.Music.insert(
+                title="L'envole",
+                dance="Valse",
+                composer="Pierre Verkest",
+            )
+            BM.Score.insert(
+                name="Voice 1",
+                source_writer_credits="Marie-Hélène",
+                imported_by=musician_joe,
+                music=music_envole,
+            )
+
             music_zelda = BM.Music.insert(
                 title="Zelda",
                 dance="Mixer",
@@ -138,8 +187,10 @@ class BandManagementBase(Blok):
                 music=music_esperanza,
             )
             pamh_band.musics.append(music_zelda)
-            trib_band.musics.append(music_zelda)
+            pamh_band.musics.append(music_envole)
+            tradamuse_band.musics.append(music_zelda)
             trib_band.musics.append(music_esperanza)
+            trib_band.musics.append(music_zelda)
 
         if latest_version and latest_version < "0.2.0":
             # do something while moving to version 0.2.0

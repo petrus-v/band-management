@@ -9,4 +9,17 @@
   </li>
   {%- endfor %}
 </ul>
+{%- endmacro %} {% macro render_musician_bands_menu(title, musician) -%}
+<p class="menu-label">{{ title }}</p>
+<ul class="menu-list">
+  {%- for member in musician.members: %}
+  <li>
+    <a
+      class="{{ 'is-active' if member.band in musician.active_bands else ''}}"
+      hx-put="/musician/{{musician.uuid}}/toggle-active-band/{{member.band.uuid}}"
+      >{{ member.band.name }}</a
+    >
+  </li>
+  {%- endfor %}
+</ul>
 {%- endmacro %}

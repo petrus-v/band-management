@@ -1,18 +1,38 @@
-{% if scores %} {% for score in scores %}
-<div class="card">
-  <div class="card-content">
-    <p class="title">{{ score.name }}</p>
-    <p class="subtitle">{{ score.music.title }}</p>
-  </div>
-  <footer class="card-footer">
-    <a class="card-footer-item" href="score/{{ score.uuid }}">
-      <span> Edit </span>
-    </a>
-    <p class="card-footer-item">
-      <span> Test </span>
-    </p>
-  </footer>
-</div>
-{% endfor %} {% else %}
-<article><p>No scores found</p></article>
-{% endif %}
+<section>
+  {% if scores %} {% for score in scores %}
+  <article class="message {{ '' if score.music else 'is-danger'}}">
+    <div class="message-header">
+      <span>{{ score.name }}</span>
+      <a class="button" href="score/{{ score.uuid }}">
+        <span class="icon">
+          <i class="fa fa-edit"></i>
+        </span>
+        <span>Edit</span>
+      </a>
+    </div>
+    <div class="message-body">
+      <ul>
+        <li>
+          <span><strong>Music: </strong></span>{{ score.music.title }}
+        </li>
+        <li>
+          <span><strong>Credits: </strong></span>{{ score.music.source_writer_credits }}
+        </li>
+      </ul>
+      <div class="field is-grouped is-grouped-multiline">
+        {%- for band in score.music.bands: %}
+        <div class="control">
+          <div class="tags has-addons">
+            <a class="tag is-link">{{ band.name }}</a>
+          </div>
+        </div>
+        {%- endfor %}
+      </div>
+    </div>
+  </article>
+  {% endfor %} {% else %}
+  <article>
+    <p>No scores found</p>
+  </article>
+  {% endif %}
+</section>
