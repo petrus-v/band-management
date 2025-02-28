@@ -54,16 +54,28 @@ footer.footer {
 
 [data-theme="light"],
 .theme-light {
-  --custom-menu-theme-background-color: var(--custom-menu-background-color-light);
-  --custom-menu-theme-background-color-hover: var(--custom-menu-background-color-hover-light);
-  --custom-menu-theme-background-color-active: var(--custom-menu-background-color-active-light);
+  --custom-menu-theme-background-color: var(
+    --custom-menu-background-color-light
+  );
+  --custom-menu-theme-background-color-hover: var(
+    --custom-menu-background-color-hover-light
+  );
+  --custom-menu-theme-background-color-active: var(
+    --custom-menu-background-color-active-light
+  );
 }
 
 [data-theme="dark"],
 .theme-dark {
-  --custom-menu-theme-background-color: var(--custom-menu-background-color-dark);
-  --custom-menu-theme-background-color-hover: var(--custom-menu-background-color-hover-dark);
-  --custom-menu-theme-background-color-active: var(--custom-menu-background-color-active-dark);
+  --custom-menu-theme-background-color: var(
+    --custom-menu-background-color-dark
+  );
+  --custom-menu-theme-background-color-hover: var(
+    --custom-menu-background-color-hover-dark
+  );
+  --custom-menu-theme-background-color-active: var(
+    --custom-menu-background-color-active-dark
+  );
 }
 
 aside {

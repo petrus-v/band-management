@@ -1,18 +1,33 @@
-{% if bands %} {% for band in bands %}
-<div class="card">
-  <div class="card-content">
-    <p class="title">{{ band.name }}</p>
-    <p class="subtitle">...</p>
-  </div>
-  <footer class="card-footer">
-    <a class="card-footer-item" href="band/{{ band.uuid }}">
-      <span> Edit </span>
-    </a>
-    <p class="card-footer-item">
-      <span> Test </span>
-    </p>
-  </footer>
-</div>
-{% endfor %} {% else %}
-<article><p>No bands found</p></article>
-{% endif %}
+<section>
+  {% if bands %} {% for band in bands %}
+    <article class="message">
+      <div class="message-header">
+        <span>{{ band.name }}</span>
+        <a class="button" href="band/{{ band.uuid }}">
+          <span class="icon">
+            <i class="fa fa-edit"></i>
+          </span>
+          <span>Edit</span>
+        </a>
+      </div>
+      <div class="message-body">
+        <p>musicians: {{band.musicians_count}}</p>
+        <div class="field is-grouped is-grouped-multiline">
+          {%- for band_member in band.members: %}
+            <div class="control">
+              <div class="tags has-addons">
+                <a class="tag is-link">{{ band_member.musician.name }}</a>
+            <!-- <a class="tag is-delete"></a> -->
+              </div>
+            </div>
+          {%- endfor %}
+        </div>
+        <p>musics: {{band.musics_count}}</p>
+      </div>
+    </article>
+  {% endfor %} {% else %}
+    <article>
+      <p>No band</p>
+    </article>
+  {% endif %}
+</section>

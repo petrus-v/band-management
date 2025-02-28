@@ -1,52 +1,52 @@
 {% extends "layouts/layout.html" %} {% block main %}
 
-<section>
-  {%- for member in musician.members: %} {%- set is_active_band = member.band in
-  musician.active_bands %}
-  <article class="message">
-    <div
-      class="message-header"
-      hx-put="/musician/{{musician.uuid}}/toggle-active-band/{{member.band.uuid}}"
-    >
-      <p>{{member.band.name}}</p>
-      <span class="icon is-small is-pulled-right">
+  <section>
+    {%- for member in musician.members: %} {%- set is_active_band = member.band in
+      musician.active_bands %}
+      <article class="message">
+        <div
+          class="message-header"
+          hx-put="/musician/{{musician.uuid}}/toggle-active-band/{{member.band.uuid}}">
+          <p>{{member.band.name}}</p>
+          <span class="icon is-small is-pulled-right">
+            {%- if is_active_band %}
+              <i class="fas fa-angle-down"></i>
+            {%- else %}
+              <i class="fas fa-angle-right"></i>
+            {%- endif %}
+          </span>
+        </div>
         {%- if is_active_band %}
-        <i class="fas fa-angle-down"></i>
-        {%- else %}
-        <i class="fas fa-angle-right"></i>
+          <div class="message-body">
+            <div class="field is-grouped is-grouped-multiline">
+              {%- for instrument in member.instruments: %}
+                <div class="control">
+                  <div class="tags has-addons">
+                    <a class="tag is-link">{{ instrument.name }}</a>
+            <!-- <a class="tag is-delete"></a> -->
+                  </div>
+                </div>
+              {%- endfor %}
+            </div>
+            <p>musicians: {{member.band.musicians_count}}</p>
+            <div class="field is-grouped is-grouped-multiline">
+              {%- for band_member in member.band.members: %}
+                <div class="control">
+                  <div class="tags has-addons">
+                    <a
+                      class="tag {{'is-link' if member != band_member else 'is-primary'}}"
+                    >{{ band_member.musician.name }}</a
+                      >
+            <!-- <a class="tag is-delete"></a> -->
+                    </div>
+                  </div>
+              {%- endfor %}
+            </div>
+            <p>musics: {{member.band.musics_count}}</p>
+          </div>
         {%- endif %}
-      </span>
-    </div>
-    {%- if is_active_band %}
-    <div class="message-body">
-      <div class="field is-grouped is-grouped-multiline">
-        {%- for instrument in member.instruments: %}
-        <div class="control">
-          <div class="tags has-addons">
-            <a class="tag is-link">{{ instrument.name }}</a>
-            <!-- <a class="tag is-delete"></a> -->
-          </div>
-        </div>
-        {%- endfor %}
-      </div>
-      <p>musicians: {{member.band.musicians_count}}</p>
-      <div class="field is-grouped is-grouped-multiline">
-        {%- for band_member in member.band.members: %}
-        <div class="control">
-          <div class="tags has-addons">
-            <a class="tag {{'is-link' if member != band_member else 'is-primary'}}"
-              >{{ band_member.musician.name }}</a
-            >
-            <!-- <a class="tag is-delete"></a> -->
-          </div>
-        </div>
-        {%- endfor %}
-      </div>
-      <p>musics: {{member.band.musics_count}}</p>
-    </div>
-    {%- endif %}
-  </article>
-  {%- endfor %}
-</section>
+      </article>
+    {%- endfor %}
+  </section>
 
 {% endblock %}

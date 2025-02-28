@@ -56,3 +56,39 @@ def test_query_for_musician_without_draft_scores(bm, joe_pamh_current_active_ban
         ),
         ("Zelda", "Voice 2 - Zelda"),
     ]
+
+
+def test_score_update_by(bm, joe_pamh_current_active_band, pamh_band, esperanza_music):
+    assert pamh_band not in esperanza_music.bands
+    esperanza_voice_3 = bm.Score.insert(
+        name="voice 3", imported_by=joe_pamh_current_active_band
+    )
+    esperanza_voice_3.update_by(
+        joe_pamh_current_active_band,
+        name="Esperanza - Voice 3",
+        source_writer_credits="Test",
+        music_uuid=esperanza_music.uuid,
+    )
+    assert esperanza_voice_3.music == esperanza_music
+    assert pamh_band in esperanza_music.bands
+    assert esperanza_voice_3.name == "Esperanza - Voice 3"
+    assert esperanza_voice_3.source_writer_credits == "Test"
+    other_music = bm.Music.insert(
+        title="Other",
+    )
+    esperanza_voice_3.update_by(
+        joe_pamh_current_active_band,
+        name="",
+        source_writer_credits="",
+        music_uuid=other_music.uuid,
+    )
+    assert esperanza_voice_3.music == other_music
+    assert pamh_band in esperanza_music.bands
+    assert pamh_band in other_music.bands
+    assert esperanza_voice_3.name == "Esperanza - Voice 3"
+    assert esperanza_voice_3.source_writer_credits is None
+
+    esperanza_voice_3.update_by(
+        joe_pamh_current_active_band, name="", source_writer_credits="", music_uuid=""
+    )
+    assert esperanza_voice_3.music is None

@@ -46,3 +46,18 @@ def trib_band(bm):
 @pytest.fixture()
 def tradamuse_band(bm):
     return bm.Band.query().filter_by(name="Trad'amuse").one()
+
+
+@pytest.fixture
+def zelda_music(bm):
+    return bm.Music.query().filter_by(title="Zelda").one()
+
+
+@pytest.fixture
+def elle_music(bm):
+    return bm.Music.query().filter_by(title="Elle").one()
+
+
+@pytest.fixture
+def esperanza_music(bm):
+    return bm.Music.query().filter_by(title="Esperanza").one()

@@ -1,0 +1,52 @@
+<section>
+  {% if musics %} {% for music in musics %}
+    <article class="message">
+      <div class="message-header">
+        <span>{{ music.title | highlight(search) | safe }}</span>
+        <a class="button" href="music/{{ music.uuid }}">
+          <span class="icon">
+            <i class="fa fa-edit"></i>
+          </span>
+          <span>Edit</span>
+        </a>
+      </div>
+      <div class="message-body">
+        <p>
+          <ul>
+            {%- if music.composer %}
+              <li>
+                <span><strong>Composer: </strong></span>{{ music.composer }}
+              </li>
+            {%- endif %}{%- if music.author %}
+              <li>
+                <span><strong>Author: </strong></span>{{ music.author }}
+              </li>
+            {%- endif %}{%- if music.dance %}
+              <li>
+                <span><strong>Dance: </strong></span>{{ music.dance }}
+              </li>
+            {%- endif %}
+          </ul>
+
+        </p>
+        <div class="field is-grouped is-grouped-multiline">
+          {%- for member in musician.members: %}
+
+            <div class="control">
+              <div class="tags has-addons">
+                <a class="tag {{ 'is-success' if member.band in music.bands else 'is-text'}}">
+                  {{ member.band.name }}</a>
+            <!-- <a class="tag is-delete"></a> -->
+              </div>
+            </div>
+          {%- endfor %}
+        </div>
+        <p>scores: {{music.scores_count}}</p>
+      </div>
+    </article>
+  {% endfor %} {% else %}
+    <article>
+      <p>No Music found</p>
+    </article>
+  {% endif %}
+</section>

@@ -1,13 +1,12 @@
 {% macro render_navbar_item(path, title, icon, method='get') -%}
-<a
-  hx-{{method}}="{{ path }}"
-  hx-target="body"
-  hx-push-url="true"
-  class="navbar-item {{ 'is-active' if request.path.lower() == path else ''}}"
->
-  <span class="icon">
-    <i class="fa {{ icon }}"></i>
-  </span>
-  <span> {{ title }} </span>
-</a>
+  <a
+    hx-{{method}}="{{ path }}"
+    hx-target="body"
+    hx-push-url="true"
+    class="navbar-item {{ 'is-active' if request.path.lower() == path else ''}}">
+    <span class="icon">
+      <i class="fa {{ icon }}"></i>
+    </span>
+    <span> {{ title }} </span>
+  </a>
 {% endmacro %}

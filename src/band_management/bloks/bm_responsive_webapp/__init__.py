@@ -44,6 +44,9 @@ class BandManagementResponsiveWebApp(Blok):
     @classmethod
     def fastapi_routes(cls, routes: dict) -> None:
         from . import main
+        from . import score
+        from . import band
+        from . import music
 
         routes.update(
             {
@@ -91,13 +94,13 @@ class BandManagementResponsiveWebApp(Blok):
                 ),
                 "GET/bands": APIRoute(
                     "/bands",
-                    main.bands,
+                    band.bands,
                     methods=["GET"],
                     response_class=HTMLResponse,
                 ),
                 "POST/bands": APIRoute(
                     "/bands",
-                    main.search_bands,
+                    band.search_bands,
                     methods=["POST"],
                     response_class=HTMLResponse,
                 ),
@@ -106,25 +109,25 @@ class BandManagementResponsiveWebApp(Blok):
                     routes=[
                         APIRoute(
                             "/",
-                            main.add_band,
+                            band.add_band,
                             methods=["POST"],
                             response_class=HTMLResponse,
                         ),
                         APIRoute(
                             "/prepare",
-                            main.prepare_band,
+                            band.prepare_band,
                             methods=["GET"],
                             response_class=HTMLResponse,
                         ),
                         APIRoute(
                             "/{band_uuid}",
-                            main.band,
+                            band.band,
                             methods=["GET"],
                             response_class=HTMLResponse,
                         ),
                         APIRoute(
                             "/{band_uuid}",
-                            main.update_band,
+                            band.update_band,
                             methods=["PUT"],
                             response_class=HTMLResponse,
                         ),
@@ -132,19 +135,60 @@ class BandManagementResponsiveWebApp(Blok):
                 ),
                 "GET/musics": APIRoute(
                     "/musics",
-                    main.musics,
+                    music.musics,
                     methods=["GET"],
                     response_class=HTMLResponse,
                 ),
+                "POST/musics": APIRoute(
+                    "/musics",
+                    music.search_musics,
+                    methods=["POST"],
+                    response_class=HTMLResponse,
+                ),
+                "POST/dropdown-musics": APIRoute(
+                    "/dropdown-musics",
+                    music.search_dropdown_musics,
+                    methods=["POST"],
+                    response_class=HTMLResponse,
+                ),
+                "MOUNT/music/": Mount(
+                    "/music",
+                    routes=[
+                        APIRoute(
+                            "/",
+                            music.add_music,
+                            methods=["POST"],
+                            response_class=HTMLResponse,
+                        ),
+                        APIRoute(
+                            "/prepare",
+                            music.prepare_music,
+                            methods=["GET"],
+                            response_class=HTMLResponse,
+                        ),
+                        APIRoute(
+                            "/{music_uuid}",
+                            music.music,
+                            methods=["GET"],
+                            response_class=HTMLResponse,
+                        ),
+                        APIRoute(
+                            "/{music_uuid}",
+                            music.update_music,
+                            methods=["PUT"],
+                            response_class=HTMLResponse,
+                        ),
+                    ],
+                ),
                 "GET/scores": APIRoute(
                     "/scores",
-                    main.scores,
+                    score.scores,
                     methods=["GET"],
                     response_class=HTMLResponse,
                 ),
                 "POST/scores": APIRoute(
                     "/scores",
-                    main.search_scores,
+                    score.search_scores,
                     methods=["POST"],
                     response_class=HTMLResponse,
                 ),
@@ -153,31 +197,31 @@ class BandManagementResponsiveWebApp(Blok):
                     routes=[
                         APIRoute(
                             "/",
-                            main.add_scores,
+                            score.add_scores,
                             methods=["POST"],
                             response_class=HTMLResponse,
                         ),
                         APIRoute(
                             "/prepare",
-                            main.prepare_score,
+                            score.prepare_score,
                             methods=["GET"],
                             response_class=HTMLResponse,
                         ),
                         APIRoute(
                             "/{score_uuid}",
-                            main.score,
+                            score.score,
                             methods=["GET"],
                             response_class=HTMLResponse,
                         ),
                         APIRoute(
                             "/{score_uuid}/media",
-                            main.score_media,
+                            score.score_media,
                             methods=["GET"],
                             response_class=FileResponse,
                         ),
                         APIRoute(
                             "/{score_uuid}",
-                            main.update_score,
+                            score.update_score,
                             methods=["PUT"],
                             response_class=HTMLResponse,
                         ),

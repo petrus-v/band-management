@@ -1,7 +1,7 @@
 {% extends "layouts/layout.html" %} {% block main %}
   <div>
-    <form id="band-form" hx-put="/band/{{ band.uuid }}" hx-target="body">
-      {% include "bands/band-form.html" %}
+    <form id="music-form" hx-put="/music/{{ music.uuid }}" hx-target="body">
+      {% include "musics/music-form.html" %}
     </form>
   </div>
 {% endblock %} {% block footer %}
@@ -11,15 +11,15 @@
       role="navigation"
       aria-label="main navigation">
       <div class="navbar">
-        <a class="navbar-item" href="/bands"> Cancel </a>
-        <input type="submit" form="band-form" class="navbar-item" value="Save" />
+        <a class="navbar-item" href="/musics"> Cancel </a>
+        <input type="submit" form="music-form" class="navbar-item" value="Save" />
       </div>
     </nav>
   </footer>
 {% endblock footer %} {% block footer_navbar_items %}
   <div class="navbar-start">
     <div class="navbar-item">
-      <a href="/bands" class="button is-outlined">
+      <a href="/musics" class="button is-outlined">
         <span class="icon">
           <i class="fa fa-undo"></i>
         </span>
@@ -27,7 +27,7 @@
       </a>
       <button
         type="submit"
-        form="band-form"
+        form="music-form"
         class="button is-light is-pulled-right">
         <span class="icon">
           <i class="fa fa-save"></i>

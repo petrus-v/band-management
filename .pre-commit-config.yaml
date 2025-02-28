@@ -5,16 +5,13 @@ repos:
     - id: ruff
       args: [ --fix, --unsafe-fixes ]
     - id: ruff-format
--   repo: https://github.com/pre-commit/mirrors-prettier
-    rev: 'v4.0.0-alpha.8'
-    hooks:
-    -   id: prettier
-        types_or: [css, javascript, html]
-        additional_dependencies:
-        - prettier@3.4.2
-        - eslint-config-prettier
-        - '@prettier/plugin-xml@0.12.0'
--   repo: https://github.com/pre-commit/mirrors-eslint
-    rev: 'v9.18.0'
-    hooks:
-    -   id: eslint
+- repo: https://github.com/pre-commit/mirrors-eslint
+  rev: 'v9.18.0'
+  hooks:
+  -   id: eslint
+- repo: https://github.com/rtts/djhtml
+  rev: '3.0.7'
+  hooks:
+    - id: djhtml
+    - id: djcss
+    - id: djjs

@@ -24,3 +24,26 @@ class Music(Mixin.PrimaryColumn):
         remote_columns="uuid",
         many2many="musics",
     )
+
+    @property
+    def scores_count(self):
+        return len(self.scores)
+
+    def update_bands(self, musician, expected_band_uuids):
+        current_bands = set()
+        expected_bands = set()
+
+        for band in musician.members.band:
+            if band in self.bands:
+                current_bands |= {band}
+            if str(band.uuid) in expected_band_uuids:
+                expected_bands |= {band}
+
+        [self.bands.append(band) for band in expected_bands - current_bands]
+        [self.bands.remove(band) for band in current_bands - expected_bands]
+
+    def ensure_musician_active_bands(self, musician):
+        [
+            self.bands.append(band)
+            for band in set(musician.active_bands) - set(self.bands)
+        ]

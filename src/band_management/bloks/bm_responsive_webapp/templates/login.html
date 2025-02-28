@@ -1,17 +1,23 @@
-{% extends "layouts/disconnected.html" %} {% block main %} {%- if error_message %}
-<article class="message is-danger">
-  <div class="message-header">
-    <p>Oops something went wrong</p>
-  </div>
-  <div class="message-body">{{ error_message }}</div>
-</article>
+{% extends "layouts/disconnected.html" %} {% block main %} {%- if error_message
+  %}
+  <article class="message is-danger">
+    <div class="message-header">
+      <p>Oops something went wrong</p>
+    </div>
+    <div class="message-body">{{ error_message }}</div>
+  </article>
 {%- endif %}
 
 <form hx-post="/login" class="box" hx-target="body">
   <div class="field">
     <label class="label">Username</label>
     <div class="control">
-      <input class="input" placeholder="Username" id="username" name="username" required />
+      <input
+        class="input"
+        placeholder="Username"
+        id="username"
+        name="username"
+        required />
     </div>
   </div>
 
@@ -24,8 +30,7 @@
         placeholder="Enter your password"
         id="password"
         name="password"
-        required
-      />
+        required />
     </div>
   </div>
   <div>
@@ -36,6 +41,7 @@
 </form>
 
 <p class="mt-6 has-text-centered">
-  Don't have an account? Create one <a href="/register" class="tag is-white is-medium">here</a>
+  Don't have an account? Create one
+  <a href="/register" class="tag is-white is-medium">here</a>
 </p>
 {% endblock %}

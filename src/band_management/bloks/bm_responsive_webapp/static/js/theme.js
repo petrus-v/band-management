@@ -4,7 +4,8 @@
   const body = document.querySelector("body");
 
   const ensure_theme = function (theme) {
-    document.cookie = "theme=" + theme + "; SameSite=Strict; Secure; Max-Age: 3600";
+    document.cookie =
+      "theme=" + theme + "; SameSite=Strict; Secure; Max-Age: 3600";
 
     if (body.dataset.theme !== theme) {
       body.dataset.theme = theme;
@@ -30,16 +31,18 @@
       systemTheme = "light";
     }
 
-    window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (event) => {
-      const newTheme = event.matches ? "dark" : "light";
-      ensure_theme(newTheme);
-    });
+    window
+      .matchMedia("(prefers-color-scheme: dark)")
+      .addEventListener("change", (event) => {
+        const newTheme = event.matches ? "dark" : "light";
+        ensure_theme(newTheme);
+      });
   }
 
   const cookieTheme = document.cookie
     .split("; ")
     .find((row) => row.startsWith("theme="))
-    ?.split("=")[1];
+  ?.split("=")[1];
   console.log("cookie theme", cookieTheme);
   if (cookieTheme) {
     ensure_theme(cookieTheme);

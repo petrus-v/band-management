@@ -24,6 +24,7 @@ class Score(Mixin.PrimaryColumn):
     music: "Model.BandManagement.Music" = Many2One(
         model="Model.BandManagement.Music",
         nullable=True,
+        one2many="scores",
     )
     imported_by: "Model.BandManagement.Musician" = Many2One(
         model="Model.BandManagement.Musician",
@@ -64,3 +65,23 @@ class Score(Mixin.PrimaryColumn):
         )
 
         return query
+
+    def update_by(
+        self,
+        musician,
+        name=None,
+        source_writer_credits=None,
+        music_uuid: str = None,
+    ):
+        BM = self.anyblok.BandManagement
+        if name:
+            self.name = name
+
+        self.source_writer_credits = source_writer_credits or None
+
+        music = None
+        if music_uuid:
+            music = BM.Music.query().filter_by(uuid=music_uuid).one_or_none()
+        if music and self.music != music:
+            music.ensure_musician_active_bands(musician)
+        self.music = music
