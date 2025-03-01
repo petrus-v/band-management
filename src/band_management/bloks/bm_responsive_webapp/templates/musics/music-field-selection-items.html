@@ -1,0 +1,16 @@
+{% if musics %} {% for music in musics %}
+  <a href="#" class="dropdown-item" hx-on:click="document.getElementById('selected-music-uuid').value = '{{ music.uuid }}';
+                                                 document.getElementById('music-search').value = '{{ music.title }}';">
+    <span> {{ music.title | highlight(search) | safe}} </span>
+    {%- if music.composer %} -
+      <span> {{ music.composer | highlight(search) | safe}} </span> {%- endif %}{%-
+    if music.author %} -
+    <span> {{ music.author | highlight(search) | safe}} </span>
+{%- endif %}
+  </a>
+{% endfor %} {% else %}
+  <a href="#" class="dropdown-item js-modal-trigger" hx-get="/music/prepare?modal_mode=1&music_name={{ search }}"
+     hx-target="#music-modal-content" data-target="music-modal" hx-trigger="click" onclick="openModal(this)">
+    Create {{ search }}...
+  </a>
+{% endif %}

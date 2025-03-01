@@ -36,10 +36,10 @@ def scores(
 
 def search_scores(
     request: Request,
-    search: Annotated[str, Form()],
     token_data: Annotated[
         TokenDataSchema, Security(get_authenticated_musician, scopes=["musician-auth"])
     ],
+    search: Annotated[str, Form()],
     ab_registry: "Registry" = Depends(get_registry),
 ):
     with registry_transaction(ab_registry) as anyblok:
@@ -58,6 +58,7 @@ def search_scores(
             context={
                 **_prepare_context(anyblok, request, token_data),
                 "scores": scores,
+                "search": search,
             },
         )
         return response
@@ -84,11 +85,11 @@ def prepare_score(
 
 
 def score(
-    score_uuid: str,
     request: Request,
     token_data: Annotated[
         TokenDataSchema, Security(get_authenticated_musician, scopes=["musician-auth"])
     ],
+    score_uuid: str,
     ab_registry: "Registry" = Depends(get_registry),
 ):
     with registry_transaction(ab_registry) as anyblok:
@@ -105,11 +106,11 @@ def score(
 
 
 async def score_media(
-    score_uuid: str,
     request: Request,
     token_data: Annotated[
         TokenDataSchema, Security(get_authenticated_musician, scopes=["musician-auth"])
     ],
+    score_uuid: str,
     ab_registry: "Registry" = Depends(get_registry),
 ):
     with registry_transaction(ab_registry) as anyblok:
@@ -126,11 +127,11 @@ async def score_media(
 
 async def add_scores(
     request: Request,
-    score_files: Annotated[
-        list[UploadFile], File(description="Multipple Score file to upload")
-    ],
     token_data: Annotated[
         TokenDataSchema, Security(get_authenticated_musician, scopes=["musician-auth"])
+    ],
+    score_files: Annotated[
+        list[UploadFile], File(description="Multipple Score file to upload")
     ],
     ab_registry: "Registry" = Depends(get_registry),
 ):
@@ -170,13 +171,13 @@ async def add_scores(
 
 def update_score(
     request: Request,
-    score_uuid: str,
-    score_name: Annotated[str | None, Form()],
-    score_music: Annotated[str | None, Form()],
-    source_writer_credits: Annotated[str | None, Form()],
     token_data: Annotated[
         TokenDataSchema, Security(get_authenticated_musician, scopes=["musician-auth"])
     ],
+    score_uuid: str,
+    score_name: Annotated[str, Form()],
+    score_music: Annotated[str | None, Form()] = None,
+    source_writer_credits: Annotated[str | None, Form()] = None,
     ab_registry: "Registry" = Depends(get_registry),
 ):
     with registry_transaction(ab_registry) as anyblok:

@@ -37,29 +37,36 @@ def prepare_music(
     token_data: Annotated[
         TokenDataSchema, Security(get_authenticated_musician, scopes=["musician-auth"])
     ],
+    music_name: str = "",
+    modal_mode: bool = False,
     ab_registry: "Registry" = Depends(get_registry),
 ):
     with registry_transaction(ab_registry) as anyblok:
         musician = _get_musician_from_token(anyblok, token_data)
         BM = anyblok.BandManagement
-        music = BM.Music(title="Default Music")
+        music = BM.Music(title=music_name or "Default Music")
         [music.bands.append(b) for b in musician.active_bands]
+        template = "music-prepare.html"
+        if modal_mode:
+            template = "musics/prepare-modal.html"
+
         return templates.TemplateResponse(
-            name="music-prepare.html",
+            name=template,
             request=request,
             context={
                 **_prepare_context(anyblok, request, token_data),
                 "music": music,
+                "modal_mode": modal_mode,
             },
         )
 
 
 def music(
-    music_uuid: str,
     request: Request,
     token_data: Annotated[
         TokenDataSchema, Security(get_authenticated_musician, scopes=["musician-auth"])
     ],
+    music_uuid: str,
     ab_registry: "Registry" = Depends(get_registry),
 ):
     with registry_transaction(ab_registry) as anyblok:
@@ -77,14 +84,15 @@ def music(
 
 def add_music(
     request: Request,
+    token_data: Annotated[
+        TokenDataSchema, Security(get_authenticated_musician, scopes=["musician-auth"])
+    ],
     music_title: Annotated[str, Form()],
     music_composer: Annotated[str, Form()],
     music_author: Annotated[str, Form()],
     music_dance: Annotated[str, Form()],
     music_bands: Annotated[list[str] | None, Form()],
-    token_data: Annotated[
-        TokenDataSchema, Security(get_authenticated_musician, scopes=["musician-auth"])
-    ],
+    modal_mode: Annotated[bool, Form()] = False,
     ab_registry: "Registry" = Depends(get_registry),
 ):
     with registry_transaction(ab_registry) as anyblok:
@@ -97,26 +105,36 @@ def add_music(
             dance=music_dance,
         )
         music.update_bands(musician, music_bands)
-    return RedirectResponse(
-        "/musics",
-        status_code=201,
-        headers={
-            "HX-Redirect": "/musics",
-        },
-    )
+    if modal_mode:
+        return templates.TemplateResponse(
+            name="musics/music-field-selection.html",
+            request=request,
+            context={
+                **_prepare_context(anyblok, request, token_data),
+                "music": music,
+            },
+        )
+    else:
+        return RedirectResponse(
+            "/musics",
+            status_code=201,
+            headers={
+                "HX-Redirect": "/musics",
+            },
+        )
 
 
 def update_music(
     request: Request,
+    token_data: Annotated[
+        TokenDataSchema, Security(get_authenticated_musician, scopes=["musician-auth"])
+    ],
     music_uuid: str,
     music_title: Annotated[str, Form()],
     music_composer: Annotated[str, Form()],
     music_author: Annotated[str, Form()],
     music_dance: Annotated[str, Form()],
     music_bands: Annotated[list[str] | None, Form()],
-    token_data: Annotated[
-        TokenDataSchema, Security(get_authenticated_musician, scopes=["musician-auth"])
-    ],
     ab_registry: "Registry" = Depends(get_registry),
 ):
     with registry_transaction(ab_registry) as anyblok:
@@ -164,10 +182,10 @@ def _search_musics(ab_registry, request, search, token_data):
 
 def search_musics(
     request: Request,
-    search: Annotated[str, Form()],
     token_data: Annotated[
         TokenDataSchema, Security(get_authenticated_musician, scopes=["musician-auth"])
     ],
+    search: Annotated[str, Form()],
     ab_registry: "Registry" = Depends(get_registry),
 ):
     with _search_musics(ab_registry, request, search, token_data) as (anyblok, musics):
@@ -185,15 +203,15 @@ def search_musics(
 
 def search_dropdown_musics(
     request: Request,
-    search: Annotated[str, Form()],
     token_data: Annotated[
         TokenDataSchema, Security(get_authenticated_musician, scopes=["musician-auth"])
     ],
+    search: Annotated[str, Form()],
     ab_registry: "Registry" = Depends(get_registry),
 ):
     with _search_musics(ab_registry, request, search, token_data) as (anyblok, musics):
         response = templates.TemplateResponse(
-            name="musics/search-dropdown-result.html",
+            name="musics/music-field-selection-items.html",
             request=request,
             context={
                 **_prepare_context(anyblok, request, token_data),

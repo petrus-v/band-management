@@ -115,8 +115,8 @@ def login(
 
 def login_post(
     request: Request,
-    anyblok_registry: Annotated["Registry", Depends(get_registry)],
     form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
+    anyblok_registry: Annotated["Registry", Depends(get_registry)],
 ):
     """Authentication end point"""
     with registry_transaction(anyblok_registry) as anyblok:
@@ -184,12 +184,12 @@ def home(
 
 
 def toggle_musician_active_band(
-    musician_uuid: str,
-    band_uuid: str,
     request: Request,
     token_data: Annotated[
         TokenDataSchema, Security(get_authenticated_musician, scopes=["musician-auth"])
     ],
+    musician_uuid: str,
+    band_uuid: str,
     ab_registry: "Registry" = Depends(get_registry),
 ):
     with registry_transaction(ab_registry) as anyblok:

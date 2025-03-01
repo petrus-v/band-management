@@ -52,11 +52,11 @@ def prepare_band(
 
 
 def band(
-    band_uuid: str,
     request: Request,
     token_data: Annotated[
         TokenDataSchema, Security(get_authenticated_musician, scopes=["musician-auth"])
     ],
+    band_uuid: str,
     ab_registry: "Registry" = Depends(get_registry),
 ):
     with registry_transaction(ab_registry) as anyblok:
@@ -74,10 +74,10 @@ def band(
 
 def add_band(
     request: Request,
-    band_name: Annotated[str, Form()],
     token_data: Annotated[
         TokenDataSchema, Security(get_authenticated_musician, scopes=["musician-auth"])
     ],
+    band_name: Annotated[str, Form()],
     ab_registry: "Registry" = Depends(get_registry),
 ):
     with registry_transaction(ab_registry) as anyblok:
@@ -94,11 +94,11 @@ def add_band(
 
 def update_band(
     request: Request,
-    band_uuid: str,
-    band_name: Annotated[str, Form()],
     token_data: Annotated[
         TokenDataSchema, Security(get_authenticated_musician, scopes=["musician-auth"])
     ],
+    band_uuid: str,
+    band_name: Annotated[str, Form()],
     ab_registry: "Registry" = Depends(get_registry),
 ):
     with registry_transaction(ab_registry) as anyblok:
@@ -116,10 +116,10 @@ def update_band(
 
 def search_bands(
     request: Request,
-    search: Annotated[str, Form()],
     token_data: Annotated[
         TokenDataSchema, Security(get_authenticated_musician, scopes=["musician-auth"])
     ],
+    search: Annotated[str, Form()],
     ab_registry: "Registry" = Depends(get_registry),
 ):
     with registry_transaction(ab_registry) as anyblok:
@@ -135,6 +135,7 @@ def search_bands(
             context={
                 **_prepare_context(anyblok, request, token_data),
                 "bands": bands,
+                "search": search,
             },
         )
         return response

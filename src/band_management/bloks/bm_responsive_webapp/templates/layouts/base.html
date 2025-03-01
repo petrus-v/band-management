@@ -1,36 +1,25 @@
 {% if not request.headers.get('HX-Boosted') %}
   <!doctype html>
   <html lang="en">
+
     <head>
       <meta charset="utf-8" />
       <meta name="viewport" content="width=device-width, initial-scale=1" />
       <title>Amné'Zik</title>
       <link rel="icon" type="image/png" href="/static/assets/favicon.png" />
-      <link
-        rel="stylesheet"
-        href="https://use.fontawesome.com/releases/v5.15.4/css/all.css"
-        crossorigin="anonymous" />
-      <link
-        rel="stylesheet"
-        href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css" />
+      <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" crossorigin="anonymous" />
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css" />
       <link rel="stylesheet" href="/static/css/style.css" />
       <link rel="stylesheet" href="/static/css/navbar.css" />
       <script src="https://unpkg.com/htmx.org"></script>
     </head>
 {% endif %}
 
-<body
-  hx-boost="true"
-  data-theme="{{request.cookies.theme == 'light' and 'light' or 'dark'}}">
+<body hx-boost="true" data-theme="{{request.cookies.theme == 'light' and 'light' or 'dark'}}">
   <header>
     <nav class="navbar is-primary is-fixed-top">
       <div class="navbar-brand">
-        <a
-          class="navbar-burger ml-0"
-          aria-label="menu"
-          id="aside-burger"
-          role="button"
-          data-target="navAsideMenu">
+        <a class="navbar-burger ml-0" aria-label="menu" id="aside-burger" role="button" data-target="navAsideMenu">
           <span aria-hidden="true"></span>
           <span aria-hidden="true"></span>
           <span aria-hidden="true"></span>
@@ -41,12 +30,7 @@
         </a>
         {% block top_menu_start %} {% endblock %}
 
-        <a
-          class="navbar-burger"
-          aria-label="menu"
-          id="top-burger"
-          role="button"
-          data-target="navMenu">
+        <a class="navbar-burger" aria-label="menu" id="top-burger" role="button" data-target="navMenu">
           <span aria-hidden="true"></span>
           <span aria-hidden="true"></span>
           <span aria-hidden="true"></span>
@@ -102,7 +86,9 @@
   </footer>
   <script async type="text/javascript" src="/static/js/navbar.js"></script>
   <script async type="text/javascript" src="/static/js/theme.js"></script>
+  <script async type="text/javascript" src="/static/js/modal.js"></script>
 </body>
 {% if not request.headers.get('HX-Boosted') %}
+
   </html>
 {% endif %}

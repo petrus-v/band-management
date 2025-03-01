@@ -41,8 +41,42 @@ def test_connected_musician_post_music(
     assert music.bands == [pamh_band]
 
 
+def test_connected_musician_post_music_modal(
+    bm,
+    connected_musician,
+    pamh_band,
+):
+    response = connected_musician.post(
+        "/music/",
+        data={
+            "music_title": "Music name",
+            "music_composer": "A composer",
+            "music_author": "An author",
+            "music_dance": "Valse",
+            "music_bands": [
+                "hidden",
+                str(pamh_band.uuid),
+            ],
+            "modal_mode": True,
+        },
+    )
+    assert response.status_code == 200, response.text
+
+    music = bm.Music.query().filter(bm.Music.title.like("Music name")).one()
+    assert music.title == "Music name"
+    assert music.composer == "A composer"
+    assert music.author == "An author"
+    assert music.dance == "Valse"
+    assert music.bands == [pamh_band]
+
+
 def test_connected_musician_prepare_music(bm, connected_musician):
     response = connected_musician.get("/music/prepare")
+    assert response.status_code == 200, response.text
+
+
+def test_connected_musician_prepare_music_modal_mode(bm, connected_musician):
+    response = connected_musician.get("/music/prepare?modal_mode=true&music_name=test")
     assert response.status_code == 200, response.text
 
 

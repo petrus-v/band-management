@@ -7,48 +7,28 @@
   </div>
 </div>
 
+{% set music = score.music %}
+
+{% include "musics/music-field-selection.html" %}
+
 <div class="field">
-  <label class="label">Music</label>
-
-  <div class="dropdown" id="music-dropdown" hx-on:click="this.classList.toggle('is-active')">
-    <div class="dropdown-trigger">
-      <div class="control has-icons-left">
-        <input type="text" form="search-music" class="input" id="music-search" placeholder="Search a music..."
-               name="search" hx-post="/dropdown-musics"
-               value="{{score.music and score.music.title or '' | default('', true)  }}"
-               hx-on:click="document.getElementById('music-dropdown').classList.toggle('is-active')"
-               hx-on:focus="document.getElementById('music-dropdown').classList.add('is-active')"
-               hx-trigger="keyup changed delay:300ms, load" hx-target="#music-dropdwon" />
-        <span class="icon is-medium is-left">
-          <i class="fas fa-music"></i>
-        </span>
-      </div>
-    </div>
-    <div class="dropdown-menu">
-      <div class="dropdown-content" id="music-dropdwon"></div>
-    </div>
-    <input type="hidden" name="score_music" form="score-form" id="selected-music-uuid"
-           value="{{score.music_uuid | default('', true)  }}" />
-    <p class="help">This is the music linked to the current score</p>
+  <label class="label">Score writer</label>
+  <div class="control">
+    <input class="input" form="score-form" type="text" name="source_writer_credits" placeholder="Score writer"
+           value="{{ score.source_writer_credits  | default('', true) }}" />
+    <p class="help">The person who write this score</p>
   </div>
+</div>
 
-  <div class="field">
-    <label class="label">Score writer</label>
-    <div class="control">
-      <input class="input" form="score-form" type="text" name="source_writer_credits" placeholder="Score writer"
-             value="{{ score.source_writer_credits  | default('', true) }}" />
-      <p class="help">The person who write this score</p>
-    </div>
-  </div>
+<div class="field">
+  <label class="label">Metatdata</label>
+  <textarea class="textarea" disabled="1">
+    {{score.storage_file_metadata}}
+  </textarea>
+</div>
 
-  <div class="field">
-    <label class="label">Metatdata</label>
-    <textarea class="textarea" disabled="1">
-      {{score.storage_file_metadata}}
-    </textarea>
-  </div>
-
-  {% if score.storage_file_metadata %}
+{% if score.storage_file_metadata %}
+  <div>
     <object type="{{score.storage_file_metadata.get('mime_type', 'appdlication/pdf')}}" data="/score/{{score.uuid}}/media"
             width="100%" height="600">
       <p>
@@ -57,5 +37,5 @@
         <a href="/score/{{score.uuid}}/media" target="_blank">download</a>.
       </p>
     </object>
-  {% endif %}
-</div>
+  </div>
+{% endif %}

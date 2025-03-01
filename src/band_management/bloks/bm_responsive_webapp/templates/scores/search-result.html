@@ -2,7 +2,7 @@
   {% if scores %} {% for score in scores %}
     <article class="message {{ '' if score.music else 'is-danger'}}">
       <div class="message-header">
-        <span>{{ score.name }}</span>
+        <span>{{ score.name | highlight(search) | safe }}</span>
         <a class="button" href="score/{{ score.uuid }}">
           <span class="icon">
             <i class="fa fa-edit"></i>
