@@ -1,0 +1,67 @@
+<div class="field">
+  <label class="label">Title</label>
+  <div class="control">
+    <input class="input" form="music-form" type="text" name="music_title" placeholder="Music title"
+           value="{{ music.title }}" />
+  </div>
+  <p class="help">The music name</p>
+</div>
+
+<div class="field">
+  <label class="label">Composer</label>
+  <div class="control">
+    <input class="input" form="music-form" type="text" name="music_composer" placeholder="Music composer"
+           value="{{ music.composer | default('', true) }}" />
+  </div>
+  <p class="help">The first one who create the music</p>
+</div>
+
+<div class="field">
+  <label class="label">Lyrics author</label>
+  <div class="control">
+    <input class="input" form="music-form" type="text" name="music_author" placeholder="Lyrics author"
+           value="{{ music.author | default('', true) }}" />
+  </div>
+  <p class="help">The one who create the song and made Lyrics</p>
+</div>
+
+<div class="field">
+  <label class="label">Dance</label>
+  <div class="control">
+    <input class="input" form="music-form" type="text" name="music_dance" placeholder="Dance"
+           value="{{ music.dance | default('', true) }}" />
+  </div>
+  <p class="help">What can you dance on this song ?</p>
+</div>
+<div class="field">
+  <label><strong>Bands: </strong></label>
+  <fieldset class="checkboxes">
+    <!-- a bit hacky otherwise you can remove all your bands from the current music -->
+    <input type="hidden" name="music_bands" value="" />
+    {%- for member in musician.members: %}
+      <label class="checkbox">
+        <input type="checkbox" {{ member.band in music.bands and "checked" }} name="music_bands" form="music-form"
+               value="{{member.band.uuid}}"></input>
+        {{ member.band.name }}
+      </label>
+
+    {%- endfor %}
+  </fieldset>
+  <p class="help">Bands that I play this song at least once.</p>
+</div>
+<div class="field">
+  <label><strong>Scores linked: </strong></label>
+
+  <div class="field is-grouped is-grouped-multiline">
+    {%- for score in music.scores: %}
+
+      <div class="control">
+        <div class="tags has-addons">
+          <a class="tag is-link">
+            {{ score.name }}</a>
+        <!-- <a class="tag is-delete"></a> -->
+        </div>
+      </div>
+    {%- endfor %}
+  </div>
+</div>

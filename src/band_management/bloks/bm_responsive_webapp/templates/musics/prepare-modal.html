@@ -1,0 +1,21 @@
+<header class="modal-card-head">
+  <p class="modal-card-title">Create a new music</p>
+  <button type="button" class="delete" data-target="music-modal" onclick="closeModal(this)" aria-label="close"></button>
+</header>
+<section class="modal-card-body">
+  <form id="music-form" hx-post="/music" hx-target="#music-field-selection" hw-swap="outerHTML">
+    {% include "musics/music-form.html" %}
+    <input type="hidden" name="modal_mode" form="music-form" value="true" />
+  </form>
+</section>
+<footer class="modal-card-foot">
+  <div class="buttons">
+    <button class="button is-success" type="submit" form="music-form">
+      <span class="icon">
+        <i class="fa fa-save"></i>
+      </span>Save</span>
+  </button>
+  <button type="button" class="button" data-target="music-modal" onclick="closeModal(this)"
+          aria-label="close">Cancel</button>
+</div>
+</footer>

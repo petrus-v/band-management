@@ -1,6 +1,7 @@
 from anyblok import Declarations
 
 from anyblok.relationship import Many2Many, Many2One
+from anyblok.column import Boolean
 
 register = Declarations.register
 Mixin = Declarations.Mixin
@@ -19,6 +20,8 @@ class Member(Mixin.PrimaryColumn):
         nullable=False,
         one2many="members",
     )
+    is_admin = Boolean(label="Band admin", default=False)
+
     instruments: list["Declarations.Model.BandManagement.Instrument"] = Many2Many(
         model=Declarations.Model.BandManagement.Instrument,
         join_table="bandmanagement_member_instrument_rel",

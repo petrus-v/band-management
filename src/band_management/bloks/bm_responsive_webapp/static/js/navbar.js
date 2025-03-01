@@ -23,8 +23,10 @@
   const footer = document.querySelector("body > footer");
   const mainContainer = document.querySelector("#main-container");
   const setMainContainerMarginHeight = function () {
-    mainContainer.style.marginTop = header.firstElementChild.clientHeight + 10 + "px";
-    mainContainer.style.marginBottom = footer.firstElementChild.clientHeight + 10 + "px";
+    mainContainer.style.marginTop =
+      header.firstElementChild.clientHeight + 10 + "px";
+    mainContainer.style.marginBottom =
+      footer.firstElementChild.clientHeight + 10 + "px";
   };
   burger.addEventListener("click", function () {
     burger.classList.toggle("is-active");

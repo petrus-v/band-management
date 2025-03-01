@@ -1,0 +1,44 @@
+<div class="field" id="music-field-selection">
+    <label class="label">Music</label>
+    <div class="control">
+        <div class="dropdown" id="music-dropdown" hx-on:click="this.classList.toggle('is-active')">
+            <div class="dropdown-trigger">
+                <div class="control has-icons-left">
+                    <input type="text" form="search-music" class="input" id="music-search"
+                           placeholder="Search a music..." name="search" hx-post="/dropdown-musics"
+                           value="{{music and music.title or '' | default('', true)  }}"
+                           hx-on:click="document.getElementById('music-dropdown').classList.toggle('is-active')"
+                           hx-on:focus="document.getElementById('music-dropdown').classList.add('is-active')"
+                           hx-trigger="keyup changed delay:300ms, load" hx-target="#music-dropdwon" />
+                    <span class="icon is-medium is-left">
+                        <i class="fas fa-music"></i>
+                    </span>
+                </div>
+            </div>
+            <div class="dropdown-menu">
+                <div class="dropdown-content" id="music-dropdwon"></div>
+            </div>
+            <input type="hidden" name="score_music" form="score-form" id="selected-music-uuid"
+                   value="{{music and music.uuid or '' | default('', true)  }}" />
+        </div>
+        <div class="modal" id="music-modal">
+            <div class="modal-background"></div>
+            <div class="modal-card" id="music-modal-content">
+                <header class="modal-card-head skeleton-block">
+                    <p class="modal-card-title">...</p>
+                    <button class="delete" aria-label="close"></button>
+                </header>
+                <section class="modal-card-body skeleton-block">
+                    <!-- Content ... -->
+                </section>
+                <footer class="modal-card-foot skeleton-block">
+                    <div class="buttons">
+                        <button class="button is-success">Save changes</button>
+                        <button class="button">Cancel</button>
+                    </div>
+                </footer>
+            </div>
+        </div>
+        <p class="help">This is the music linked to the current score</p>
+    </div>
+</div>
