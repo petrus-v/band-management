@@ -64,7 +64,7 @@ wheels = [
 [[package]]
 name = "anyblok-fastapi"
 version = "0.1.0"
-source = { git = "https://github.com/AnyBlok/AnyBlok_fastapi?branch=master#d6406ac05421d22be50f98b54c6e01b9a9b4fdc6" }
+source = { git = "https://github.com/AnyBlok/AnyBlok_fastapi?branch=master#6951551f839a06f6094c50574c797593d163bbec" }
 dependencies = [
     { name = "anyblok" },
     { name = "fastapi" },

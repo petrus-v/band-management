@@ -1,6 +1,6 @@
 import pytest
 from fastapi import HTTPException
-from ..main import get_authenticated_musician
+from ..fastapi_utils import get_authenticated_musician
 from fastapi.security import SecurityScopes
 from band_management.bloks.http_auth_base.auth_api import create_access_token
 from band_management.bloks.http_auth_base.schemas.auth import TokenDataSchema
@@ -74,6 +74,15 @@ def test_anonymous_band_management_login(anonymous):
         follow_redirects=False,
     )
     assert response.status_code == 202, response.text
+
+
+def test_already_connected_band_management_login(connected_musician):
+    response = connected_musician.get(
+        "/login",
+        follow_redirects=False,
+    )
+    assert response.status_code == 200, response.text
+    assert response.headers["hx-redirect"] == "/home", response.text
 
 
 def test_anonymous_band_management_login_with_redirect(anonymous):
