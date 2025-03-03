@@ -137,8 +137,9 @@ def add_band(
     ab_registry: "Registry" = Depends(get_registry),
 ):
     with registry_transaction(ab_registry) as anyblok:
+        musician = _get_musician_from_token(anyblok, token_data)
         BM = anyblok.BandManagement
-        BM.Band.insert(name=band_name)
+        BM.Band.insert_by(musician, name=band_name)
     return RedirectResponse(
         "/bands",
         status_code=201,
