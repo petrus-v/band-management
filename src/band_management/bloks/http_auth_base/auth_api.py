@@ -15,14 +15,11 @@ from band_management.bloks.http_auth_base.schemas.auth import (
     TokenDataSchema,
     UserSchema,
 )
-from band_management.config import SECRET_KEY, ALGORITHM, ACCESS_TOKEN_EXPIRE_MINUTES
+from band_management import config
 
 if TYPE_CHECKING:
     from anyblok.registy import Registry as AnyblokRegistry
-# to get a string more secure you could run something like this:
-# openssl rand -hex 32
-# SECRET_KEY = "09d25e094faa6ca2556c818166b7a9563b93f7099f6f0f4caa6cf63b88e8d3e7"
-# make it convifurable over anyblok config
+
 logger = logging.getLogger(__name__)
 
 
@@ -36,11 +33,11 @@ def create_access_token(data: TokenDataSchema, expires_delta: timedelta | None =
         expire = datetime.now(timezone.utc) + expires_delta
     else:
         expire = datetime.now(timezone.utc) + timedelta(
-            minutes=ACCESS_TOKEN_EXPIRE_MINUTES
+            minutes=config.ACCESS_TOKEN_EXPIRE_MINUTES
         )
     data.exp = int(expire.timestamp())
     encoded_jwt = jwt.encode(
-        data.model_dump(mode="json"), SECRET_KEY, algorithm=ALGORITHM
+        data.model_dump(mode="json"), config.SECRET_KEY, algorithm=config.ALGORITHM
     )
     return encoded_jwt
 
@@ -58,7 +55,7 @@ async def get_current_user(
         headers={"WWW-Authenticate": authenticate_value},
     )
     try:
-        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        payload = jwt.decode(token, config.SECRET_KEY, algorithms=[config.ALGORITHM])
         token_data = TokenDataSchema(**payload)
         if not token_data.sub:
             raise credentials_exception
@@ -96,7 +93,7 @@ async def login_for_access_token(
         user = anyblok.Auth.authenticate(form_data.username, form_data.password)
         if not user:
             raise HTTPException(status_code=400, detail="Incorrect authentication")
-        access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+        access_token_expires = timedelta(minutes=config.ACCESS_TOKEN_EXPIRE_MINUTES)
         access_token = create_access_token(
             data=user.get_access_token_data(),
             expires_delta=access_token_expires,

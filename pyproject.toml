@@ -46,6 +46,7 @@ test = [
   "pytest-cov",
   "httpx>=0.28.1",
   "pytest-asyncio",
+  "freezegun",
 ]
 
 [tool.hatch.version]
@@ -62,6 +63,8 @@ branch = true
 omit = [
   "__init__.py",
   "*/tests/*",
+  "conftest.py",
+  "config.py",
 ]
 
 [tool.coverage.report]

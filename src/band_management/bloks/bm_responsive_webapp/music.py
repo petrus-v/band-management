@@ -11,6 +11,7 @@ from band_management.bloks.bm_responsive_webapp.fastapi_utils import (
     get_authenticated_musician,
     _prepare_context,
     _get_musician_from_token,
+    RenewTokenRoute,
 )
 from contextlib import contextmanager
 from .jinja import templates
@@ -21,19 +22,18 @@ from fastapi.responses import HTMLResponse
 
 musics_router = APIRouter(
     prefix="/musics",
-    tags=["music"],
     responses={404: {"description": "Not found"}},
+    route_class=RenewTokenRoute,
 )
 router = APIRouter(
     prefix="/music",
-    tags=["music"],
     responses={404: {"description": "Not found"}},
+    route_class=RenewTokenRoute,
 )
 
 
 @musics_router.get(
     "/",
-    response_class=HTMLResponse,
 )
 def musics(
     request: Request,
@@ -76,7 +76,6 @@ def _search_musics(ab_registry, request, search, token_data):
 
 @musics_router.post(
     "/",
-    response_class=HTMLResponse,
 )
 def search_musics(
     request: Request,
@@ -101,7 +100,6 @@ def search_musics(
 
 @musics_router.post(
     "/dropdown",
-    response_class=HTMLResponse,
 )
 def search_dropdown_musics(
     request: Request,
@@ -126,7 +124,6 @@ def search_dropdown_musics(
 
 @router.get(
     "/prepare",
-    response_class=HTMLResponse,
 )
 def prepare_music(
     request: Request,
@@ -159,7 +156,6 @@ def prepare_music(
 
 @router.get(
     "/{music_uuid}",
-    response_class=HTMLResponse,
 )
 def music(
     request: Request,
@@ -223,14 +219,13 @@ def add_music(
             "/musics",
             status_code=201,
             headers={
-                "HX-Redirect": "/musics",
+                "HX-Redirect": "/musics/",
             },
         )
 
 
 @router.put(
     "/{music_uuid}",
-    response_class=RedirectResponse,
 )
 def update_music(
     request: Request,
@@ -259,6 +254,6 @@ def update_music(
         "/musics",
         status_code=200,
         headers={
-            "HX-Redirect": "/musics",
+            "HX-Redirect": "/musics/",
         },
     )

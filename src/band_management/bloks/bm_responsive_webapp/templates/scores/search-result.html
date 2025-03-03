@@ -3,7 +3,7 @@
     <article class="message {{ '' if score.music else 'is-danger'}}">
       <div class="message-header">
         <span>{{ score.name | highlight(search) | safe }}</span>
-        <a class="button" href="score/{{ score.uuid }}">
+        <a class="button" href="/score/{{ score.uuid }}">
           <span class="icon">
             <i class="fa fa-edit"></i>
           </span>

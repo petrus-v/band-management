@@ -47,6 +47,12 @@ class BandManagementResponsiveWebApp(Blok):
         from . import score
         from . import music
 
+        app.mount(
+            "/static",
+            StaticFiles(directory=Path(__file__).parent / "static"),
+            name="static",
+        )
+
         app.include_router(main.router)
         app.include_router(band.bands_router)
         app.include_router(band.router)
@@ -54,8 +60,3 @@ class BandManagementResponsiveWebApp(Blok):
         app.include_router(music.router)
         app.include_router(score.scores_router)
         app.include_router(score.router)
-        app.mount(
-            "/static",
-            StaticFiles(directory=Path(__file__).parent / "static"),
-            name="static",
-        )

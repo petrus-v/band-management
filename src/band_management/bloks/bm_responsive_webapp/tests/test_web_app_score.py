@@ -107,7 +107,7 @@ async def test_connected_musician_post_multiple_files(
     assert (storage_directory / relative_path).exists()
     assert (storage_directory / relative_path).is_file()
 
-    assert response.headers["hx-redirect"] == "/scores", response.text
+    assert response.headers["hx-redirect"] == "/scores/", response.text
 
 
 @pytest.mark.asyncio

@@ -1,14 +1,8 @@
 {% extends "layouts/layout.html" %} {% block top_menu_start %}
   <div class="navbar-item is-pulled-right">
     <div class="control">
-      <input
-        class="form-control"
-        type="search"
-        name="search"
-        placeholder="Begin Typing To Search band..."
-        hx-post="bands"
-        hx-trigger="input changed delay:500ms, keyup[key=='Enter'], load"
-        hx-target="#search-results" />
+      <input class="form-control" type="search" name="search" placeholder="Begin Typing To Search band..."
+             hx-post="/bands/" hx-trigger="input changed delay:500ms, keyup[key=='Enter'], load" hx-target="#search-results" />
     </div>
   </div>
 {% endblock %} {% block main %}

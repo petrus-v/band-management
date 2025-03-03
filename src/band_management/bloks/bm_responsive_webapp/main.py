@@ -19,14 +19,14 @@ from band_management.bloks.http_auth_base.auth_api import (
     create_access_token,
 )
 from fastapi import APIRouter
-from fastapi.responses import HTMLResponse
 
 from .fastapi_utils import (
     get_authenticated_musician,
     _get_musician_from_token,
     _prepare_context,
+    RenewTokenRoute,
 )
-from band_management.config import ACCESS_TOKEN_EXPIRE_MINUTES
+from band_management import config
 
 
 logger = logging.getLogger(__name__)
@@ -34,12 +34,12 @@ logger = logging.getLogger(__name__)
 router = APIRouter(
     tags=["main"],
     responses={404: {"description": "Not found :cry:"}},
+    route_class=RenewTokenRoute,
 )
 
 
 @router.get(
     "/",
-    response_class=HTMLResponse,
 )
 def index(
     request: Request,
@@ -55,7 +55,6 @@ def index(
 
 @router.get(
     "/login",
-    response_class=HTMLResponse,
 )
 def login(
     request: Request,
@@ -81,7 +80,6 @@ def login(
 
 @router.post(
     "/login",
-    response_class=RedirectResponse,
 )
 def login_post(
     request: Request,
@@ -110,9 +108,9 @@ def login_post(
             "auth-token",
             create_access_token(
                 data=user.get_access_token_data(),
-                expires_delta=timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES),
+                expires_delta=timedelta(minutes=config.ACCESS_TOKEN_EXPIRE_MINUTES),
             ),
-            max_age=ACCESS_TOKEN_EXPIRE_MINUTES * 60,
+            max_age=config.ACCESS_TOKEN_EXPIRE_MINUTES * 60,
             secure=True,
             httponly=True,
             samesite="strict",
@@ -122,7 +120,6 @@ def login_post(
 
 @router.post(
     "/logout",
-    response_class=RedirectResponse,
 )
 def logout(
     request: Request,
@@ -142,7 +139,6 @@ def logout(
 
 @router.get(
     "/home",
-    response_class=HTMLResponse,
 )
 def home(
     request: Request,
@@ -161,7 +157,6 @@ def home(
 
 @router.put(
     "/musician/{musician_uuid}/toggle-active-band/{band_uuid}",
-    response_class=HTMLResponse,
 )
 def toggle_musician_active_band(
     request: Request,
@@ -185,7 +180,7 @@ def toggle_musician_active_band(
             request.headers.get("HX-Current-URL", "/"),
             status_code=201,
             headers={
-                # "HX-Redirect": "/bands",
+                # "HX-Redirect": "/bands/",
                 "HX-Refresh": "true",
             },
         )
@@ -193,7 +188,6 @@ def toggle_musician_active_band(
 
 @router.get(
     "/profile",
-    response_class=HTMLResponse,
 )
 def profile(
     request: Request,
@@ -214,7 +208,6 @@ def profile(
 
 @router.get(
     "/credits",
-    response_class=HTMLResponse,
 )
 def credits(
     request: Request,
@@ -232,7 +225,6 @@ def credits(
 
 @router.get(
     "/terms",
-    response_class=HTMLResponse,
 )
 def terms(
     request: Request,
@@ -249,7 +241,6 @@ def terms(
 
 @router.get(
     "/register",
-    response_class=HTMLResponse,
 )
 def register(
     request: Request,

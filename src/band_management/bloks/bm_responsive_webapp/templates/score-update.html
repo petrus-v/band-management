@@ -1,26 +1,19 @@
 {% extends "layouts/layout.html" %} {% block main %}
   <div>
-    <form
-      id="score-form"
-      hx-put="/score/{{ score.uuid }}"
-      hx-encoding="multipart/form-data"
-      hx-target="body">
+    <form id="score-form" hx-put="/score/{{ score.uuid }}" hx-encoding="multipart/form-data" hx-target="body">
       {% include "scores/score-form-details.html" %}
     </form>
   </div>
 {% endblock %} {% block footer_navbar_items %}
   <div class="navbar-start">
     <div class="navbar-item">
-      <a href="/scores" class="button is-outlined">
+      <a href="/scores/" class="button is-outlined">
         <span class="icon">
           <i class="fa fa-undo"></i>
         </span>
         <span>Cancel</span>
       </a>
-      <button
-        type="submit"
-        form="score-form"
-        class="button is-light is-pulled-right">
+      <button type="submit" form="score-form" class="button is-light is-pulled-right">
         <span class="icon">
           <i class="fa fa-save"></i>
         </span>

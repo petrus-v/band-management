@@ -15,27 +15,26 @@ from band_management.bloks.bm_responsive_webapp.fastapi_utils import (
     get_authenticated_musician,
     _prepare_context,
     _get_musician_from_token,
+    RenewTokenRoute,
 )
 from .jinja import templates
 
 from fastapi import APIRouter
-from fastapi.responses import HTMLResponse
 
 scores_router = APIRouter(
     prefix="/scores",
-    tags=["score"],
     responses={404: {"description": "Not found"}},
+    route_class=RenewTokenRoute,
 )
 router = APIRouter(
     prefix="/score",
-    tags=["score"],
     responses={404: {"description": "Not found"}},
+    route_class=RenewTokenRoute,
 )
 
 
 @scores_router.get(
     "/",
-    response_class=HTMLResponse,
 )
 def scores(
     request: Request,
@@ -54,7 +53,6 @@ def scores(
 
 @scores_router.post(
     "/",
-    response_class=HTMLResponse,
 )
 def search_scores(
     request: Request,
@@ -88,7 +86,6 @@ def search_scores(
 
 @router.get(
     "/prepare",
-    response_class=HTMLResponse,
 )
 def prepare_score(
     request: Request,
@@ -112,7 +109,6 @@ def prepare_score(
 
 @router.get(
     "/{score_uuid}",
-    response_class=HTMLResponse,
 )
 def score(
     request: Request,
@@ -161,7 +157,6 @@ async def score_media(
 
 @router.post(
     "/",
-    response_class=HTMLResponse,
 )
 async def add_scores(
     request: Request,
@@ -199,17 +194,16 @@ async def add_scores(
         )
     else:
         return RedirectResponse(
-            "/scores",
+            "/scores/",
             status_code=201,
             headers={
-                "HX-Redirect": "/scores",
+                "HX-Redirect": "/scores/",
             },
         )
 
 
 @router.put(
     "/{score_uuid}",
-    response_class=HTMLResponse,
 )
 def update_score(
     request: Request,
@@ -240,6 +234,6 @@ def update_score(
             "/scores",
             status_code=status_code,
             headers={
-                "HX-Redirect": "/scores",
+                "HX-Redirect": "/scores/",
             },
         )

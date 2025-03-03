@@ -1,7 +1,7 @@
 from typing import Annotated
 from anyblok_fastapi.fastapi import get_registry, registry_transaction
 from fastapi import Depends, Request, Form, APIRouter
-from fastapi.responses import HTMLResponse, RedirectResponse
+from fastapi.responses import RedirectResponse
 from .jinja import templates
 from anyblok.registry import Registry
 from fastapi import Security
@@ -13,23 +13,25 @@ from band_management.bloks.bm_responsive_webapp.fastapi_utils import (
     get_authenticated_musician,
     _prepare_context,
     _get_musician_from_token,
+    RenewTokenRoute,
 )
 
 bands_router = APIRouter(
     prefix="/bands",
     tags=["band"],
     responses={404: {"description": "Not found"}},
+    route_class=RenewTokenRoute,
 )
 router = APIRouter(
     prefix="/band",
     tags=["band"],
     responses={404: {"description": "Not found"}},
+    route_class=RenewTokenRoute,
 )
 
 
 @bands_router.get(
     "/",
-    response_class=HTMLResponse,
 )
 def bands(
     request: Request,
@@ -48,7 +50,6 @@ def bands(
 
 @bands_router.post(
     "/",
-    response_class=HTMLResponse,
 )
 def search_bands(
     request: Request,
@@ -79,7 +80,6 @@ def search_bands(
 
 @router.get(
     "/prepare",
-    response_class=HTMLResponse,
 )
 def prepare_band(
     request: Request,
@@ -103,7 +103,6 @@ def prepare_band(
 
 @router.get(
     "/{band_uuid}",
-    response_class=HTMLResponse,
 )
 def band(
     request: Request,
@@ -128,7 +127,6 @@ def band(
 
 @router.post(
     "/",
-    response_class=HTMLResponse,
 )
 def add_band(
     request: Request,
@@ -145,14 +143,13 @@ def add_band(
         "/bands",
         status_code=201,
         headers={
-            "HX-Redirect": "/bands",
+            "HX-Redirect": "/bands/",
         },
     )
 
 
 @router.put(
     "/{band_uuid}",
-    response_class=HTMLResponse,
 )
 def update_band(
     request: Request,
@@ -171,6 +168,6 @@ def update_band(
         "/bands",
         status_code=200,
         headers={
-            "HX-Redirect": "/bands",
+            "HX-Redirect": "/bands/",
         },
     )

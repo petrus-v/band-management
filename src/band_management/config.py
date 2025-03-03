@@ -10,11 +10,14 @@ if os.environ.get("ORIGINAL_SCORE_PATH"):
 else:
     ORIGINAL_SCORE_PATH = DATA_PATH / "original"
 
+# to get a string more secure you could run something like this:
+# openssl rand -hex 32
+# SECRET_KEY = "09d25e094faa6ca2556c818166b7a9563b93f7099f6f0f4caa6cf63b88e8d3e7"
+# make it configurable over anyblok config
 SECRET_KEY = os.environ.get("JWT_SECRET_KEY")
 if not SECRET_KEY:
     SECRET_KEY = "insecrure_secretkey"
     logger.warning("Insecure secret key to generate JW-Token")
-
 
 ALGORITHM = "HS256"
 """JWT TOKEN hash lagorithm"""
