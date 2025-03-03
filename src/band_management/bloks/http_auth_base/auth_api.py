@@ -16,6 +16,7 @@ from band_management.bloks.http_auth_base.schemas.auth import (
     UserSchema,
 )
 from band_management import config
+from fastapi import APIRouter
 
 if TYPE_CHECKING:
     from anyblok.registy import Registry as AnyblokRegistry
@@ -25,6 +26,17 @@ logger = logging.getLogger(__name__)
 
 oauth2_scheme = OAuth2PasswordBearer(
     tokenUrl="token",
+)
+
+
+router_auth = APIRouter(
+    tags=["api"],
+    responses={404: {"description": "Not found"}},
+)
+api_user = APIRouter(
+    prefix="/api/user",
+    tags=["api"],
+    responses={404: {"description": "Not found"}},
 )
 
 
@@ -84,6 +96,10 @@ async def get_authenticated_user(
     return token_data
 
 
+@router_auth.post(
+    "/token",
+    response_model=TokenSchema,
+)
 async def login_for_access_token(
     anyblok_registry: Annotated["AnyblokRegistry", Depends(get_registry)],
     form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
@@ -101,6 +117,10 @@ async def login_for_access_token(
         return TokenSchema(access_token=access_token, token_type="bearer")
 
 
+@api_user.get(
+    "/me",
+    response_model=UserSchema,
+)
 async def read_users_me(
     anyblok_registry: Annotated["AnyblokRegistry", Depends(get_registry)],
     token_data: Annotated[TokenDataSchema, Depends(get_authenticated_user)],

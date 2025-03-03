@@ -51,7 +51,7 @@ def test_auth_unknown_user(webserver):
 
 def test_user_me(joe_rest_api_client, joe_user):
     response = joe_rest_api_client.get(
-        "/api/users/me",
+        "/api/user/me",
     )
     user = UserSchema(**response.json())
     assert user.musician.name == "Joe"
@@ -66,7 +66,7 @@ def test_user_me_with_expired_token(webserver, joe_user):
     webserver.headers["Authorization"] = f"Bearer {token}"
 
     response = webserver.get(
-        "/api/users/me",
+        "/api/user/me",
     )
     assert response.status_code == 401
     assert response.json() == {
@@ -101,7 +101,7 @@ async def test_valid_token_without_sub_raises(joe_user):
 
 def test_access_denied_no_scope_user(webserver_no_scope_user):
     response = webserver_no_scope_user.get(
-        "/api/users/me",
+        "/api/user/me",
     )
     assert response.status_code == 401
     assert response.json() == {

@@ -1,8 +1,6 @@
 from anyblok.blok import Blok
-from fastapi.routing import APIRoute
+from fastapi import FastAPI
 from band_management import __version__ as VERSION
-
-from band_management.bloks.http_auth_base.schemas.auth import TokenSchema, UserSchema
 
 
 def import_declarations(reload=None):
@@ -89,21 +87,8 @@ class HTTPAuthBase(Blok):
             pass
 
     @classmethod
-    def fastapi_routes(cls, routes) -> None:
+    def prepare_fastapi(cls, app: FastAPI) -> None:
         from . import auth_api
 
-        routes.update(
-            {
-                "POST/token": APIRoute(
-                    "/token",
-                    auth_api.login_for_access_token,
-                    methods=["POST"],
-                    response_model=TokenSchema,
-                ),
-                "GET/api/users/me": APIRoute(
-                    "/api/users/me",
-                    auth_api.read_users_me,
-                    response_model=UserSchema,
-                ),
-            }
-        )
+        app.include_router(auth_api.router_auth)
+        app.include_router(auth_api.api_user)
