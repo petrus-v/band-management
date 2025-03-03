@@ -86,6 +86,17 @@ def test_anonymous_band_management_login(anonymous):
     assert anonymous.cookies.get("auth-token")
 
 
+def test_already_connected_band_management_index(connected_musician):
+    token = connected_musician.cookies.get("auth-token")
+    assert token
+    response = connected_musician.get(
+        "/",
+        follow_redirects=False,
+    )
+    assert response.status_code == 200, response.text
+    assert response.headers["hx-redirect"] == "/home", response.text
+
+
 def test_already_connected_band_management_login(connected_musician):
     token = connected_musician.cookies.get("auth-token")
     assert token
