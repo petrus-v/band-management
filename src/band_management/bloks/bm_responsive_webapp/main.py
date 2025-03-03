@@ -44,13 +44,19 @@ router = APIRouter(
 def index(
     request: Request,
     token_data: Annotated[TokenDataSchema, Security(get_authenticated_musician)],
-    ab_registry: "Registry" = Depends(get_registry),
 ):
     """Get the list of company"""
-    with registry_transaction(ab_registry):
-        return templates.TemplateResponse(
-            name="index.html", request=request, context={}
+    if token_data:
+        response = RedirectResponse(
+            "/home",
+            status_code=200,
+            headers={
+                # "Content-Language": user.musician.lang,
+                "HX-Redirect": "/home",
+            },
         )
+        return response
+    return templates.TemplateResponse(name="index.html", request=request, context={})
 
 
 @router.get(

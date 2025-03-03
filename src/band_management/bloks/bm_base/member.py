@@ -2,6 +2,9 @@ from anyblok import Declarations
 
 from anyblok.relationship import Many2Many, Many2One
 from anyblok.column import Boolean
+from anyblok.schema import (
+    UniqueConstraint,
+)
 
 register = Declarations.register
 Mixin = Declarations.Mixin
@@ -31,3 +34,12 @@ class Member(Mixin.PrimaryColumn):
         remote_columns="uuid",
         many2many="members",
     )
+
+    @classmethod
+    def define_table_args(cls):
+        table_args = super().define_table_args()
+        return table_args + (
+            UniqueConstraint(
+                cls.musician_uuid, cls.band_uuid, name="unique_musician_per_band"
+            ),
+        )
