@@ -113,14 +113,31 @@ def band(
     ab_registry: "Registry" = Depends(get_registry),
 ):
     with registry_transaction(ab_registry) as anyblok:
+        musician = _get_musician_from_token(anyblok, token_data)
         BM = anyblok.BandManagement
         band = BM.Band.query().get(band_uuid)
-        return templates.TemplateResponse(
-            name="band-update.html",
-            request=request,
-            context={
-                **_prepare_context(anyblok, request, token_data),
-                "band": band,
+        member = musician.member_of(band)
+        if member and member.is_admin:
+            return templates.TemplateResponse(
+                name="band-update.html",
+                request=request,
+                context={
+                    **_prepare_context(anyblok, request, token_data),
+                    "band": band,
+                },
+            )
+        print(
+            musician.name,
+            " is not allowed to get ",
+            band.name,
+            " is member admin",
+            member.is_admin if member and member.is_admin else member,
+        )
+        return RedirectResponse(
+            "/bands",
+            status_code=401,
+            headers={
+                "HX-Redirect": "/bands/",
             },
         )
 
@@ -159,12 +176,15 @@ def update_band(
     ],
     band_uuid: str,
     band_name: Annotated[str, Form()],
+    administrators: Annotated[list[str], Form()] = [],
     ab_registry: "Registry" = Depends(get_registry),
 ):
     with registry_transaction(ab_registry) as anyblok:
+        musician = _get_musician_from_token(anyblok, token_data)
         BM = anyblok.BandManagement
         band = BM.Band.query().get(band_uuid)
-        band.name = band_name
+        band.update_by(musician, name=band_name)
+        band.update_administrator_by(musician, administrators)
     return RedirectResponse(
         "/bands",
         status_code=200,

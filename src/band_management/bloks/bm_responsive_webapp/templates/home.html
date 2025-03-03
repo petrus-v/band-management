@@ -4,9 +4,7 @@
     {%- for member in musician.members: %} {%- set is_active_band = member.band in
       musician.active_bands %}
       <article class="message">
-        <div
-          class="message-header"
-          hx-put="/musician/{{musician.uuid}}/toggle-active-band/{{member.band.uuid}}">
+        <div class="message-header" hx-put="/musician/{{musician.uuid}}/toggle-active-band/{{member.band.uuid}}">
           <p>{{member.band.name}}</p>
           <span class="icon is-small is-pulled-right">
             {%- if is_active_band %}
@@ -18,29 +16,24 @@
         </div>
         {%- if is_active_band %}
           <div class="message-body">
-            <div class="field is-grouped is-grouped-multiline">
-              {%- for instrument in member.instruments: %}
-                <div class="control">
-                  <div class="tags has-addons">
-                    <a class="tag is-link">{{ instrument.name }}</a>
-            <!-- <a class="tag is-delete"></a> -->
-                  </div>
-                </div>
-              {%- endfor %}
-            </div>
+            {% if member.instruments %}
+              <div class="tags">
+                {%- for instrument in member.instruments: %}
+                  <span class="tag is-link">{{ instrument.name }}</span>
+                {%- endfor %}
+              </div>
+            {% endif %}
             <p>musicians: {{member.band.musicians_count}}</p>
-            <div class="field is-grouped is-grouped-multiline">
-              {%- for band_member in member.band.members: %}
-                <div class="control">
-                  <div class="tags has-addons">
-                    <a
-                      class="tag {{'is-link' if member != band_member else 'is-primary'}}"
-                    >{{ band_member.musician.name }}</a
-                      >
-            <!-- <a class="tag is-delete"></a> -->
-                    </div>
-                  </div>
-              {%- endfor %}
+            <div class="tags">{%- for band_member in member.band.members: %}
+              <div class="tag {{'is-link' if member != band_member else 'is-primary'}}">
+                {% if band_member.is_admin %}
+                  <span class="icon">
+                    <i class="fa fa-user"></i>
+                  </span>
+                {% endif %}
+                <span>{{ band_member.musician.name }}</span>
+              </div>
+            {%- endfor %}
             </div>
             <p>musics: {{member.band.musics_count}}</p>
           </div>

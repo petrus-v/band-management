@@ -17,28 +17,24 @@
               <li>
                 <span><strong>Composer: </strong></span>{{ music.composer }}
               </li>
-            {%- endif %}{%- if music.author %}
+            {%- endif %}
+            {%- if music.author %}
               <li>
                 <span><strong>Author: </strong></span>{{ music.author }}
               </li>
-            {%- endif %}{%- if music.dance %}
+            {%- endif %}
+            {%- if music.dance %}
               <li>
                 <span><strong>Dance: </strong></span>{{ music.dance }}
               </li>
             {%- endif %}
           </ul>
-
         </p>
-        <div class="field is-grouped is-grouped-multiline">
+        <div class="tags">
           {%- for member in musician.members: %}
-
-            <div class="control">
-              <div class="tags has-addons">
-                <a class="tag {{ 'is-success' if member.band in music.bands else 'is-text'}}">
-                  {{ member.band.name }}</a>
-            <!-- <a class="tag is-delete"></a> -->
-              </div>
-            </div>
+            <span class="tag {{ 'is-success' if member.band in music.bands else 'is-text'}}">
+              {{ member.band.name }}
+            </span>
           {%- endfor %}
         </div>
         <p>scores: {{music.scores_count}}</p>

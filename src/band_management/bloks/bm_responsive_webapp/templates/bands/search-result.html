@@ -1,31 +1,38 @@
 <section>
-  {% if bands %} {% for band in bands %}
-    <article class="message">
-      <div class="message-header">
-        <span>{{ band.name | highlight(search) | safe}}</span>
-        <a class="button" href="/band/{{ band.uuid }}">
-          <span class="icon">
-            <i class="fa fa-edit"></i>
-          </span>
-          <span>Edit</span>
-        </a>
-      </div>
-      <div class="message-body">
-        <p>musicians: {{band.musicians_count}}</p>
-        <div class="field is-grouped is-grouped-multiline">
-          {%- for band_member in band.members: %}
-            <div class="control">
-              <div class="tags has-addons">
-                <a class="tag is-link">{{ band_member.musician.name }}</a>
-            <!-- <a class="tag is-delete"></a> -->
+  {% if bands %}
+    {% for band in bands %}
+      {% set user_member = musician.member_of(band) %}
+      <article class="message">
+        <div class="message-header">
+          <span>{{ band.name | highlight(search) | safe}}</span>
+          {% if user_member.is_admin %}
+            <a class="button" href="/band/{{ band.uuid }}">
+              <span class="icon">
+                <i class="fa fa-edit"></i>
+              </span>
+              <span>Edit</span>
+            </a>
+          {% endif %}
+        </div>
+        <div class="message-body">
+          <p>musicians: {{band.musicians_count}}</p>
+          <div class="tags">
+            {%- for band_member in band.members: %}
+              <div class="tag {{'is-link' if band_member != user_member else 'is-primary'}}">
+                {% if band_member.is_admin %}
+                  <span class="icon">
+                    <i class="fa fa-user"></i>
+                  </span>
+                {% endif %}
+                <span>{{ band_member.musician.name }}</span>
               </div>
-            </div>
-          {%- endfor %}
+            {%- endfor %}
+          </div>
         </div>
         <p>musics: {{band.musics_count}}</p>
       </div>
-    </article>
-  {% endfor %} {% else %}
+      </article>
+    {% endfor %} {% else %}
     <article>
       <p>No band</p>
     </article>

@@ -1,6 +1,7 @@
 from anyblok import Declarations
 
 from anyblok.column import String
+from band_management.exceptions import PermissionDenied, ValidationError
 
 register = Declarations.register
 Mixin = Declarations.Mixin
@@ -29,3 +30,33 @@ class Band(Mixin.PrimaryColumn):
         )
         musician.active_bands.append(band)
         return band
+
+    def update_by(self, admin_musician, **kwargs):
+        if not admin_musician.member_of(self).is_admin:
+            raise PermissionDenied(
+                f"You, {admin_musician.name}, are not allowed to edit this band {self.name}. Ask an existing band administrator to become a band administrator."
+            )
+        self.update(**kwargs)
+
+    def update_administrator_by(self, admin_musician, administrators: list):
+        if not admin_musician.member_of(self).is_admin:
+            raise PermissionDenied(
+                f"You, {admin_musician.name}, are not allowed to edit administrators's band {self.name}. Ask an existing band administrator to become a band administrator."
+            )
+
+        for member in self.members:
+            member.is_admin = str(member.uuid) in administrators
+
+        if len([member for member in self.members if member.is_admin]) == 0:
+            raise ValidationError(
+                f"You should set at least one administrator to this band {self.name}"
+            )
+
+    def add_member_by(self, admin_musician, invited_member, is_admin=False):
+        if not admin_musician.member_of(self).is_admin:
+            raise PermissionDenied(
+                f"You, {admin_musician.name}, are not allowed to invite new musician to this band {self.name}. Ask an existing band administrator to become a band administrator."
+            )
+        return self.anyblok.BandManagement.Member.insert(
+            musician=invited_member, band=self, is_admin=is_admin
+        )

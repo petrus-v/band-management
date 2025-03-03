@@ -46,3 +46,8 @@ class Musician(Mixin.PrimaryColumn):
             raise ValidationError(
                 f"Musician {self.name} require at least one active band."
             )
+
+    def member_of(self, band):
+        for member in self.members:
+            if member.band == band:
+                return member
