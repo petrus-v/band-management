@@ -9,7 +9,7 @@ def test_connected_musician_search_musics(bm, connected_musician):
 
 
 def test_connected_musician_search_musics_dropdown(bm, connected_musician):
-    response = connected_musician.post("/dropdown-musics", data={"search": "ze"})
+    response = connected_musician.post("/musics/dropdown", data={"search": "ze"})
     assert response.status_code == 200, response.text
 
 

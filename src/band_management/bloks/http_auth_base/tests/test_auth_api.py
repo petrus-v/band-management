@@ -1,5 +1,6 @@
 import pytest
-from ..auth_api import SECRET_KEY, ALGORITHM, create_access_token, get_current_user
+from ..auth_api import create_access_token, get_current_user
+from band_management import config
 from band_management.bloks.http_auth_base.schemas.auth import (
     TokenDataSchema,
     UserSchema,
@@ -9,8 +10,6 @@ from fastapi import HTTPException
 from fastapi.security import SecurityScopes
 from datetime import timedelta, datetime
 
-ACCESS_TOKEN_EXPIRE_MINUTES = 5
-
 
 def test_auth_user(joe_user, webserver):
     response = webserver.post(
@@ -18,7 +17,9 @@ def test_auth_user(joe_user, webserver):
     )
     assert response.status_code == 200, response.text
     payload = jwt.decode(
-        response.json()["access_token"], SECRET_KEY, algorithms=[ALGORITHM]
+        response.json()["access_token"],
+        config.SECRET_KEY,
+        algorithms=[config.ALGORITHM],
     )
     token_data = TokenDataSchema(**payload)
     assert token_data.scopes == ["musician-auth"]
@@ -31,7 +32,9 @@ def test_auth_user_without_scope(no_scope_user, webserver):
     )
     assert response.status_code == 200
     payload = jwt.decode(
-        response.json()["access_token"], SECRET_KEY, algorithms=[ALGORITHM]
+        response.json()["access_token"],
+        config.SECRET_KEY,
+        algorithms=[config.ALGORITHM],
     )
     token_data = TokenDataSchema(**payload)
     assert token_data.scopes == []
@@ -48,7 +51,7 @@ def test_auth_unknown_user(webserver):
 
 def test_user_me(joe_rest_api_client, joe_user):
     response = joe_rest_api_client.get(
-        "/api/users/me",
+        "/api/user/me",
     )
     user = UserSchema(**response.json())
     assert user.musician.name == "Joe"
@@ -63,7 +66,7 @@ def test_user_me_with_expired_token(webserver, joe_user):
     webserver.headers["Authorization"] = f"Bearer {token}"
 
     response = webserver.get(
-        "/api/users/me",
+        "/api/user/me",
     )
     assert response.status_code == 401
     assert response.json() == {
@@ -75,7 +78,7 @@ def test_create_access_token_default_timedelta(joe_user):
     token = create_access_token(
         data=joe_user.get_access_token_data(),
     )
-    payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+    payload = jwt.decode(token, config.SECRET_KEY, algorithms=[config.ALGORITHM])
     token_data = TokenDataSchema(**payload)
     assert token_data.exp >= (datetime.now() + timedelta(minutes=14)).timestamp()
 
@@ -98,7 +101,7 @@ async def test_valid_token_without_sub_raises(joe_user):
 
 def test_access_denied_no_scope_user(webserver_no_scope_user):
     response = webserver_no_scope_user.get(
-        "/api/users/me",
+        "/api/user/me",
     )
     assert response.status_code == 401
     assert response.json() == {

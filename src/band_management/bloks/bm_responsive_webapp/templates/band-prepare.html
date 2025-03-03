@@ -1,22 +1,19 @@
 {% extends "layouts/layout.html" %} {% block main %}
   <div>
-    <form id="band-form" hx-post="/band" hx-target="body">
+    <form id="band-form" hx-post="/band/" hx-target="body">
       {% include "bands/band-form.html" %}
     </form>
   </div>
 {% endblock %} {% block footer_navbar_items %}
   <div class="navbar-start">
     <div class="navbar-item">
-      <a href="/bands" class="button is-outlined">
+      <a href="/bands/" class="button is-outlined">
         <span class="icon">
           <i class="fa fa-undo"></i>
         </span>
         <span>Cancel</span>
       </a>
-      <button
-        type="submit"
-        form="band-form"
-        class="button is-light is-pulled-right">
+      <button type="submit" form="band-form" class="button is-light is-pulled-right">
         <span class="icon">
           <i class="fa fa-save"></i>
         </span>

@@ -2,27 +2,28 @@ import pytest
 from uuid_extensions import uuid7
 from datetime import timedelta
 from band_management.bloks.http_auth_base.auth_api import create_access_token
-from pathlib import Path
-from band_management import config
 from anyblok_fastapi.conftest import webserver  # noqa: F401
+from band_management import config
 
 
-@pytest.fixture(name="anonymous", scope="function")
+@pytest.fixture(scope="function", autouse=True)
+def cleanup_auth_cookies(request, webserver):  # noqa: F811
+    def clear_cookies():
+        webserver.cookies = {}
+
+    request.addfinalizer(clear_cookies)
+
+
+@pytest.fixture(name="anonymous")
 def anonymous_user_http_client(webserver):  # noqa: F811
-    if webserver.cookies.get("auth-token") is not None:
-        webserver.cookies.pop("auth-token")
-
-    yield webserver
-
-    if webserver.cookies.get("auth-token") is not None:
-        webserver.cookies.pop("auth-token")
+    return webserver
 
 
 @pytest.fixture(name="joe_http_client")
 def webserver_joe_user(webserver, joe_user):  # noqa: F811
     token = create_access_token(
         data=joe_user.get_access_token_data(),
-        expires_delta=timedelta(minutes=10),
+        expires_delta=timedelta(minutes=config.ACCESS_TOKEN_EXPIRE_MINUTES),
     )
     webserver.cookies["auth-token"] = f"{token}"
     return webserver
@@ -31,15 +32,6 @@ def webserver_joe_user(webserver, joe_user):  # noqa: F811
 @pytest.fixture(name="connected_musician")
 def band_leader_user_http_client(joe_http_client):  # noqa: F811
     return joe_http_client
-
-
-@pytest.fixture(name="storage_directory", scope="session", autouse=True)
-def storage_directory(tmp_path_factory) -> Path:
-    original_path = config.ORIGINAL_SCORE_PATH
-    storage_path = tmp_path_factory.mktemp("data-storage")
-    config.ORIGINAL_SCORE_PATH = storage_path
-    yield storage_path
-    config.ORIGINAL_SCORE_PATH = original_path
 
 
 @pytest.fixture

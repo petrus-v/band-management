@@ -3,7 +3,7 @@
   <button type="button" class="delete" data-target="music-modal" onclick="closeModal(this)" aria-label="close"></button>
 </header>
 <section class="modal-card-body">
-  <form id="music-form" hx-post="/music" hx-target="#music-field-selection" hw-swap="outerHTML">
+  <form id="music-form" hx-post="/music/" hx-target="#music-field-selection" hw-swap="outerHTML">
     {% include "musics/music-form.html" %}
     <input type="hidden" name="modal_mode" form="music-form" value="true" />
   </form>

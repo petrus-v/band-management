@@ -1,5 +1,5 @@
 import logging
-from typing import Annotated, Optional
+from typing import Annotated
 from anyblok_fastapi.fastapi import get_registry, registry_transaction
 from fastapi import Depends, Request
 from .jinja import templates
@@ -9,86 +9,38 @@ from fastapi import Security
 from datetime import timedelta
 from fastapi.security import (
     OAuth2PasswordRequestForm,
-    SecurityScopes,
 )
-from jose import JWTError, jwt
 from fastapi import HTTPException, status
-from pydantic import ValidationError
 
-from band_management.bloks.http_auth_base.auth_api import SECRET_KEY, ALGORITHM
 from band_management.bloks.http_auth_base.schemas.auth import (
     TokenDataSchema,
 )
 from band_management.bloks.http_auth_base.auth_api import (
     create_access_token,
 )
+from fastapi import APIRouter
 
-ACCESS_TOKEN_EXPIRE_MINUTES = 60
+from .fastapi_utils import (
+    get_authenticated_musician,
+    _get_musician_from_token,
+    _prepare_context,
+    RenewTokenRoute,
+)
+from band_management import config
 
 
 logger = logging.getLogger(__name__)
 
-
-class CookieAuth:
-    async def __call__(self, request: Request) -> Optional[str]:
-        return request.cookies.get("auth-token")
-
-
-async def get_authenticated_musician(
-    security_scopes: SecurityScopes, token: Annotated[str, Depends(CookieAuth())]
-) -> Optional[TokenDataSchema]:
-    token_data = None
-
-    if token:
-        try:
-            payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-            token_data = TokenDataSchema(**payload)
-        except (JWTError, ValidationError) as err:
-            logger.warning("Ignoring error %r", err)
-
-    if security_scopes.scopes:
-        authenticate_value = f'Bearer scope="{security_scopes.scope_str}"'
-    else:
-        authenticate_value = "Bearer"
-    for scope in security_scopes.scopes:
-        if not token_data:
-            raise HTTPException(
-                status_code=status.HTTP_401_UNAUTHORIZED,
-                detail="Missing permissions",
-                headers={"WWW-Authenticate": authenticate_value},
-            )
-
-        if scope not in token_data.scopes:
-            raise HTTPException(
-                status_code=status.HTTP_401_UNAUTHORIZED,
-                detail="Missing permissions",
-                headers={"WWW-Authenticate": authenticate_value},
-            )
-    return token_data
+router = APIRouter(
+    tags=["main"],
+    responses={404: {"description": "Not found :cry:"}},
+    route_class=RenewTokenRoute,
+)
 
 
-def _get_musician_from_token(anyblok, token_data):
-    musician = None
-    if token_data:
-        user = anyblok.Auth.User.query().get(token_data.sub)
-        if user:
-            musician = user.musician
-        if not musician:
-            raise HTTPException(
-                status_code=status.HTTP_401_UNAUTHORIZED,
-                detail="Not enough permissions",
-            )
-    return musician
-
-
-def _prepare_context(anyblok, request, token_data):
-    musician = _get_musician_from_token(anyblok, token_data)
-    return {
-        "is_authenticated": True if musician else False,
-        "musician": musician,
-    }
-
-
+@router.get(
+    "/",
+)
 def index(
     request: Request,
     token_data: Annotated[TokenDataSchema, Security(get_authenticated_musician)],
@@ -101,18 +53,34 @@ def index(
         )
 
 
+@router.get(
+    "/login",
+)
 def login(
     request: Request,
-    # token_data: Annotated[TokenDataSchema, Security(get_current_user, scopes=["mp-admin"])],
+    token_data: Annotated[
+        TokenDataSchema, Security(get_authenticated_musician, scopes=[])
+    ],
     ab_registry: "Registry" = Depends(get_registry),
 ):
-    with registry_transaction(ab_registry):
-        pass
+    if token_data:
+        response = RedirectResponse(
+            "/home",
+            status_code=200,
+            headers={
+                # "Content-Language": user.musician.lang,
+                "HX-Redirect": "/home",
+            },
+        )
+        return response
     return templates.TemplateResponse(
         name="login.html", request=request, context={"error_message": None}
     )
 
 
+@router.post(
+    "/login",
+)
 def login_post(
     request: Request,
     form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
@@ -128,11 +96,6 @@ def login_post(
                 request=request,
                 context={"error_message": "Incorrect authentication"},
             )
-        access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
-        access_token = create_access_token(
-            data=user.get_access_token_data(),
-            expires_delta=access_token_expires,
-        )
         response = RedirectResponse(
             "/home",
             status_code=202,
@@ -143,8 +106,11 @@ def login_post(
         )
         response.set_cookie(
             "auth-token",
-            access_token,
-            max_age=ACCESS_TOKEN_EXPIRE_MINUTES * 60,
+            create_access_token(
+                data=user.get_access_token_data(),
+                expires_delta=timedelta(minutes=config.ACCESS_TOKEN_EXPIRE_MINUTES),
+            ),
+            max_age=config.ACCESS_TOKEN_EXPIRE_MINUTES * 60,
             secure=True,
             httponly=True,
             samesite="strict",
@@ -152,7 +118,10 @@ def login_post(
         return response
 
 
-def logout_post(
+@router.post(
+    "/logout",
+)
+def logout(
     request: Request,
     token_data: Annotated[TokenDataSchema, Security(get_authenticated_musician)],
     anyblok_registry: Annotated["Registry", Depends(get_registry)],
@@ -168,6 +137,9 @@ def logout_post(
     return response
 
 
+@router.get(
+    "/home",
+)
 def home(
     request: Request,
     token_data: Annotated[
@@ -183,6 +155,9 @@ def home(
         )
 
 
+@router.put(
+    "/musician/{musician_uuid}/toggle-active-band/{band_uuid}",
+)
 def toggle_musician_active_band(
     request: Request,
     token_data: Annotated[
@@ -205,12 +180,15 @@ def toggle_musician_active_band(
             request.headers.get("HX-Current-URL", "/"),
             status_code=201,
             headers={
-                # "HX-Redirect": "/bands",
+                # "HX-Redirect": "/bands/",
                 "HX-Refresh": "true",
             },
         )
 
 
+@router.get(
+    "/profile",
+)
 def profile(
     request: Request,
     token_data: Annotated[
@@ -228,6 +206,9 @@ def profile(
         )
 
 
+@router.get(
+    "/credits",
+)
 def credits(
     request: Request,
     token_data: Annotated[TokenDataSchema, Security(get_authenticated_musician)],
@@ -242,6 +223,9 @@ def credits(
     )
 
 
+@router.get(
+    "/terms",
+)
 def terms(
     request: Request,
     token_data: Annotated[TokenDataSchema, Security(get_authenticated_musician)],
@@ -255,6 +239,9 @@ def terms(
         )
 
 
+@router.get(
+    "/register",
+)
 def register(
     request: Request,
     token_data: Annotated[TokenDataSchema, Security(get_authenticated_musician)],

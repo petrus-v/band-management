@@ -11,14 +11,31 @@ from band_management.storage import storage_factory
 from band_management.bloks.http_auth_base.schemas.auth import (
     TokenDataSchema,
 )
-from band_management.bloks.bm_responsive_webapp.main import (
+from band_management.bloks.bm_responsive_webapp.fastapi_utils import (
     get_authenticated_musician,
     _prepare_context,
     _get_musician_from_token,
+    RenewTokenRoute,
 )
 from .jinja import templates
 
+from fastapi import APIRouter
 
+scores_router = APIRouter(
+    prefix="/scores",
+    responses={404: {"description": "Not found"}},
+    route_class=RenewTokenRoute,
+)
+router = APIRouter(
+    prefix="/score",
+    responses={404: {"description": "Not found"}},
+    route_class=RenewTokenRoute,
+)
+
+
+@scores_router.get(
+    "/",
+)
 def scores(
     request: Request,
     token_data: Annotated[
@@ -34,6 +51,9 @@ def scores(
         )
 
 
+@scores_router.post(
+    "/",
+)
 def search_scores(
     request: Request,
     token_data: Annotated[
@@ -64,6 +84,9 @@ def search_scores(
         return response
 
 
+@router.get(
+    "/prepare",
+)
 def prepare_score(
     request: Request,
     token_data: Annotated[
@@ -84,6 +107,9 @@ def prepare_score(
         )
 
 
+@router.get(
+    "/{score_uuid}",
+)
 def score(
     request: Request,
     token_data: Annotated[
@@ -105,6 +131,10 @@ def score(
         )
 
 
+@router.get(
+    "/{score_uuid}/media",
+    response_class=FileResponse,
+)
 async def score_media(
     request: Request,
     token_data: Annotated[
@@ -125,6 +155,9 @@ async def score_media(
         return FileResponse(medium.path, media_type=medium.storage_metadata.mime_type)
 
 
+@router.post(
+    "/",
+)
 async def add_scores(
     request: Request,
     token_data: Annotated[
@@ -161,14 +194,17 @@ async def add_scores(
         )
     else:
         return RedirectResponse(
-            "/scores",
+            "/scores/",
             status_code=201,
             headers={
-                "HX-Redirect": "/scores",
+                "HX-Redirect": "/scores/",
             },
         )
 
 
+@router.put(
+    "/{score_uuid}",
+)
 def update_score(
     request: Request,
     token_data: Annotated[
@@ -198,6 +234,6 @@ def update_score(
             "/scores",
             status_code=status_code,
             headers={
-                "HX-Redirect": "/scores",
+                "HX-Redirect": "/scores/",
             },
         )
