@@ -6,14 +6,6 @@ from anyblok_fastapi.conftest import webserver  # noqa: F401
 from band_management import config
 
 
-@pytest.fixture(scope="function", autouse=True)
-def cleanup_auth_cookies(request, webserver):  # noqa: F811
-    def clear_cookies():
-        webserver.cookies = {}
-
-    request.addfinalizer(clear_cookies)
-
-
 @pytest.fixture(name="anonymous")
 def anonymous_user_http_client(webserver):  # noqa: F811
     return webserver

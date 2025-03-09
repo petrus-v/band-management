@@ -47,7 +47,7 @@ def test_connected_musician_update_band(joe_user, connected_musician, pamh_band)
     joe_in_pahm_member = joe_user.musician.member_of(pamh_band)
     joe_in_pahm_member.is_admin = True
     assert len([member for member in pamh_band.members if member.is_admin]) == 2
-    joe_in_pahm_member.anyblok.flush()
+    assert joe_in_pahm_member.is_admin is True
     response = connected_musician.put(
         f"/band/{pamh_band.uuid}",
         data={"band_name": "other", "administrators": [str(joe_in_pahm_member.uuid)]},

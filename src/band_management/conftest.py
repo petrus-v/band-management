@@ -1,6 +1,19 @@
 import pytest
 from pathlib import Path
 from band_management import config
+from anyblok.conftest import *  # noqa: F401,F403
+
+
+@pytest.fixture(scope="function")
+def anyblok(rollback_registry):
+    """Alias rollback registry"""
+    return rollback_registry
+
+
+@pytest.fixture(name="bm")
+def band_management(anyblok):
+    """Alias rollback registry"""
+    return anyblok.BandManagement
 
 
 @pytest.fixture(name="storage_directory", scope="session", autouse=True)
