@@ -1,6 +1,7 @@
 from anyblok import Declarations
 
 from anyblok.column import String
+from anyblok.relationship import One2Many
 from band_management.exceptions import PermissionDenied, ValidationError
 
 register = Declarations.register
@@ -11,6 +12,17 @@ Model = Declarations.Model
 @register(Model.BandManagement)
 class Band(Mixin.PrimaryColumn):
     name: str = String(label="Title", nullable=False, unique=True)
+
+    inactive_members = One2Many(
+        model="Model.BandManagement.Member",
+        remote_columns="band_uuid",
+        primaryjoin=(
+            "and_(ModelBandManagementBand.uuid == ModelBandManagementMember.band_uuid,"
+            "ModelBandManagementMember.invitation_state == 'rejected')"
+        ),
+        viewonly=True,
+        lazy="subquery",
+    )
 
     @property
     def musics_count(self):
@@ -38,7 +50,13 @@ class Band(Mixin.PrimaryColumn):
             )
         self.update(**kwargs)
 
-    def update_administrator_by(self, admin_musician, administrators: list):
+    def update_administrator_by(self, admin_musician, administrators: list[str]):
+        """Update the administrator list
+
+
+        administrators is a list of Member uuid
+        """
+
         if not admin_musician.member_of(self).is_admin:
             raise PermissionDenied(
                 f"You, {admin_musician.name}, are not allowed to edit administrators's band {self.name}. Ask an existing band administrator to become a band administrator."

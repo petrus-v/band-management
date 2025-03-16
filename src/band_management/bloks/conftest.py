@@ -1,7 +1,15 @@
 import pytest
 
 
-@pytest.fixture(name="joe_musician")
+@pytest.fixture
+def pverkest_musician(bm):
+    pverkest_musician = (
+        bm.Musician.query().filter(bm.Musician.email.ilike("pierre@verkest.fr")).one()
+    )
+    return pverkest_musician
+
+
+@pytest.fixture
 def joe_musician(bm):
     joe_musician = (
         bm.Musician.query().filter(bm.Musician.email.ilike("joe@test.fr")).one()
@@ -9,15 +17,20 @@ def joe_musician(bm):
     return joe_musician
 
 
-@pytest.fixture(name="doe_musician")
+@pytest.fixture
 def doe_musician(bm):
     doe = bm.Musician.query().filter(bm.Musician.email.ilike("doe@test.fr")).one()
     return doe
 
 
-@pytest.fixture(name="joe_user")
+@pytest.fixture
 def joe_user(joe_musician):
     return joe_musician.user
+
+
+@pytest.fixture
+def pverkest_user(pverkest_musician):
+    return pverkest_musician.user
 
 
 @pytest.fixture()

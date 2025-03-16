@@ -6,12 +6,20 @@
         <div class="message-header">
           <span>{{ band.name | highlight(search) | safe}}</span>
           {% if user_member.is_admin %}
-            <a class="button" href="/band/{{ band.uuid }}">
-              <span class="icon">
-                <i class="fa fa-edit"></i>
-              </span>
-              <span>Edit</span>
-            </a>
+            <div class="field is-grouped">
+              <a class="button" href="/band/{{ band.uuid }}/invite">
+                <span class="icon">
+                  <i class="fa fa-user-plus"></i>
+                </span>
+                <span>Invite</span>
+              </a>
+              <a class="button" href="/band/{{ band.uuid }}">
+                <span class="icon">
+                  <i class="fa fa-edit"></i>
+                </span>
+                <span>Edit</span>
+              </a>
+            </div>
           {% endif %}
         </div>
         <div class="message-body">
@@ -28,9 +36,10 @@
               </div>
             {%- endfor %}
           </div>
+          <div>
+            <p>musics: {{band.musics_count}}</p>
+          </div>
         </div>
-        <p>musics: {{band.musics_count}}</p>
-      </div>
       </article>
     {% endfor %} {% else %}
     <article>

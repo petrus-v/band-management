@@ -21,6 +21,16 @@ def webserver_joe_user(webserver, joe_user):  # noqa: F811
     return webserver
 
 
+@pytest.fixture(name="pverkest_http_client")
+def webserver_pverkest_user(webserver, pverkest_user):  # noqa: F811
+    token = create_access_token(
+        data=pverkest_user.get_access_token_data(),
+        expires_delta=timedelta(minutes=config.ACCESS_TOKEN_EXPIRE_MINUTES),
+    )
+    webserver.cookies["auth-token"] = f"{token}"
+    return webserver
+
+
 @pytest.fixture(name="connected_musician")
 def band_leader_user_http_client(joe_http_client):  # noqa: F811
     return joe_http_client

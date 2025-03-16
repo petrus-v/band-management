@@ -188,20 +188,3 @@ def test_band_terms(anonymous):
 def test_band_credits(anonymous):
     response = anonymous.get("/credits")
     assert response.status_code == 200, response.text
-
-
-def test_toggle_musician_active_band(connected_musician, joe_user, pamh_band):
-    response = connected_musician.put(
-        f"/musician/{joe_user.musician_uuid}/toggle-active-band/{pamh_band.uuid}"
-    )
-    assert response.status_code == 201, response.text
-    assert response.headers["HX-Refresh"] == "true"
-
-
-def test_toggle_musician_active_band_permission_denied(
-    connected_musician, doe_musician, pamh_band
-):
-    response = connected_musician.put(
-        f"/musician/{doe_musician.uuid}/toggle-active-band/{pamh_band.uuid}"
-    )
-    assert response.status_code == 401, response.text

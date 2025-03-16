@@ -126,18 +126,78 @@ def band(
                     "band": band,
                 },
             )
-        print(
-            musician.name,
-            " is not allowed to get ",
-            band.name,
-            " is member admin",
-            member.is_admin if member and member.is_admin else member,
-        )
         return RedirectResponse(
             "/bands",
             status_code=401,
             headers={
                 "HX-Redirect": "/bands/",
+            },
+        )
+
+
+@router.get(
+    "/{band_uuid}/invite",
+)
+def invite_band_member_page(
+    request: Request,
+    token_data: Annotated[
+        TokenDataSchema, Security(get_authenticated_musician, scopes=["musician-auth"])
+    ],
+    band_uuid: str,
+    ab_registry: "Registry" = Depends(get_registry),
+):
+    with registry_transaction(ab_registry) as anyblok:
+        musician = _get_musician_from_token(anyblok, token_data)
+        BM = anyblok.BandManagement
+        band = BM.Band.query().get(band_uuid)
+        member = musician.member_of(band)
+        if member and member.is_admin:
+            return templates.TemplateResponse(
+                name="band-invite.html",
+                request=request,
+                context={
+                    **_prepare_context(anyblok, request, token_data),
+                    "band": band,
+                },
+            )
+        return RedirectResponse(
+            "/bands",
+            status_code=401,
+            headers={
+                "HX-Redirect": "/bands/",
+            },
+        )
+
+
+@router.post(
+    "/{band_uuid}/invite",
+)
+def invite_band_member(
+    request: Request,
+    token_data: Annotated[
+        TokenDataSchema, Security(get_authenticated_musician, scopes=["musician-auth"])
+    ],
+    band_uuid: str,
+    musician_uuid: Annotated[str, Form()],
+    ab_registry: "Registry" = Depends(get_registry),
+):
+    with registry_transaction(ab_registry) as anyblok:
+        current_musician = _get_musician_from_token(anyblok, token_data)
+        BM = anyblok.BandManagement
+        band = BM.Band.query().get(band_uuid)
+        current_musician.member_of(band)
+        invited_musician = BM.Musician.query().get(musician_uuid)
+        BM.Member.create_invitation_by(
+            band=band,
+            invited_musician=invited_musician,
+            invited_by=current_musician,
+        )
+        return templates.TemplateResponse(
+            name="band-invite.html",
+            request=request,
+            context={
+                **_prepare_context(anyblok, request, token_data),
+                "band": band,
             },
         )
 

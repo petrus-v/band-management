@@ -1,9 +1,8 @@
 from anyblok import Declarations
 
 from anyblok.column import Email, String
-from anyblok.relationship import Many2Many
+from anyblok.relationship import Many2Many, One2Many
 from band_management.exceptions import PermissionDenied, ValidationError
-
 
 register = Declarations.register
 Mixin = Declarations.Mixin
@@ -12,7 +11,7 @@ Model = Declarations.Model
 
 @register(Model.BandManagement)
 class Musician(Mixin.PrimaryColumn):
-    name: str = String(label="Name", nullable=False)
+    name: str = String(label="Name", nullable=False, unique=True)
     email: str = Email(label="Email", nullable=False, unique=True)
     lang: str = String(label="Language", nullable=False, default="en")
 
@@ -23,6 +22,16 @@ class Musician(Mixin.PrimaryColumn):
         m2m_local_columns="musician_uuid",
         m2m_remote_columns="band_uuid",
         remote_columns="uuid",
+    )
+    rejected_invitations = One2Many(
+        model="Model.BandManagement.Member",
+        remote_columns="musician_uuid",
+        primaryjoin=(
+            "and_(ModelBandManagementMusician.uuid == ModelBandManagementMember.musician_uuid,"
+            "ModelBandManagementMember.invitation_state == 'rejected')"
+        ),
+        viewonly=True,
+        # lazy="subquery",
     )
 
     @property
@@ -38,6 +47,11 @@ class Musician(Mixin.PrimaryColumn):
             )
 
         if band not in self.active_bands:
+            if self.member_of(band).invitation_state == "rejected":
+                raise ValidationError(
+                    f"You ({self.name}) should accept the invitation before activate this band: {band.name}."
+                )
+
             self.active_bands.append(band)
         else:
             self.active_bands.remove(band)

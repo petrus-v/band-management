@@ -10,7 +10,6 @@ from datetime import timedelta
 from fastapi.security import (
     OAuth2PasswordRequestForm,
 )
-from fastapi import HTTPException, status
 
 from band_management.bloks.http_auth_base.schemas.auth import (
     TokenDataSchema,
@@ -22,7 +21,6 @@ from fastapi import APIRouter
 
 from .fastapi_utils import (
     get_authenticated_musician,
-    _get_musician_from_token,
     _prepare_context,
     RenewTokenRoute,
 )
@@ -158,37 +156,6 @@ def home(
             name="home.html",
             request=request,
             context={**_prepare_context(anyblok, request, token_data)},
-        )
-
-
-@router.put(
-    "/musician/{musician_uuid}/toggle-active-band/{band_uuid}",
-)
-def toggle_musician_active_band(
-    request: Request,
-    token_data: Annotated[
-        TokenDataSchema, Security(get_authenticated_musician, scopes=["musician-auth"])
-    ],
-    musician_uuid: str,
-    band_uuid: str,
-    ab_registry: "Registry" = Depends(get_registry),
-):
-    with registry_transaction(ab_registry) as anyblok:
-        musician = _get_musician_from_token(anyblok, token_data)
-        if musician_uuid != str(musician.uuid):
-            raise HTTPException(
-                status_code=status.HTTP_401_UNAUTHORIZED,
-                detail="Your are not allowed to update other user active bands",
-            )
-
-        musician.toggle_musician_active_band(band_uuid)
-        return RedirectResponse(
-            request.headers.get("HX-Current-URL", "/"),
-            status_code=201,
-            headers={
-                # "HX-Redirect": "/bands/",
-                "HX-Refresh": "true",
-            },
         )
 
 

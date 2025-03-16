@@ -7,6 +7,21 @@ def test_toogle_add_current_band(joe_pamh_current_active_band, pamh_band, trib_b
     assert joe_pamh_current_active_band.active_bands == [pamh_band, trib_band]
 
 
+def test_cant_toogle_rejected_band_as_active_band(
+    joe_pamh_current_active_band, trib_band
+):
+    joe_member_trib = joe_pamh_current_active_band.member_of(trib_band)
+    joe_member_trib.reject_invitation()
+    with pytest.raises(
+        ValidationError,
+        match=(
+            f"You \({joe_pamh_current_active_band.name}\) should accept the invitation "
+            f"before activate this band: {trib_band.name}\."
+        ),
+    ):
+        joe_pamh_current_active_band.toggle_musician_active_band(trib_band.uuid)
+
+
 def test_toogle_remove_band(joe_pamh_current_active_band, pamh_band, trib_band):
     joe_pamh_current_active_band.toggle_musician_active_band(trib_band.uuid)
     joe_pamh_current_active_band.toggle_musician_active_band(pamh_band.uuid)
