@@ -1,13 +1,14 @@
 {% if musicians %} {% for musician in musicians %}
-  <a href="#" class="dropdown-item" hx-on:click="document.getElementById('selected-musician-uuid').value = '{{ musician.uuid }}';
-                                                 document.getElementById('musician-search').value = '{{ musician.name }}';">
+  <a href="#" class="dropdown-item"
+     hx-on:click="document.getElementById('selected-musician-uuid').value = '{{ musician.uuid }}';
+                  document.getElementById('musician-search').value = '{{ musician.name }}';">
     <span> {{ musician.name | highlight(search) | safe}} </span>
   </a>
 {% endfor %}
 {% endif %}
 {% if search|length >= 1 %}
   <a href="#" class="dropdown-item js-modal-trigger"
-     hx-get="/musician/prepare?modal_mode=1&musician_name={{ search }}&band_uuid={{band and band.uuid or '' }}"
+     hx-get="/musician/prepare?next_action={{ NextAction.EDIT_MODAL_FROM_VIEW }}&musician_name={{ search }}&band_uuid={{band and band.uuid or '' }}"
      hx-target="#musician-modal-content" data-target="musician-modal" hx-trigger="click" onclick="openModal(this)">
     Create new musician {{ search }}...
   </a>

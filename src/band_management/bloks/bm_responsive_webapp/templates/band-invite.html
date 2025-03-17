@@ -46,12 +46,26 @@
         <p>
           <div class="tags">
             {%- for band_member in band.members if band_member.invitation_state == 'invited': %}
-              <div class="tag {{'is-link' if band_member != user_member else 'is-primary'}}">
-                {% if band_member.is_admin %}
-                  <span class="icon">
-                    <i class="fa fa-user"></i>
-                  </span>
-                {% endif %}
+              {%- set user=band_member.musician.user %}
+              {% set invitation_url=request.base_url.replace(
+              path="user/reset-password"
+              ).replace_query_params(
+              invitation_token=user.invitation_token
+              )
+              %}
+              <div class="tag {{'is-link' if band_member != user_member else 'is-primary'}}"
+                   hx-on:click="navigator.clipboard.writeText('{{ invitation_url }}');">
+                {% if band_member.musician.user.invitation_token %}
+                  {% if user.invitation_token_expiration_date > now %}
+                    <span class="icon" >
+                      <i class="fa fa-clipboard"></i>
+                    </span>
+                  {% else %}
+                    <span class="icon is-danger" hx-on:click="alert('KO')">
+                      <i class="fa fa-error"></i>
+                    </span>
+                  {%endif %}
+                {%endif %}
                 <span>{{ band_member.musician.name }}</span>
               </div>
             {%- endfor %}

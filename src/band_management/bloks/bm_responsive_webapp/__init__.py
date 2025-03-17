@@ -8,11 +8,15 @@ VERSION = __version__
 
 
 def import_declarations(reload=None):
-    # from . import mixins
+    from . import auth
+    from . import band_management
 
     if reload is not None:
-        # reload(mixins)
-        pass
+        reload(auth)
+        reload(band_management)
+
+    auth.import_declarations(reload=reload)
+    band_management.import_declarations(reload=reload)
 
 
 class BandManagementResponsiveWebApp(Blok):

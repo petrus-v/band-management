@@ -5,7 +5,7 @@
 <section class="modal-card-body">
   <form id="music-form" hx-post="/music/" hx-target="#music-field-selection" hw-swap="outerHTML">
     {% include "musics/music-form.html" %}
-    <input type="hidden" name="modal_mode" form="music-form" value="true" />
+    <input type="hidden" name="next_action" form="music-form" value="{{NextAction.UPDATE_FIELD_SELECTION}}" />
   </form>
 </section>
 <footer class="modal-card-foot">

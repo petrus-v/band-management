@@ -34,3 +34,5 @@ def predictive_jwt_config() -> Path:
     config.ALGORITHM = "HS256"
     config.ACCESS_TOKEN_EXPIRE_MINUTES = 30
     config.ACCESS_TOKEN_RENEW_MINUTES = 2
+    config.INVITATION_TOKEN_EXPIRE_DAYS = 5
+    config.RESET_PASSWORD_TOKEN_EXPIRE_MINUTES = 10

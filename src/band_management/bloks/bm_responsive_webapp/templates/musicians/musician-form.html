@@ -2,7 +2,7 @@
   <label class="label">Name</label>
   <div class="control">
     <input class="input" form="musician-form" type="text" name="musician_name" placeholder="Musician Name"
-           value="{{ invited_musician.name }}" />
+           value="{{ invited_musician.name | default('', true) }}" />
   </div>
   <p class="help">The musician name</p>
 </div>
@@ -15,5 +15,6 @@
   </div>
   <p class="help">Musician's email</p>
 </div>
-<input type="text" name="band_uuid" id="band-uuid" form="musician-form"
+<input type="hidden" name="csrf_token" value="{{csrf_token(10)}}" />
+<input type="hidden" name="band_uuid" id="band-uuid" form="musician-form"
        value="{{band and band.uuid or '' | default('', true)  }}" />

@@ -25,8 +25,10 @@
   const setMainContainerMarginHeight = function () {
     mainContainer.style.marginTop =
       header.firstElementChild.clientHeight + 10 + "px";
-    mainContainer.style.marginBottom =
-      footer.firstElementChild.clientHeight + 10 + "px";
+    if (footer && footer.firstElementChild) {
+      mainContainer.style.marginBottom =
+        footer.firstElementChild.clientHeight + 10 + "px";
+    }
   };
   burger.addEventListener("click", function () {
     burger.classList.toggle("is-active");

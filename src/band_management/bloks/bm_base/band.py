@@ -36,9 +36,7 @@ class Band(Mixin.PrimaryColumn):
     def insert_by(cls, musician, **kwargs):
         band = cls.insert(**kwargs)
         cls.anyblok.BandManagement.Member.insert(
-            musician=musician,
-            band=band,
-            is_admin=True,
+            musician=musician, band=band, is_admin=True, invitation_state="accepted"
         )
         musician.active_bands.append(band)
         return band

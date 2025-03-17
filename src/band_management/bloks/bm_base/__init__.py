@@ -62,11 +62,17 @@ class BandManagementBase(Blok):
                 name="Pierre Verkest",
                 email="pierre@verkest.fr",
                 lang="fr",
+                create_solo_band=False,
             )
             musician_joe = BM.Musician.insert(
-                name="Joe", email="joe@test.fr", lang="en"
+                name="Joe",
+                email="joe@test.fr",
+                lang="en",
+                create_solo_band=False,
             )
-            musician_doe = BM.Musician.insert(name="Doe", email="doe@test.fr")
+            musician_doe = BM.Musician.insert(
+                create_solo_band=False, name="Doe", email="doe@test.fr"
+            )
 
             voice = BM.Instrument.insert(name="Voice")
             BM.Instrument.insert(name="Voice Tenor")

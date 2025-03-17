@@ -65,3 +65,14 @@ class Musician(Mixin.PrimaryColumn):
         for member in self.members:
             if member.band == band:
                 return member
+
+    def create_solo(self):
+        BM = self.anyblok.BandManagement
+        return BM.Band.insert_by(self, name=f"{self.name} Solo")
+
+    @classmethod
+    def insert(cls, *args, create_solo_band: bool = True, **kwargs):
+        musician = super().insert(*args, **kwargs)
+        if create_solo_band:
+            musician.create_solo()
+        return musician

@@ -14,7 +14,7 @@ from band_management.bloks.bm_responsive_webapp.fastapi_utils import (
     RenewTokenRoute,
 )
 from contextlib import contextmanager
-from .jinja import templates
+from .jinja import templates, NextAction
 import sqlalchemy as sa
 
 from fastapi import APIRouter
@@ -131,7 +131,7 @@ def prepare_music(
         TokenDataSchema, Security(get_authenticated_musician, scopes=["musician-auth"])
     ],
     music_name: str = "",
-    modal_mode: bool = False,
+    next_action: NextAction = NextAction.EDIT_FORM_VIEW,
     ab_registry: "Registry" = Depends(get_registry),
 ):
     with registry_transaction(ab_registry) as anyblok:
@@ -140,8 +140,10 @@ def prepare_music(
         music = BM.Music(title=music_name or "Default Music")
         [music.bands.append(b) for b in musician.active_bands]
         template = "music-prepare.html"
-        if modal_mode:
+        future_action = NextAction.BACK_TO_LIST
+        if next_action == NextAction.EDIT_MODAL_FROM_VIEW:
             template = "musics/prepare-modal.html"
+            future_action = NextAction.UPDATE_FIELD_SELECTION
 
         return templates.TemplateResponse(
             name=template,
@@ -149,7 +151,7 @@ def prepare_music(
             context={
                 **_prepare_context(anyblok, request, token_data),
                 "music": music,
-                "modal_mode": modal_mode,
+                "future_action": future_action,
             },
         )
 
@@ -192,7 +194,7 @@ def add_music(
     music_author: Annotated[str, Form()],
     music_dance: Annotated[str, Form()],
     music_bands: Annotated[list[str] | None, Form()],
-    modal_mode: Annotated[bool, Form()] = False,
+    next_action: Annotated[NextAction, Form()] = NextAction.BACK_TO_LIST.value,
     ab_registry: "Registry" = Depends(get_registry),
 ):
     with registry_transaction(ab_registry) as anyblok:
@@ -205,7 +207,7 @@ def add_music(
             dance=music_dance,
         )
         music.update_bands(musician, music_bands)
-    if modal_mode:
+    if next_action == NextAction.UPDATE_FIELD_SELECTION:
         return templates.TemplateResponse(
             name="musics/music-field-selection.html",
             request=request,

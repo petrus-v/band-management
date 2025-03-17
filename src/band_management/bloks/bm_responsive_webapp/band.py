@@ -1,3 +1,5 @@
+import datetime
+
 from typing import Annotated
 from anyblok_fastapi.fastapi import get_registry, registry_transaction
 from fastapi import Depends, Request, Form, APIRouter
@@ -158,6 +160,7 @@ def invite_band_member_page(
                 context={
                     **_prepare_context(anyblok, request, token_data),
                     "band": band,
+                    "now": datetime.datetime.now(tz=datetime.timezone.utc),
                 },
             )
         return RedirectResponse(
@@ -198,6 +201,7 @@ def invite_band_member(
             context={
                 **_prepare_context(anyblok, request, token_data),
                 "band": band,
+                "now": datetime.datetime.now(tz=datetime.timezone.utc),
             },
         )
 
