@@ -1,6 +1,6 @@
 FROM python:3.13-slim-bookworm AS base
 
-LABEL org.opencontainers.image.source = "https://github.com/petrus-v/band-management" 
+LABEL org.opencontainers.image.source="https://github.com/petrus-v/band-management" 
 LABEL org.opencontainers.image.authors="Pierre Verkest <pierre@verkest.fr>"
 
 ENV VIRTUAL_ENV=/anyblok
