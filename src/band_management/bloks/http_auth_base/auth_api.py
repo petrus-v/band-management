@@ -42,9 +42,9 @@ api_user = APIRouter(
 
 def create_access_token(data: TokenDataSchema, expires_delta: timedelta | None = None):
     if expires_delta:
-        expire = datetime.now(timezone.utc) + expires_delta
+        expire = datetime.now(tz=timezone.utc) + expires_delta
     else:
-        expire = datetime.now(timezone.utc) + timedelta(
+        expire = datetime.now(tz=timezone.utc) + timedelta(
             minutes=config.ACCESS_TOKEN_EXPIRE_MINUTES
         )
     data.exp = int(expire.timestamp())

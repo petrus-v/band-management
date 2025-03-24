@@ -1,0 +1,102 @@
+{% extends "layouts/layout.html" %}
+{% block main %}
+  {% set user_member = musician.member_of(band) %}
+
+  <article class="message">
+    <div class="message-header">
+      <span>{{ band.name | highlight(search) | safe}}</span>
+      {% if user_member.is_admin %}
+        <div class="field is-grouped">
+      <!-- <a class="button" href="/band/{{ band.uuid }}/invite">
+      <span class="icon">
+        <i class="fa fa-user-plus"></i>
+      </span>
+      <span>Invite</span>
+    </a> -->
+          <a class="button" href="/band/{{ band.uuid }}">
+            <span class="icon">
+              <i class="fa fa-edit"></i>
+            </span>
+            <span>Edit</span>
+          </a>
+        </div>
+      {% endif %}
+    </div>
+    <div class="message-body">
+      <h2>Active musicians: {{band.musicians_count}}</h2>
+      <div id="acepted-members">
+        <h3>accepted</h3>
+        <p>
+          <div class="tags">
+            {%- for band_member in band.members if band_member.invitation_state == 'accepted': %}
+              <div class="tag {{'is-link' if band_member != user_member else 'is-primary'}}">
+                {% if band_member.is_admin %}
+                  <span class="icon">
+                    <i class="fa fa-user"></i>
+                  </span>
+                {% endif %}
+                <span>{{ band_member.musician.name }}</span>
+              </div>
+            {%- endfor %}
+          </div>
+        </p>
+      </div>
+      <div id="invited-members">
+        <h3>Invited members</h3>
+        <p>
+          <div class="tags">
+            {%- for band_member in band.members if band_member.invitation_state == 'invited': %}
+              {%- set user=band_member.musician.user %}
+              {% set invitation_url=request.base_url.replace(
+              path="user/reset-password"
+              ).replace_query_params(
+              invitation_token=user.invitation_token
+              )
+              %}
+              <div class="tag {{'is-link' if band_member != user_member else 'is-primary'}}"
+                   hx-on:click="navigator.clipboard.writeText('{{ invitation_url }}');">
+                {% if band_member.musician.user.invitation_token %}
+                  {% if user.invitation_token_expiration_date > now %}
+                    <span class="icon">
+                      <i class="fa fa-clipboard"></i>
+                    </span>
+                  {% else %}
+                    <span class="icon is-danger" hx-on:click="alert('KO')">
+                      <i class="fa fa-error"></i>
+                    </span>
+                  {%endif %}
+                {%endif %}
+                <span>{{ band_member.musician.name }}</span>
+              </div>
+            {%- endfor %}
+          </div>
+        </p>
+      </div>
+      <div id="rejected-members">
+        <h3>Old/Revoked/Refused members</h3>
+        <p>
+          <div class="tags">
+            {%- for band_member in band.inactive_members: %}
+              <div class="tag {{'is-link' if band_member != user_member else 'is-primary'}}">
+                {% if band_member.is_admin %}
+                  <span class="icon">
+                    <i class="fa fa-user"></i>
+                  </span>
+                {% endif %}
+                <span>{{ band_member.musician.name }}</span>
+              </div>
+            {%- endfor %}
+          </div>
+        </p>
+      </div>
+      <div>
+        <h3>Invite new member</h3>
+        <form id="invite-form" hx-post="/band/{{ band.uuid }}/invite" hx-target="body">
+          {% include "musicians/musician-field-selection.html" %}
+          <button type="submit" form="invite-form" class="button is-success">Invite</button>
+        </form>
+      </div>
+    </div>
+  </article>
+
+{% endblock %}

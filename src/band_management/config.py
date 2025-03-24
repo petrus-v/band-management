@@ -43,3 +43,14 @@ without the needs to reconnect.
 Only for the responsive web app. The api endpoint must handle a new
 connexion
 """
+
+INVITATION_TOKEN_EXPIRE_DAYS = os.environ.get("INVITATION_TOKEN_EXPIRE_DAYS", 15)
+"""How long the invitation token is valid
+to let new user access to their new account.
+"""
+RESET_PASSWORD_TOKEN_EXPIRE_MINUTES = os.environ.get(
+    "RESET_PASSWORD_TOKEN_EXPIRE_MINUTES", 30
+)
+"""How long the reset password token is valid
+Also used while registering new user
+"""

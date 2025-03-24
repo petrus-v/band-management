@@ -1,3 +1,6 @@
+from band_management.bloks.bm_responsive_webapp.jinja import NextAction
+
+
 def test_connected_musician_get_musics(connected_musician):
     response = connected_musician.get("/musics")
     assert response.status_code == 200, response.text
@@ -57,7 +60,7 @@ def test_connected_musician_post_music_modal(
                 "hidden",
                 str(pamh_band.uuid),
             ],
-            "modal_mode": True,
+            "next_action": NextAction.UPDATE_FIELD_SELECTION,
         },
     )
     assert response.status_code == 200, response.text
@@ -76,7 +79,9 @@ def test_connected_musician_prepare_music(bm, connected_musician):
 
 
 def test_connected_musician_prepare_music_modal_mode(bm, connected_musician):
-    response = connected_musician.get("/music/prepare?modal_mode=true&music_name=test")
+    response = connected_musician.get(
+        f"/music/prepare?next_action={NextAction.EDIT_MODAL_FROM_VIEW}&music_name=test"
+    )
     assert response.status_code == 200, response.text
 
 

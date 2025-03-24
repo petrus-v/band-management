@@ -3,25 +3,41 @@
   <ul class="menu-list">
     {%- for menu in menus %}
       <li>
-        <a
-          href="{{ menu.path }}"
-          class="{{ 'is-active' if request.path.lower() == menu.path else ''}}"
-        >{{ menu.name }}</a
-          >
-        </li>
+        <a href="{{ menu.path }}" class="{{ 'is-active' if request.path.lower() == menu.path else ''}}">{{ menu.name }}</a>
+      </li>
     {%- endfor %}
   </ul>
-{%- endmacro %} {% macro render_musician_bands_menu(title, musician) -%}
+{%- endmacro %}
+
+{% macro render_musician_bands_menu(title, musician) -%}
   <p class="menu-label">{{ title }}</p>
   <ul class="menu-list">
     {%- for member in musician.members: %}
       <li>
-        <a
-          class="{{ 'is-active' if member.band in musician.active_bands else ''}}"
-          hx-put="/musician/{{musician.uuid}}/toggle-active-band/{{member.band.uuid}}"
-        >{{ member.band.name }}</a
-          >
-        </li>
+        <div class="field has-addons">
+          <a class="{{ 'is-active' if member.band in musician.active_bands else ''}}"
+             hx-put="/musician/{{musician.uuid}}/toggle-active-band/{{member.band.uuid}}">
+            {{ member.band.name }}
+          </a>
+          {%- if member.invitation_state == 'invited' %}
+            {%- set end_of_tooltip = 'from ' + member.invited_by.name if member.invited_by else '' %}
+            <button class="button is-success" title="Accept invitation{{end_of_tooltip}}"
+                    hx-put="/member/{{member.uuid}}/accept">
+              <span class="icon">
+                <i class="fas fa-check"></i>
+              </span>
+              <span>Accept</span>
+            </button>
+            <button class="button is-warning" title="Reject invitation from {{end_of_tooltip}}"
+                    hx-put="/member/{{member.uuid}}/reject">
+              <span class="icon">
+                <i class="fas fa-ban"></i>
+              </span>
+              <span>Reject</span>
+            </button>
+          {%- endif %}
+        </span>
+      </li>
     {%- endfor %}
   </ul>
 {%- endmacro %}

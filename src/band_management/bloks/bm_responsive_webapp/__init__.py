@@ -8,11 +8,15 @@ VERSION = __version__
 
 
 def import_declarations(reload=None):
-    # from . import mixins
+    from . import auth
+    from . import band_management
 
     if reload is not None:
-        # reload(mixins)
-        pass
+        reload(auth)
+        reload(band_management)
+
+    auth.import_declarations(reload=reload)
+    band_management.import_declarations(reload=reload)
 
 
 class BandManagementResponsiveWebApp(Blok):
@@ -42,10 +46,12 @@ class BandManagementResponsiveWebApp(Blok):
 
     @classmethod
     def prepare_fastapi(cls, app: FastAPI) -> None:
-        from . import main
         from . import band
-        from . import score
+        from . import main
+        from . import member
         from . import music
+        from . import musician
+        from . import score
 
         app.mount(
             "/static",
@@ -53,10 +59,13 @@ class BandManagementResponsiveWebApp(Blok):
             name="static",
         )
 
-        app.include_router(main.router)
         app.include_router(band.bands_router)
         app.include_router(band.router)
+        app.include_router(main.router)
+        app.include_router(member.router)
         app.include_router(music.musics_router)
         app.include_router(music.router)
+        app.include_router(musician.musicians_router)
+        app.include_router(musician.router)
         app.include_router(score.scores_router)
         app.include_router(score.router)

@@ -1,0 +1,47 @@
+<div class="field" id="musician-field-selection">
+    <label class="label">Musician</label>
+    <div class="control">
+        <div class="dropdown" id="musician-dropdown" hx-on:click="this.classList.toggle('is-active')">
+            <div class="dropdown-trigger">
+                <div class="control has-icons-left">
+                    <input type="text" form="search-musician" class="input" id="musician-search"
+                           placeholder="Search a musician..." name="search" hx-post="/musicians/dropdown"
+                           value="{{invited_musician and invited_musician.name or '' | default('', true)  }}"
+                           hx-include="#band-uuid"
+                           hx-on:click="document.getElementById('musician-dropdown').classList.toggle('is-active')"
+                           hx-on:focus="document.getElementById('musician-dropdown').classList.add('is-active')"
+                           hx-trigger="keyup changed delay:300ms, load" hx-target="#musician-dropdwon" />
+                    <input type="hidden" name="band_uuid" id="band-uuid" form="search-musician"
+                           value="{{band.uuid or '' | default('', true)  }}" />
+                    <span class="icon is-medium is-left">
+                        <i class="fas fa-user-plus"></i>
+                    </span>
+                </div>
+            </div>
+            <div class="dropdown-menu">
+                <div class="dropdown-content" id="musician-dropdwon"></div>
+            </div>
+            <input type="hidden" name="musician_uuid" form="invite-form" id="selected-musician-uuid"
+                   value="{{invited_musician and invited_musician.uuid or '' | default('', true)  }}" />
+        </div>
+        <div class="modal" id="musician-modal">
+            <div class="modal-background"></div>
+            <div class="modal-card" id="musician-modal-content">
+                <header class="modal-card-head skeleton-block">
+                    <p class="modal-card-title">...</p>
+                    <button class="delete" aria-label="close"></button>
+                </header>
+                <section class="modal-card-body skeleton-block">
+                    <!-- Content ... -->
+                </section>
+                <footer class="modal-card-foot skeleton-block">
+                    <div class="buttons">
+                        <button class="button is-success">Save changes</button>
+                        <button class="button">Cancel</button>
+                    </div>
+                </footer>
+            </div>
+        </div>
+        <p class="help">Select musician to invite</p>
+    </div>
+</div>

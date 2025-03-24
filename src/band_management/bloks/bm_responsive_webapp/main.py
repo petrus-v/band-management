@@ -1,7 +1,7 @@
 import logging
 from typing import Annotated
 from anyblok_fastapi.fastapi import get_registry, registry_transaction
-from fastapi import Depends, Request
+from fastapi import Depends, Request, Form, Query
 from .jinja import templates
 from fastapi.responses import RedirectResponse
 from anyblok.registry import Registry
@@ -10,7 +10,6 @@ from datetime import timedelta
 from fastapi.security import (
     OAuth2PasswordRequestForm,
 )
-from fastapi import HTTPException, status
 
 from band_management.bloks.http_auth_base.schemas.auth import (
     TokenDataSchema,
@@ -22,9 +21,10 @@ from fastapi import APIRouter
 
 from .fastapi_utils import (
     get_authenticated_musician,
-    _get_musician_from_token,
     _prepare_context,
     RenewTokenRoute,
+    parse_jwt_token,
+    check_csrf,
 )
 from band_management import config
 
@@ -44,13 +44,19 @@ router = APIRouter(
 def index(
     request: Request,
     token_data: Annotated[TokenDataSchema, Security(get_authenticated_musician)],
-    ab_registry: "Registry" = Depends(get_registry),
 ):
     """Get the list of company"""
-    with registry_transaction(ab_registry):
-        return templates.TemplateResponse(
-            name="index.html", request=request, context={}
+    if token_data:
+        response = RedirectResponse(
+            "/home",
+            status_code=200,
+            headers={
+                # "Content-Language": user.musician.lang,
+                "HX-Redirect": "/home",
+            },
         )
+        return response
+    return templates.TemplateResponse(name="index.html", request=request, context={})
 
 
 @router.get(
@@ -155,37 +161,6 @@ def home(
         )
 
 
-@router.put(
-    "/musician/{musician_uuid}/toggle-active-band/{band_uuid}",
-)
-def toggle_musician_active_band(
-    request: Request,
-    token_data: Annotated[
-        TokenDataSchema, Security(get_authenticated_musician, scopes=["musician-auth"])
-    ],
-    musician_uuid: str,
-    band_uuid: str,
-    ab_registry: "Registry" = Depends(get_registry),
-):
-    with registry_transaction(ab_registry) as anyblok:
-        musician = _get_musician_from_token(anyblok, token_data)
-        if musician_uuid != str(musician.uuid):
-            raise HTTPException(
-                status_code=status.HTTP_401_UNAUTHORIZED,
-                detail="Your are not allowed to update other user active bands",
-            )
-
-        musician.toggle_musician_active_band(band_uuid)
-        return RedirectResponse(
-            request.headers.get("HX-Current-URL", "/"),
-            status_code=201,
-            headers={
-                # "HX-Redirect": "/bands/",
-                "HX-Refresh": "true",
-            },
-        )
-
-
 @router.get(
     "/profile",
 )
@@ -251,5 +226,95 @@ def register(
         return templates.TemplateResponse(
             name="register.html",
             request=request,
-            context={**_prepare_context(anyblok, request, token_data)},
+            context={
+                **_prepare_context(anyblok, request, token_data),
+                "invited_musician": anyblok.BandManagement.Musician(),
+            },
         )
+
+
+@router.get(
+    "/user/reset-password",
+)
+def reset_password_page(
+    request: Request,
+    token_data: Annotated[TokenDataSchema, Security(get_authenticated_musician)],
+    invitation_token: Annotated[str, Query()],
+    ab_registry: "Registry" = Depends(get_registry),
+):
+    """Used to reset own password or create user account when invited"""
+    with registry_transaction(ab_registry) as anyblok:
+        data = parse_jwt_token(invitation_token)
+        user = anyblok.Auth.User.query().get(data.sub)
+        if not user:
+            return RedirectResponse(
+                request.base_url,
+                status_code=401,
+                headers={
+                    "HX-Redirect": "/",
+                },
+            )
+
+        return templates.TemplateResponse(
+            name="reset-password.html",
+            request=request,
+            context={
+                **_prepare_context(anyblok, request, token_data),
+                "invited_musician": user.musician,
+                "invitation_token": invitation_token,
+            },
+        )
+
+
+@router.post(
+    "/user/reset-password",
+)
+def reset_password(
+    request: Request,
+    token_data: Annotated[TokenDataSchema, Security(get_authenticated_musician)],
+    csrf: check_csrf,
+    invitation_token: Annotated[str, Form()],
+    password: Annotated[str, Form()],
+    password_confirmation: Annotated[str, Form()],
+    ab_registry: "Registry" = Depends(get_registry),
+):
+    with registry_transaction(ab_registry) as anyblok:
+        data = parse_jwt_token(invitation_token)
+        Auth = anyblok.Auth
+        invited_user = Auth.User.query().get(data.sub)
+        if password != password_confirmation:
+            return templates.TemplateResponse(
+                name="reset-password.html",
+                status_code=400,
+                request=request,
+                context={
+                    **_prepare_context(anyblok, request, token_data),
+                    "invited_musician": invited_user.musician,
+                    "invitation_token": invitation_token,
+                    "error_message": "Password mismatched !",
+                },
+            )
+
+        for cred in (
+            Auth.CredentialStore.query()
+            .filter_by(user=invited_user, label="main")
+            .all()
+        ):
+            cred.delete()
+        Auth.CredentialStore.insert(
+            label="main",
+            key=invited_user.musician.email,
+            secret=password,
+            user=invited_user,
+        )
+        invited_user.invitation_token = None
+        invited_user.invitation_token_expiration_date = None
+        response = RedirectResponse(
+            "/login",
+            status_code=200,
+            headers={
+                # "Content-Language": user.musician.lang,
+                "HX-Redirect": "/login",
+            },
+        )
+        return response

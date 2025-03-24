@@ -1,8 +1,11 @@
 import pytest
 from unittest import mock
 from fastapi import HTTPException
-from ..fastapi_utils import get_authenticated_musician
 from fastapi.security import SecurityScopes
+from band_management.bloks.bm_responsive_webapp.fastapi_utils import (
+    get_authenticated_musician,
+    csrf_token,
+)
 from band_management.bloks.http_auth_base.auth_api import create_access_token
 from band_management.bloks.http_auth_base.schemas.auth import TokenDataSchema
 from datetime import timedelta
@@ -84,6 +87,17 @@ def test_anonymous_band_management_login(anonymous):
     assert response.headers["hx-redirect"] == "/home", response.text
     assert response.status_code == 202, response.text
     assert anonymous.cookies.get("auth-token")
+
+
+def test_already_connected_band_management_index(connected_musician):
+    token = connected_musician.cookies.get("auth-token")
+    assert token
+    response = connected_musician.get(
+        "/",
+        follow_redirects=False,
+    )
+    assert response.status_code == 200, response.text
+    assert response.headers["hx-redirect"] == "/home", response.text
 
 
 def test_already_connected_band_management_login(connected_musician):
@@ -179,18 +193,70 @@ def test_band_credits(anonymous):
     assert response.status_code == 200, response.text
 
 
-def test_toggle_musician_active_band(connected_musician, joe_user, pamh_band):
-    response = connected_musician.put(
-        f"/musician/{joe_user.musician_uuid}/toggle-active-band/{pamh_band.uuid}"
+def test_reset_user_password_get_page(anonymous, pverkest_musician):
+    pverkest_musician.user.refresh_invitation_token()
+    response = anonymous.get(
+        "/user/reset-password",
+        params={
+            "invitation_token": pverkest_musician.user.invitation_token,
+        },
     )
-    assert response.status_code == 201, response.text
-    assert response.headers["HX-Refresh"] == "true"
+    assert response.status_code == 200
 
 
-def test_toggle_musician_active_band_permission_denied(
-    connected_musician, doe_musician, pamh_band
-):
-    response = connected_musician.put(
-        f"/musician/{doe_musician.uuid}/toggle-active-band/{pamh_band.uuid}"
+def test_reset_user_password_get_page_unknwon_token(anonymous, pverkest_musician):
+    response = anonymous.get(
+        "/user/reset-password",
+        params={
+            "invitation_token": create_access_token(
+                data=TokenDataSchema(sub=uuid7()),
+                expires_delta=timedelta(minutes=2),
+            ),
+        },
     )
     assert response.status_code == 401, response.text
+    assert response.headers["hx-redirect"] == "/"
+
+
+def test_reset_user_password_post(anyblok, anonymous, pverkest_musician):
+    pverkest_musician.user.refresh_invitation_token()
+    anyblok.Auth.CredentialStore.insert(
+        label="main",
+        key=pverkest_musician.email,
+        secret="abc",
+        user=pverkest_musician.user,
+    )
+    assert (
+        anyblok.Auth.authenticate(pverkest_musician.email, "abc")
+        == pverkest_musician.user
+    )
+    response = anonymous.post(
+        "/user/reset-password",
+        data={
+            "invitation_token": pverkest_musician.user.invitation_token,
+            "csrf_token": csrf_token(5),
+            "password": "abc123*",
+            "password_confirmation": "abc123*",
+        },
+    )
+    assert response.status_code == 200, response.text
+    # anyblok.flush()
+    assert (
+        anyblok.Auth.authenticate(pverkest_musician.email, "abc123*")
+        == pverkest_musician.user
+    )
+    assert anyblok.Auth.authenticate(pverkest_musician.email, "abc") is None
+
+
+def test_reset_user_password_mismatch_post(anyblok, anonymous, pverkest_musician):
+    pverkest_musician.user.refresh_invitation_token()
+    response = anonymous.post(
+        "/user/reset-password",
+        data={
+            "invitation_token": pverkest_musician.user.invitation_token,
+            "csrf_token": csrf_token(5),
+            "password": "abc123*",
+            "password_confirmation": "abc123",
+        },
+    )
+    assert response.status_code == 400, response.text

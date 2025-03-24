@@ -1,10 +1,9 @@
 import logging
-from typing import Callable
+from typing import Callable, Annotated, Optional
 
-from fastapi import Request, Response
+from fastapi import Request, Response, Form
 from fastapi.routing import APIRoute
 
-from typing import Annotated, Optional
 from fastapi import Depends
 from fastapi.security import (
     SecurityScopes,
@@ -13,7 +12,7 @@ from datetime import datetime, timedelta, timezone
 from jose import JWTError, jwt
 from fastapi import HTTPException, status
 from pydantic import ValidationError
-
+from band_management.exceptions import ValidationError as BMValidationError
 from band_management.bloks.http_auth_base.schemas.auth import (
     TokenDataSchema,
 )
@@ -32,6 +31,31 @@ class CookieAuth:
         return request.cookies.get("auth-token")
 
 
+def parse_jwt_token(token: str) -> TokenDataSchema:
+    payload = jwt.decode(token, config.SECRET_KEY, algorithms=[config.ALGORITHM])
+    return TokenDataSchema(**payload)
+
+
+def csrf_token(
+    minutes: int,
+):
+    return create_access_token(
+        TokenDataSchema(sub="csrf"), expires_delta=timedelta(minutes=minutes)
+    )
+
+
+async def assert_valid_csrf_token(
+    csrf_token: Annotated[str, Form()],
+):
+    token_data = parse_jwt_token(csrf_token)
+    if token_data.sub != "csrf":
+        raise BMValidationError("Not a valid csrf token !")
+    return True
+
+
+check_csrf = Annotated[bool, Depends(assert_valid_csrf_token)]
+
+
 async def get_authenticated_musician(
     request: Request,
     security_scopes: SecurityScopes,
@@ -41,12 +65,9 @@ async def get_authenticated_musician(
 
     if token:
         try:
-            payload = jwt.decode(
-                token, config.SECRET_KEY, algorithms=[config.ALGORITHM]
-            )
-            token_data = TokenDataSchema(**payload)
+            token_data = parse_jwt_token(token)
             token_expiry = datetime.fromtimestamp(token_data.exp, tz=timezone.utc)
-            if datetime.now(timezone.utc) >= (
+            if datetime.now(tz=timezone.utc) >= (
                 token_expiry - timedelta(minutes=config.ACCESS_TOKEN_RENEW_MINUTES)
             ):
                 request.state.refreshed_auth_token = create_access_token(

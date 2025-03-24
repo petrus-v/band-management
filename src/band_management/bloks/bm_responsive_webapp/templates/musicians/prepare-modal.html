@@ -1,0 +1,22 @@
+<header class="modal-card-head">
+  <p class="modal-card-title">Create a new musician</p>
+  <button type="button" class="delete" data-target="musician-modal" onclick="closeModal(this)"
+          aria-label="close"></button>
+</header>
+<section class="modal-card-body">
+  <form id="musician-form" hx-post="/musician/" hx-target="#musician-field-selection" hw-swap="outerHTML">
+    {% include "musicians/musician-form.html" %}
+    <input type="hidden" name="next_action" form="musician-form" value="{{NextAction.UPDATE_FIELD_SELECTION}}" />
+  </form>
+</section>
+<footer class="modal-card-foot">
+  <div class="buttons">
+    <button class="button is-success" type="submit" form="musician-form">
+      <span class="icon">
+        <i class="fa fa-save"></i>
+      </span>Save</span>
+  </button>
+  <button type="button" class="button" data-target="musician-modal" onclick="closeModal(this)"
+          aria-label="close">Cancel</button>
+</div>
+</footer>

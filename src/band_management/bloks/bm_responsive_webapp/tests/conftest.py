@@ -6,14 +6,6 @@ from anyblok_fastapi.conftest import webserver  # noqa: F401
 from band_management import config
 
 
-@pytest.fixture(scope="function", autouse=True)
-def cleanup_auth_cookies(request, webserver):  # noqa: F811
-    def clear_cookies():
-        webserver.cookies = {}
-
-    request.addfinalizer(clear_cookies)
-
-
 @pytest.fixture(name="anonymous")
 def anonymous_user_http_client(webserver):  # noqa: F811
     return webserver
@@ -23,6 +15,16 @@ def anonymous_user_http_client(webserver):  # noqa: F811
 def webserver_joe_user(webserver, joe_user):  # noqa: F811
     token = create_access_token(
         data=joe_user.get_access_token_data(),
+        expires_delta=timedelta(minutes=config.ACCESS_TOKEN_EXPIRE_MINUTES),
+    )
+    webserver.cookies["auth-token"] = f"{token}"
+    return webserver
+
+
+@pytest.fixture(name="pverkest_http_client")
+def webserver_pverkest_user(webserver, pverkest_user):  # noqa: F811
+    token = create_access_token(
+        data=pverkest_user.get_access_token_data(),
         expires_delta=timedelta(minutes=config.ACCESS_TOKEN_EXPIRE_MINUTES),
     )
     webserver.cookies["auth-token"] = f"{token}"

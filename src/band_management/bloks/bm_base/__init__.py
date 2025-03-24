@@ -62,11 +62,17 @@ class BandManagementBase(Blok):
                 name="Pierre Verkest",
                 email="pierre@verkest.fr",
                 lang="fr",
+                create_solo_band=False,
             )
             musician_joe = BM.Musician.insert(
-                name="Joe", email="joe@test.fr", lang="en"
+                name="Joe",
+                email="joe@test.fr",
+                lang="en",
+                create_solo_band=False,
             )
-            musician_doe = BM.Musician.insert(name="Doe", email="doe@test.fr")
+            musician_doe = BM.Musician.insert(
+                create_solo_band=False, name="Doe", email="doe@test.fr"
+            )
 
             voice = BM.Instrument.insert(name="Voice")
             BM.Instrument.insert(name="Voice Tenor")
@@ -87,11 +93,16 @@ class BandManagementBase(Blok):
             banjos = BM.Instrument.insert(name="Banjos")
 
             pierre_in_pahm = BM.Member.insert(
-                is_admin=True, musician=musician_pv, band=pamh_band
+                is_admin=True,
+                musician=musician_pv,
+                band=pamh_band,
+                invitation_state="accepted",
             )
             musician_pv.active_bands.append(pamh_band)
             pierre_in_pahm.instruments.append(gc_accordion)
-            joe_in_pahm = BM.Member.insert(musician=musician_joe, band=pamh_band)
+            joe_in_pahm = BM.Member.insert(
+                musician=musician_joe, band=pamh_band, invitation_state="accepted"
+            )
             joe_in_pahm.instruments.append(violin)
 
             pierre_in_trib = BM.Member.insert(
@@ -99,6 +110,7 @@ class BandManagementBase(Blok):
                 musician=musician_pv,
                 band=trib_band,
             )
+            musician_pv.active_bands.append(trib_band)
             pierre_in_trib.instruments.append(gc_accordion)
             pierre_in_trib.instruments.append(voice)
             joe_in_trib = BM.Member.insert(musician=musician_joe, band=trib_band)

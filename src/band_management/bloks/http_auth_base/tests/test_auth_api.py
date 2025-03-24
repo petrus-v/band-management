@@ -8,7 +8,7 @@ from band_management.bloks.http_auth_base.schemas.auth import (
 from jose import jwt
 from fastapi import HTTPException
 from fastapi.security import SecurityScopes
-from datetime import timedelta, datetime
+from datetime import timedelta, datetime, timezone
 
 
 def test_auth_user(joe_user, webserver):
@@ -80,7 +80,10 @@ def test_create_access_token_default_timedelta(joe_user):
     )
     payload = jwt.decode(token, config.SECRET_KEY, algorithms=[config.ALGORITHM])
     token_data = TokenDataSchema(**payload)
-    assert token_data.exp >= (datetime.now() + timedelta(minutes=14)).timestamp()
+    assert (
+        token_data.exp
+        >= (datetime.now(tz=timezone.utc) + timedelta(minutes=14)).timestamp()
+    )
 
 
 @pytest.mark.asyncio

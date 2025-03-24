@@ -1,0 +1,17 @@
+{% extends "layouts/layout.html" %} {% block main %}
+    <h1>Register</h1>
+    <div>
+        <p>
+            You, {{ invited_musician.name }}, have create a new account.
+
+            Once we implement it, you should receive this link by Emai
+            that invite you to click on it to be able to finalyze your
+            registration and set your password.
+
+            <span hx-on:click="navigator.clipboard.writeText('{{invitation_url}}')">
+                Click me to put url to visit in your clipboard
+            </span>
+
+        </p>
+    </div>
+{% endblock %}
