@@ -57,7 +57,7 @@
                    hx-on:click="navigator.clipboard.writeText('{{ invitation_url }}');">
                 {% if band_member.musician.user.invitation_token %}
                   {% if user.invitation_token_expiration_date > now %}
-                    <span class="icon" >
+                    <span class="icon">
                       <i class="fa fa-clipboard"></i>
                     </span>
                   {% else %}
@@ -93,7 +93,7 @@
         <h3>Invite new member</h3>
         <form id="invite-form" hx-post="/band/{{ band.uuid }}/invite" hx-target="body">
           {% include "musicians/musician-field-selection.html" %}
-          <button type="submit" form="invite-form" class="button is-light">Invite</button>
+          <button type="submit" form="invite-form" class="button is-success">Invite</button>
         </form>
       </div>
     </div>
