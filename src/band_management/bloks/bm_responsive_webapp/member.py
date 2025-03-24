@@ -16,12 +16,6 @@ from band_management.bloks.bm_responsive_webapp.fastapi_utils import (
 )
 
 
-# musicians_router = APIRouter(
-#     prefix="/members",
-#     tags=["musician"],
-#     responses={404: {"description": "Not found"}},
-#     route_class=RenewTokenRoute,
-# )
 router = APIRouter(
     prefix="/member",
     tags=["musician"],

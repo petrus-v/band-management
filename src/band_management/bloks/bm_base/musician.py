@@ -31,7 +31,6 @@ class Musician(Mixin.PrimaryColumn):
             "ModelBandManagementMember.invitation_state == 'rejected')"
         ),
         viewonly=True,
-        # lazy="subquery",
     )
 
     @property
