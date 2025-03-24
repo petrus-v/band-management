@@ -50,7 +50,7 @@ jobs:
 
       -
         name: Push image
-        if: ${{ github.repository_owner == 'petrus-v' && github.ref == 'refs/heads/14.0' }}
+        if: ${{ github.repository_owner == 'petrus-v' && github.ref == 'refs/heads/main' }}
         uses: docker/build-push-action@v6
         with:
           context: .
