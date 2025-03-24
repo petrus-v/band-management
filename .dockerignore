@@ -1,0 +1,16 @@
+.github/
+.pytest_cache/
+.ruff_cache/
+.venv/
+bm-management-data/
+htmlcov/
+lib/
+.coverage
+.gitignore
+.pre-commit-config.yaml
+.python-version
+Dockerfile
+eslint.config.js
+LICENSE
+Makefile
+nohup.out

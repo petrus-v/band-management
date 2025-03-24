@@ -1,0 +1,36 @@
+services:
+  anyblok:
+    image: ghcr.io/petrus-v/band-management:latest
+    build:
+      context: ./
+    networks:
+      - internal
+    volumes:
+      - bm_data:/data/bm
+      - ./app.ci.docker.cfg:/etc/app.cfg
+    command: ["anyblok_uvicorn", "-c", "/etc/app.cfg", "--host", "0.0.0.0"]
+    ports:
+      - 8000:8000
+    environment:
+      DATA_PATH: "/data/bm"
+      JWT_SECRET_KEY: CHANGE_ME
+
+  db:
+    image: postgres
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-emptydb}
+      POSTGRES_USER: ${POSTGRES_USER:-bmuser}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-bmpwd}
+    networks:
+      - internal
+
+networks:
+  internal:
+
+volumes:
+  pg_data:
+    driver: local
+  bm_data:
+    driver: local
