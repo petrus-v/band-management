@@ -1,3 +1,4 @@
+LABEL org.opencontainers.image.source = "https://github.com/petrus-v/band-management" 
 FROM python:3.13-slim-bookworm AS base
 ENV VIRTUAL_ENV=/anyblok
 ENV PATH=/anyblok/bin:$PATH
