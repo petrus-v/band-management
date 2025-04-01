@@ -15,7 +15,7 @@ def test_cant_toogle_rejected_band_as_active_band(
     with pytest.raises(
         ValidationError,
         match=(
-            f"You \({joe_pamh_current_active_band.name}\) should accept the invitation "
+            f"You, {joe_pamh_current_active_band.name}, should accept the invitation "
             f"before activate this band: {trib_band.name}\."
         ),
     ):

@@ -1,5 +1,5 @@
 <header class="modal-card-head">
-  <p class="modal-card-title">Create a new musician</p>
+  <p class="modal-card-title">{{ _t("Create a new musician") }}</p>
   <button type="button" class="delete" data-target="musician-modal" onclick="closeModal(this)"
           aria-label="close"></button>
 </header>
@@ -14,9 +14,9 @@
     <button class="button is-success" type="submit" form="musician-form">
       <span class="icon">
         <i class="fa fa-save"></i>
-      </span>Save</span>
+      </span>{{ _t("Save") }}</span>
   </button>
   <button type="button" class="button" data-target="musician-modal" onclick="closeModal(this)"
-          aria-label="close">Cancel</button>
+          aria-label="close">{{ _t("Cancel") }}</button>
 </div>
 </footer>

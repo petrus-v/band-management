@@ -4,7 +4,7 @@
         <form id="musician-form" hx-post="/musician/" hx-target="body">
             {% include "musicians/musician-form.html" %}
             <input type="hidden" name="next_action" form="musician-form" value="{{NextAction.EDIT_FORM_VIEW}}" />
-            <button type="submit">Créer le compte...</button>
+            <button class="is-success" type="submit">{{ _t("Register") }}</button>
         </form>
     </div>
 {% endblock %}

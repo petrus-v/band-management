@@ -59,6 +59,8 @@ COPY --from=dependencies $VIRTUAL_ENV $VIRTUAL_ENV
 COPY . /app
 WORKDIR /app
 
-RUN python -m compileall .
+RUN python -m compileall . \
+    && pybabel compile -d ./src/band_management/i18n/
+
 RUN --mount=type=cache,target=$UV_CACHE_DIR \
     uv sync --no-dev --frozen

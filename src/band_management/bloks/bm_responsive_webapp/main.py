@@ -10,7 +10,7 @@ from datetime import timedelta
 from fastapi.security import (
     OAuth2PasswordRequestForm,
 )
-
+from band_management import _t
 from band_management.bloks.http_auth_base.schemas.auth import (
     TokenDataSchema,
 )
@@ -21,6 +21,7 @@ from fastapi import APIRouter
 
 from .fastapi_utils import (
     get_authenticated_musician,
+    _get_musician_from_token,
     _prepare_context,
     RenewTokenRoute,
     parse_jwt_token,
@@ -33,7 +34,7 @@ logger = logging.getLogger(__name__)
 
 router = APIRouter(
     tags=["main"],
-    responses={404: {"description": "Not found :cry:"}},
+    responses={404: {"description": _t("Not found :cry:")}},
     route_class=RenewTokenRoute,
 )
 
@@ -49,14 +50,20 @@ def index(
     if token_data:
         response = RedirectResponse(
             "/home",
-            status_code=200,
+            status_code=302,
             headers={
                 # "Content-Language": user.musician.lang,
                 "HX-Redirect": "/home",
             },
         )
         return response
-    return templates.TemplateResponse(name="index.html", request=request, context={})
+    return templates.TemplateResponse(
+        name="index.html",
+        request=request,
+        context={
+            **_prepare_context(None, request, token_data),
+        },
+    )
 
 
 @router.get(
@@ -72,7 +79,7 @@ def login(
     if token_data:
         response = RedirectResponse(
             "/home",
-            status_code=200,
+            status_code=302,
             headers={
                 # "Content-Language": user.musician.lang,
                 "HX-Redirect": "/home",
@@ -80,7 +87,9 @@ def login(
         )
         return response
     return templates.TemplateResponse(
-        name="login.html", request=request, context={"error_message": None}
+        name="login.html",
+        request=request,
+        context={**_prepare_context(None, request, token_data), "error_message": None},
     )
 
 
@@ -100,7 +109,10 @@ def login_post(
                 name="login.html",
                 status_code=401,
                 request=request,
-                context={"error_message": "Incorrect authentication"},
+                context={
+                    **_prepare_context(None, request, None),
+                    "error_message": _t("Incorrect authentication"),
+                },
             )
         response = RedirectResponse(
             "/home",
@@ -172,11 +184,17 @@ def profile(
     ab_registry: "Registry" = Depends(get_registry),
 ):
     with registry_transaction(ab_registry) as anyblok:
+        musician = _get_musician_from_token(anyblok, token_data)
+        languages = {
+            "fr": _t("French", lang=musician.lang),
+            "en": _t("English", lang=musician.lang),
+        }
         return templates.TemplateResponse(
             name="profile.html",
             request=request,
             context={
                 **_prepare_context(anyblok, request, token_data),
+                "languages": languages,
             },
         )
 
@@ -190,12 +208,11 @@ def credits(
     ab_registry: "Registry" = Depends(get_registry),
 ):
     with registry_transaction(ab_registry) as anyblok:
-        pass
-    return templates.TemplateResponse(
-        name="credits.html",
-        request=request,
-        context={**_prepare_context(anyblok, request, token_data)},
-    )
+        return templates.TemplateResponse(
+            name="credits.html",
+            request=request,
+            context={**_prepare_context(anyblok, request, token_data)},
+        )
 
 
 @router.get(
@@ -291,7 +308,9 @@ def reset_password(
                     **_prepare_context(anyblok, request, token_data),
                     "invited_musician": invited_user.musician,
                     "invitation_token": invitation_token,
-                    "error_message": "Password mismatched !",
+                    "error_message": _t(
+                        "Password mismatched !", lang=invited_user.musician.lang
+                    ),
                 },
             )
 

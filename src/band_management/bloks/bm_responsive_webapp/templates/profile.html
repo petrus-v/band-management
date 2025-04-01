@@ -1,9 +1,27 @@
 {% extends "layouts/layout.html" %} {% block main %}
   <section>
-    <h1 class="title is-1">Profiles</h1>
-    <ul>
-      <li><b>name: </b>{{ musician.name}}</li>
-      <li><b>lang: </b>{{ musician.lang}}</li>
-    </ul>
+    <h1 class="title is-1">{{ _t("Profiles") }}</h1>
+    <div>
+      <form id="musician-form" hx-put="/musician/{{ musician.uuid }}" hx-target="body">
+        {% include "musicians/musician-form-profile.html" %}
+      </form>
+    </div>
   </section>
-{% endblock %}
+{% endblock %} {% block footer_navbar_items %}
+  <div class="navbar-start">
+    <div class="navbar-item">
+      <a href="/home/" class="button is-outlined">
+        <span class="icon">
+          <i class="fa fa-undo"></i>
+        </span>
+        <span>{{ _t("Cancel") }}</span>
+      </a>
+      <button type="submit" form="musician-form" class="button is-light is-pulled-right">
+        <span class="icon">
+          <i class="fa fa-save"></i>
+        </span>
+        <span>{{ _t("Save") }}</span>
+      </button>
+    </div>
+  </div>
+{% endblock footer_navbar_items %}

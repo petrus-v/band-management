@@ -7,21 +7,21 @@
           <span class="icon">
             <i class="fa fa-edit"></i>
           </span>
-          <span>Edit</span>
+          <span>{{ _t("Edit") }}</span>
         </a>
       </div>
       <div class="message-body">
         <ul>
           <li>
-            <span><strong>Music: </strong></span>{{ score.music.title }}
+            <span><strong>{{ _t("Music: ") }}</strong></span>{{ score.music.title }}
           </li>
           <li>
-            <span><strong>Credits: </strong></span>{{
+            <span><strong>{{ _t("Score writer: ") }}</strong></span>{{
             score.music.source_writer_credits }}
           </li>
         </ul>
         <div class="field">
-          <label><strong>Interpreted by: </strong></label>
+          <label><strong>{{ _t("Interpreted by: ") }}</strong></label>
           <div class="field is-grouped is-grouped-multiline">
             {%- for band in musician.members.band: %} {%- if band in
               score.music.bands %}
@@ -37,7 +37,7 @@
     </article>
   {% endfor %} {% else %}
     <article>
-      <p>No scores found</p>
+      <p>{{ _t("No scores found.") }}</p>
     </article>
   {% endif %}
 </section>

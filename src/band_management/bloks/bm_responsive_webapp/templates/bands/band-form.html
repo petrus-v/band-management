@@ -1,13 +1,13 @@
 <div class="field">
-  <label for="band_name" class="label">Name</label>
+  <label for="band_name" class="label">{{ _t("Name") }}</label>
   <div class="control">
     <input class="input" form="band-form" type="text" name="band_name" id="band_name" placeholder="My band"
            value="{{ band.name }}" />
   </div>
-  <p class="help">Your band name</p>
+  <p class="help">{{ _t("Your band name") }}</p>
 </div>
 <div class="field">
-  <label class="label">Administrators</label>
+  <label class="label">{{ _t("Administrators") }}</label>
   <div class="control">
     <div class="checkboxes">
       {% for member in band.members %}
@@ -19,5 +19,5 @@
     {% endfor %}
   </div>
 </div>
-<p class="help">Band's administrators</p>
+<p class="help">{{ _t("Band's administrators") }}</p>
 </div>

@@ -17,6 +17,7 @@ dynamic = ["__version__"]
 dependencies = [
     "anyblok",
     "anyblok-fastapi",
+    "babel",
     "python-multipart",
     "jinja2",
     "psycopg",
@@ -66,3 +67,6 @@ omit = [
 
 [tool.coverage.report]
 show_missing = true
+
+[tool.babel]
+mapping_file = "babel.cfg"

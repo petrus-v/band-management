@@ -1,0 +1,582 @@
+#: src/band_management/bloks/bm_responsive_webapp/templates/register-confirmation.html
+#, python-format
+msgid ""
+"\n"
+"                You, %(invited_musician_name)s, have create a new "
+"account.\n"
+"\n"
+"                Once we implement it, you should receive this link by "
+"Emai\n"
+"                that invite you to click on it to be able to finalyze "
+"your\n"
+"                registration and set your password."
+msgstr ""
+
+#: src/band_management/bloks/bm_responsive_webapp/templates/index.html
+msgid ""
+"\n"
+"            Run your band like a pro! Sheet music, rehearsals, gigs –\n"
+"            all in sync. Share, organize, play. Let the music\n"
+"            flow!"
+msgstr ""
+
+#: src/band_management/bloks/bm_base/musician.py
+#, python-format
+msgid "%s Solo"
+msgstr ""
+
+#: src/band_management/bloks/bm_responsive_webapp/templates/scores/score-form-details.html
+msgid "1st voice"
+msgstr ""
+
+#: src/band_management/bloks/bm_responsive_webapp/templates/layouts/base.html
+msgid "About us"
+msgstr ""
+
+#: src/band_management/bloks/bm_responsive_webapp/templates/macros/menu-item.html
+msgid "Accept"
+msgstr ""
+
+#: src/band_management/bloks/bm_responsive_webapp/templates/layouts/connected.html
+msgid "Active bands"
+msgstr ""
+
+#: src/band_management/bloks/bm_responsive_webapp/templates/band-invite.html
+#, python-format
+msgid "Active musicians: %(count)s"
+msgstr ""
+
+#: src/band_management/bloks/bm_responsive_webapp/templates/bands/band-form.html
+msgid "Administrators"
+msgstr ""
+
+#: src/band_management/bloks/bm_responsive_webapp/templates/musicians/musician-form-profile.html
+msgid "Application language preference"
+msgstr ""
+
+#: src/band_management/bloks/bm_responsive_webapp/templates/musics/search-result.html
+msgid "Author: "
+msgstr ""
+
+#: src/band_management/bloks/bm_responsive_webapp/templates/bands/band-form.html
+msgid "Band's administrators"
+msgstr ""
+
+#: src/band_management/bloks/bm_responsive_webapp/templates/layouts/connected.html
+msgid "Bands"
+msgstr ""
+
+#: src/band_management/bloks/bm_responsive_webapp/templates/musics/music-form.html
+msgid "Bands that I play this song at least once."
+msgstr ""
+
+#: src/band_management/bloks/bm_responsive_webapp/templates/musics/music-form.html
+msgid "Bands: "
+msgstr ""
+
+#: src/band_management/bloks/bm_responsive_webapp/templates/bands.html
+msgid "Begin Typing To Search band..."
+msgstr ""
+
+#: src/band_management/bloks/bm_responsive_webapp/templates/musics.html
+msgid "Begin Typing To Search music..."
+msgstr ""
+
+#: src/band_management/bloks/bm_responsive_webapp/templates/scores.html
+msgid "Begin Typing To Search scores..."
+msgstr ""
+
+#: src/band_management/bloks/bm_responsive_webapp/templates/band-prepare.html
+#: src/band_management/bloks/bm_responsive_webapp/templates/band-update.html
+#: src/band_management/bloks/bm_responsive_webapp/templates/music-prepare.html
+#: src/band_management/bloks/bm_responsive_webapp/templates/music-update.html
+#: src/band_management/bloks/bm_responsive_webapp/templates/musicians/musician-field-selection.html
+#: src/band_management/bloks/bm_responsive_webapp/templates/musicians/prepare-modal.html
+#: src/band_management/bloks/bm_responsive_webapp/templates/musics/music-field-selection.html
+#: src/band_management/bloks/bm_responsive_webapp/templates/musics/prepare-modal.html
+#: src/band_management/bloks/bm_responsive_webapp/templates/profile.html
+#: src/band_management/bloks/bm_responsive_webapp/templates/score-prepare.html
+#: src/band_management/bloks/bm_responsive_webapp/templates/score-update.html
+msgid "Cancel"
+msgstr ""
+
+#: src/band_management/bloks/bm_responsive_webapp/templates/register-confirmation.html
+msgid "Click me to put url to visit in your clipboard"
+msgstr ""
+
+#: src/band_management/bloks/bm_responsive_webapp/templates/musics/music-form.html
+msgid "Composer"
+msgstr ""
+
+#: src/band_management/bloks/bm_responsive_webapp/templates/musics/search-result.html
+msgid "Composer: "
+msgstr ""
+
+#: src/band_management/bloks/http_auth_base/auth_api.py
+msgid "Could not validate credentials."
+msgstr ""
+
+#: src/band_management/bloks/bm_responsive_webapp/templates/musics/prepare-modal.html
+msgid "Create a new music"
+msgstr ""
+
+#: src/band_management/bloks/bm_responsive_webapp/templates/musicians/prepare-modal.html
+msgid "Create a new musician"
+msgstr ""
+
+#: src/band_management/bloks/bm_responsive_webapp/templates/musics/music-field-selection-items.html
+#, python-format
+msgid "Create new music %(search)s..."
+msgstr ""
+
+#: src/band_management/bloks/bm_responsive_webapp/templates/musicians/musician-field-selection-items.html
+#, python-format
+msgid "Create new musician %(search)s..."
+msgstr ""
+
+#: src/band_management/bloks/bm_responsive_webapp/templates/credits.html
+#: src/band_management/bloks/bm_responsive_webapp/templates/layouts/base.html
+msgid "Credits"
+msgstr ""
+
+#: src/band_management/bloks/bm_responsive_webapp/templates/musics/music-form.html
+msgid "Dance"
+msgstr ""
+
+#: src/band_management/bloks/bm_responsive_webapp/templates/musics/search-result.html
+msgid "Dance: "
+msgstr ""
+
+#: src/band_management/bloks/bm_responsive_webapp/templates/login.html
+msgid "Don't have an account? Create one"
+msgstr ""
+
+#: src/band_management/bloks/bm_responsive_webapp/templates/band-invite.html
+#: src/band_management/bloks/bm_responsive_webapp/templates/bands/search-result.html
+#: src/band_management/bloks/bm_responsive_webapp/templates/musics/search-result.html
+#: src/band_management/bloks/bm_responsive_webapp/templates/scores/search-result.html
+msgid "Edit"
+msgstr ""
+
+#: src/band_management/bloks/bm_responsive_webapp/templates/login.html
+#: src/band_management/bloks/bm_responsive_webapp/templates/musicians/musician-form-profile.html
+#: src/band_management/bloks/bm_responsive_webapp/templates/musicians/musician-form.html
+msgid "Email"
+msgstr ""
+
+#: src/band_management/bloks/bm_responsive_webapp/main.py
+msgid "English"
+msgstr ""
+
+#: src/band_management/bloks/bm_responsive_webapp/templates/login.html
+msgid "Enter your password"
+msgstr ""
+
+#: src/band_management/bloks/bm_responsive_webapp/main.py
+msgid "French"
+msgstr ""
+
+#: src/band_management/bloks/bm_responsive_webapp/templates/layouts/connected.html
+msgid "General"
+msgstr ""
+
+#: src/band_management/bloks/bm_responsive_webapp/templates/home.html
+#, python-format
+msgid "Hello, %(user)s!"
+msgstr ""
+
+#: src/band_management/bloks/bm_responsive_webapp/templates/layouts/connected.html
+msgid "Home"
+msgstr ""
+
+#: src/band_management/bloks/bm_responsive_webapp/templates/index.html
+msgid "Home page"
+msgstr ""
+
+#: src/band_management/bloks/bm_responsive_webapp/templates/score-prepare.html
+#: src/band_management/bloks/bm_responsive_webapp/templates/scores.html
+msgid "Import"
+msgstr ""
+
+#: src/band_management/bloks/bm_responsive_webapp/main.py
+msgid "Incorrect authentication"
+msgstr ""
+
+#: src/band_management/bloks/bm_responsive_webapp/templates/scores/search-result.html
+msgid "Interpreted by: "
+msgstr ""
+
+#: src/band_management/bloks/bm_responsive_webapp/templates/band-invite.html
+#: src/band_management/bloks/bm_responsive_webapp/templates/bands/search-result.html
+msgid "Invite"
+msgstr ""
+
+#: src/band_management/bloks/bm_responsive_webapp/templates/band-invite.html
+msgid "Invite new member"
+msgstr ""
+
+#: src/band_management/bloks/bm_responsive_webapp/templates/band-invite.html
+msgid "Invited members"
+msgstr ""
+
+#: src/band_management/bloks/bm_responsive_webapp/templates/scores/score-form-details.html
+msgid "Label"
+msgstr ""
+
+#: src/band_management/bloks/bm_responsive_webapp/templates/musicians/musician-form-profile.html
+msgid "Language"
+msgstr ""
+
+#: src/band_management/bloks/bm_responsive_webapp/templates/layouts/disconnected.html
+#: src/band_management/bloks/bm_responsive_webapp/templates/login.html
+msgid "Login"
+msgstr ""
+
+#: src/band_management/bloks/bm_responsive_webapp/templates/layouts/connected.html
+msgid "Logout"
+msgstr ""
+
+#: src/band_management/bloks/bm_responsive_webapp/templates/musics/music-form.html
+msgid "Lyricist"
+msgstr ""
+
+#: src/band_management/bloks/bm_responsive_webapp/templates/scores/score-form-details.html
+msgid "Metadata"
+msgstr ""
+
+#: src/band_management/bloks/bm_responsive_webapp/fastapi_utils.py
+msgid "Missing permissions"
+msgstr ""
+
+#: src/band_management/bloks/bm_responsive_webapp/templates/musics/music-field-selection.html
+msgid "Music"
+msgstr ""
+
+#: src/band_management/bloks/bm_responsive_webapp/templates/musics/music-form.html
+msgid "Music composer"
+msgstr ""
+
+#: src/band_management/bloks/bm_responsive_webapp/templates/musics/music-form.html
+msgid "Music title"
+msgstr ""
+
+#: src/band_management/bloks/bm_responsive_webapp/templates/scores/search-result.html
+msgid "Music: "
+msgstr ""
+
+#: src/band_management/bloks/bm_responsive_webapp/templates/musicians/musician-field-selection.html
+msgid "Musician"
+msgstr ""
+
+#: src/band_management/bloks/bm_responsive_webapp/templates/musicians/musician-form-profile.html
+#: src/band_management/bloks/bm_responsive_webapp/templates/musicians/musician-form.html
+msgid "Musician Name"
+msgstr ""
+
+#: src/band_management/bloks/bm_responsive_webapp/templates/musicians/musician-form.html
+msgid "Musician's email"
+msgstr ""
+
+#: src/band_management/bloks/bm_responsive_webapp/templates/bands/search-result.html
+#: src/band_management/bloks/bm_responsive_webapp/templates/home.html
+#, python-format
+msgid "Musicians: %(count)s"
+msgstr ""
+
+#: src/band_management/bloks/bm_responsive_webapp/templates/layouts/connected.html
+msgid "Musics"
+msgstr ""
+
+#: src/band_management/bloks/bm_responsive_webapp/templates/bands/search-result.html
+#: src/band_management/bloks/bm_responsive_webapp/templates/home.html
+#, python-format
+msgid "Musics: %(count)s"
+msgstr ""
+
+#: src/band_management/bloks/bm_responsive_webapp/templates/bands/band-form.html
+#: src/band_management/bloks/bm_responsive_webapp/templates/musicians/musician-form-profile.html
+#: src/band_management/bloks/bm_responsive_webapp/templates/musicians/musician-form.html
+msgid "Name"
+msgstr ""
+
+#: src/band_management/bloks/bm_responsive_webapp/templates/bands.html
+#: src/band_management/bloks/bm_responsive_webapp/templates/musics.html
+msgid "New"
+msgstr ""
+
+#: src/band_management/bloks/bm_responsive_webapp/templates/musics/search-result.html
+msgid "No Music found."
+msgstr ""
+
+#: src/band_management/bloks/bm_responsive_webapp/templates/bands/search-result.html
+msgid "No band found."
+msgstr ""
+
+#: src/band_management/bloks/bm_responsive_webapp/templates/scores/search-result.html
+msgid "No scores found."
+msgstr ""
+
+#: src/band_management/bloks/bm_responsive_webapp/fastapi_utils.py
+msgid "Not a valid csrf token !"
+msgstr ""
+
+#: src/band_management/bloks/bm_responsive_webapp/fastapi_utils.py
+msgid "Not enough permissions"
+msgstr ""
+
+#: src/band_management/bloks/http_auth_base/auth_api.py
+msgid "Not enough permissions."
+msgstr ""
+
+#: src/band_management/bloks/http_auth_base/auth_api.py
+msgid "Not found"
+msgstr ""
+
+#: src/band_management/bloks/bm_responsive_webapp/main.py
+msgid "Not found :cry:"
+msgstr ""
+
+#: src/band_management/bloks/bm_responsive_webapp/templates/band-invite.html
+msgid "Old/Revoked/Refused members"
+msgstr ""
+
+#: src/band_management/bloks/bm_responsive_webapp/templates/login.html
+#: src/band_management/bloks/bm_responsive_webapp/templates/reset-password.html
+msgid "Oops something went wrong"
+msgstr ""
+
+#: src/band_management/bloks/bm_responsive_webapp/templates/login.html
+#: src/band_management/bloks/bm_responsive_webapp/templates/reset-password.html
+msgid "Password"
+msgstr ""
+
+#: src/band_management/bloks/bm_responsive_webapp/templates/reset-password.html
+msgid "Password confirmation"
+msgstr ""
+
+#: src/band_management/bloks/bm_responsive_webapp/main.py
+msgid "Password mismatched !"
+msgstr ""
+
+#: src/band_management/bloks/bm_base/musician.py
+msgid "Permission denied. You must be part of the band to be able to active it."
+msgstr ""
+
+#: src/band_management/bloks/bm_responsive_webapp/templates/layouts/connected.html
+msgid "Profile"
+msgstr ""
+
+#: src/band_management/bloks/bm_responsive_webapp/templates/profile.html
+msgid "Profiles"
+msgstr ""
+
+#: src/band_management/bloks/bm_responsive_webapp/templates/layouts/disconnected.html
+#: src/band_management/bloks/bm_responsive_webapp/templates/register-confirmation.html
+#: src/band_management/bloks/bm_responsive_webapp/templates/register.html
+msgid "Register"
+msgstr ""
+
+#: src/band_management/bloks/bm_responsive_webapp/templates/macros/menu-item.html
+msgid "Reject"
+msgstr ""
+
+#: src/band_management/bloks/bm_responsive_webapp/templates/reset-password.html
+msgid "Reset password"
+msgstr ""
+
+#: src/band_management/bloks/bm_responsive_webapp/templates/band-prepare.html
+#: src/band_management/bloks/bm_responsive_webapp/templates/band-update.html
+#: src/band_management/bloks/bm_responsive_webapp/templates/music-prepare.html
+#: src/band_management/bloks/bm_responsive_webapp/templates/music-update.html
+#: src/band_management/bloks/bm_responsive_webapp/templates/musicians/musician-field-selection.html
+#: src/band_management/bloks/bm_responsive_webapp/templates/musicians/prepare-modal.html
+#: src/band_management/bloks/bm_responsive_webapp/templates/musics/music-field-selection.html
+#: src/band_management/bloks/bm_responsive_webapp/templates/musics/prepare-modal.html
+#: src/band_management/bloks/bm_responsive_webapp/templates/profile.html
+#: src/band_management/bloks/bm_responsive_webapp/templates/score-update.html
+msgid "Save"
+msgstr ""
+
+#: src/band_management/bloks/bm_responsive_webapp/templates/scores/score-form.html
+msgid "Score file(s)"
+msgstr ""
+
+#: src/band_management/bloks/bm_responsive_webapp/templates/scores/score-form-details.html
+msgid "Score writer"
+msgstr ""
+
+#: src/band_management/bloks/bm_responsive_webapp/templates/scores/search-result.html
+msgid "Score writer: "
+msgstr ""
+
+#: src/band_management/bloks/bm_responsive_webapp/templates/layouts/connected.html
+msgid "Scores"
+msgstr ""
+
+#: src/band_management/bloks/bm_responsive_webapp/templates/musics/music-form.html
+msgid "Scores linked: "
+msgstr ""
+
+#: src/band_management/bloks/bm_responsive_webapp/templates/musics/search-result.html
+#, python-format
+msgid "Scores: %(count)s"
+msgstr ""
+
+#: src/band_management/bloks/bm_responsive_webapp/templates/musics/music-field-selection.html
+msgid "Search a music..."
+msgstr ""
+
+#: src/band_management/bloks/bm_responsive_webapp/templates/musicians/musician-field-selection.html
+msgid "Search a musician..."
+msgstr ""
+
+#: src/band_management/bloks/bm_responsive_webapp/templates/musicians/musician-field-selection.html
+msgid "Select musician to invite"
+msgstr ""
+
+#: src/band_management/bloks/bm_responsive_webapp/templates/reset-password.html
+msgid "Set password"
+msgstr ""
+
+#: src/band_management/bloks/bm_responsive_webapp/templates/layouts/base.html
+#: src/band_management/bloks/bm_responsive_webapp/templates/terms.html
+msgid "Terms"
+msgstr ""
+
+#: src/band_management/bloks/bm_responsive_webapp/templates/musics/music-form.html
+msgid "The composer who create the music"
+msgstr ""
+
+#: src/band_management/bloks/bm_responsive_webapp/templates/musics/music-form.html
+msgid "The music name"
+msgstr ""
+
+#: src/band_management/bloks/bm_responsive_webapp/templates/musicians/musician-form.html
+msgid "The musician name"
+msgstr ""
+
+#: src/band_management/bloks/bm_responsive_webapp/templates/musics/music-form.html
+msgid "The one who made lyrics to this song"
+msgstr ""
+
+#: src/band_management/bloks/bm_responsive_webapp/templates/scores/score-form-details.html
+msgid "The person who write this score"
+msgstr ""
+
+#: src/band_management/bloks/bm_responsive_webapp/templates/musics/music-field-selection.html
+msgid "This is the music linked to the current score"
+msgstr ""
+
+#: src/band_management/bloks/bm_responsive_webapp/templates/musics/music-form.html
+msgid "Title"
+msgstr ""
+
+#: src/band_management/bloks/bm_responsive_webapp/templates/scores/score-form.html
+msgid "Upload your score(s)"
+msgstr ""
+
+#: src/band_management/bloks/bm_responsive_webapp/templates/scores/score-form-details.html
+msgid "Viewer not available on this browser for given file type"
+msgstr ""
+
+#: src/band_management/bloks/bm_responsive_webapp/templates/musics/music-form.html
+msgid "What can you dance on this song ?"
+msgstr ""
+
+#: src/band_management/bloks/bm_base/member.py
+#, python-format
+msgid ""
+"You must have an accepted invitation with admin access to this band %s "
+"before invite new musicians."
+msgstr ""
+
+#: src/band_management/bloks/bm_base/band.py
+#, python-format
+msgid "You should set at least one administrator to this band %s"
+msgstr ""
+
+#: src/band_management/bloks/bm_base/band.py
+#, python-format
+msgid ""
+"You, %s, are not allowed to edit administrators's band %s. Ask an "
+"existing band administrator to become a band administrator."
+msgstr ""
+
+#: src/band_management/bloks/bm_base/band.py
+#, python-format
+msgid ""
+"You, %s, are not allowed to edit this band %s. Ask an existing band "
+"administrator to become a band administrator."
+msgstr ""
+
+#: src/band_management/bloks/bm_base/band.py
+#, python-format
+msgid ""
+"You, %s, are not allowed to invite new musician to this band %s. Ask an "
+"existing band administrator to become a band administrator."
+msgstr ""
+
+#: src/band_management/bloks/bm_base/musician.py
+#, python-format
+msgid "You, %s, require at least one active band."
+msgstr ""
+
+#: src/band_management/bloks/bm_base/musician.py
+#, python-format
+msgid "You, %s, should accept the invitation before activate this band: %s."
+msgstr ""
+
+#: src/band_management/bloks/bm_responsive_webapp/member.py
+msgid "Your are not allowed to accept invitation for someone else."
+msgstr ""
+
+#: src/band_management/bloks/bm_responsive_webapp/musician.py
+msgid "Your are not allowed to update other musician profiles"
+msgstr ""
+
+#: src/band_management/bloks/bm_responsive_webapp/member.py
+#: src/band_management/bloks/bm_responsive_webapp/musician.py
+msgid "Your are not allowed to update other user active bands"
+msgstr ""
+
+#: src/band_management/bloks/bm_responsive_webapp/templates/bands/band-form.html
+msgid "Your band name"
+msgstr ""
+
+#: src/band_management/bloks/bm_responsive_webapp/templates/musicians/musician-form-profile.html
+msgid "Your email address to communicate with you."
+msgstr ""
+
+#: src/band_management/bloks/bm_responsive_webapp/templates/musicians/musician-form-profile.html
+msgid "Your name or musician name"
+msgstr ""
+
+#: src/band_management/bloks/bm_responsive_webapp/templates/reset-password.html
+msgid "Your password"
+msgstr ""
+
+#: src/band_management/bloks/bm_responsive_webapp/templates/scores/score-form-details.html
+msgid "Your score name"
+msgstr ""
+
+#: src/band_management/bloks/bm_responsive_webapp/templates/band-invite.html
+msgid "accepted"
+msgstr ""
+
+#: src/band_management/bloks/bm_responsive_webapp/templates/login.html
+msgid "here"
+msgstr ""
+
+#: src/band_management/bloks/bm_responsive_webapp/templates/musicians/musician-form-profile.html
+#: src/band_management/bloks/bm_responsive_webapp/templates/musicians/musician-form.html
+msgid "musician@band.com"
+msgstr ""
+
+#: src/band_management/bloks/bm_responsive_webapp/templates/reset-password.html
+msgid "type your password again"
+msgstr ""
+
+#: src/band_management/bloks/bm_responsive_webapp/templates/login.html
+msgid "user@example.com"
+msgstr ""
+

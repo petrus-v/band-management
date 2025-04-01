@@ -1,6 +1,6 @@
 {% if not request.headers.get('HX-Boosted') %}
   <!doctype html>
-  <html lang="en">
+  <html lang="{{ lang }}">
 
     <head>
       <meta charset="utf-8" />
@@ -68,8 +68,8 @@
     <div class="columns">
       <aside id="sideBarMenuLeft" class="menu column is-3">
         {% from "macros/menu-item.html" import render_menu with context %} {%
-        block side_menu %} {% endblock %} {{ render_menu( 'About us', [
-        {'name': 'Credits', 'path': '/credits'}, {'name': 'Terms',
+        block side_menu %} {% endblock %} {{ render_menu( _t('About us'), [
+        {'name': _t('Credits'), 'path': '/credits'}, {'name': _t('Terms'),
         'path':'/terms'}, ]) }}
       </aside>
       <main class="column">{% block main %} {% endblock %}</main>

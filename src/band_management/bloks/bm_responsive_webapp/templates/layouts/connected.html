@@ -5,8 +5,8 @@
         <a class="navbar-link is-hidden-touch"> {{ musician.name }} </a>
 
         <div class="navbar-dropdown">
-          {{ render_navbar_item('/profile', 'Profile', 'fa-user-cog')}}
-          {{ render_navbar_item('/logout', 'Logout', 'a-sign-out-alt', method='post')}}
+          {{ render_navbar_item('/profile', _t('Profile'), 'fa-user-cog')}}
+          {{ render_navbar_item('/logout', _t('Logout'), 'a-sign-out-alt', method='post')}}
         </div>
       </div>
     </div>
@@ -14,15 +14,15 @@
 {% endblock top_menu_end %}
 {% block side_menu %}
   {% from "macros/menu-item.html" import render_musician_bands_menu with context %}
-  {{ render_musician_bands_menu('Active bands', musician )}}
+  {{ render_musician_bands_menu(_t('Active bands'), musician )}}
   {{
   render_menu(
-  'General',
+  _t('General'),
   [
-  {'name': 'Home', 'path': '/home'},
-  {'name': 'Bands', 'path':'/bands/'},
-  {'name': 'Musics', 'path':'/musics/'},
-  {'name': 'Scores', 'path': '/scores/'},
+  {'name': _t('Home'), 'path': '/home'},
+  {'name': _t('Bands'), 'path':'/bands/'},
+  {'name': _t('Musics'), 'path':'/musics/'},
+  {'name': _t('Scores'), 'path': '/scores/'},
   ])
   }}
 {% endblock side_menu %}

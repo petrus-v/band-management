@@ -70,7 +70,7 @@ def test_user_me_with_expired_token(webserver, joe_user):
     )
     assert response.status_code == 401
     assert response.json() == {
-        "detail": "Could not validate credentials",
+        "detail": "Could not validate credentials.",
     }
 
 
@@ -108,6 +108,6 @@ def test_access_denied_no_scope_user(webserver_no_scope_user):
     )
     assert response.status_code == 401
     assert response.json() == {
-        "detail": "Not enough permissions",
+        "detail": "Not enough permissions.",
     }
     assert response.headers["WWW-Authenticate"] == 'Bearer scope="musician-auth"'

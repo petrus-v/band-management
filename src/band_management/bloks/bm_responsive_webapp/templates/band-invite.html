@@ -17,15 +17,15 @@
             <span class="icon">
               <i class="fa fa-edit"></i>
             </span>
-            <span>Edit</span>
+            <span>{{ _t("Edit") }}</span>
           </a>
         </div>
       {% endif %}
     </div>
     <div class="message-body">
-      <h2>Active musicians: {{band.musicians_count}}</h2>
+      <h2>{% trans count=band.musicians_count %}Active musicians: {{ count }}{% endtrans %}</h2>
       <div id="acepted-members">
-        <h3>accepted</h3>
+        <h3>{{ _t("accepted") }}</h3>
         <p>
           <div class="tags">
             {%- for band_member in band.members if band_member.invitation_state == 'accepted': %}
@@ -42,7 +42,7 @@
         </p>
       </div>
       <div id="invited-members">
-        <h3>Invited members</h3>
+        <h3>{{ _t("Invited members") }}</h3>
         <p>
           <div class="tags">
             {%- for band_member in band.members if band_member.invitation_state == 'invited': %}
@@ -73,7 +73,7 @@
         </p>
       </div>
       <div id="rejected-members">
-        <h3>Old/Revoked/Refused members</h3>
+        <h3>{{ _t("Old/Revoked/Refused members") }}</h3>
         <p>
           <div class="tags">
             {%- for band_member in band.inactive_members: %}
@@ -90,10 +90,10 @@
         </p>
       </div>
       <div>
-        <h3>Invite new member</h3>
+        <h3>{{ _t("Invite new member") }}</h3>
         <form id="invite-form" hx-post="/band/{{ band.uuid }}/invite" hx-target="body">
           {% include "musicians/musician-field-selection.html" %}
-          <button type="submit" form="invite-form" class="button is-success">Invite</button>
+          <button type="submit" form="invite-form" class="button is-success">{{ _t("Invite") }}</button>
         </form>
       </div>
     </div>

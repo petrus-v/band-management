@@ -27,6 +27,13 @@ setup-tests: ## install python project dependencies for tests
 test:
 	ANYBLOK_CONFIG_FILE=app.test.cfg uv run pytest -v -s src/
 
+translations: ## Regenerate pot file and merges translations
+	uvx pre-commit run --all-files
+	uv run pybabel extract -F babel.cfg -k "_t:1" --add-location=file --sort-output --omit-header -o ./src/band_management/i18n/band-management.pot ./src/ 
+	msgmerge -U --sort-output --no-fuzzy-matching  ./src/band_management/i18n/fr/LC_MESSAGES/messages.po src/band_management/i18n/band-management.pot
+
+compile-translations:  ## create compiled messages.mo translation dictionnary (to be used in production)
+	uv run pybabel compile -d ./src/band_management/i18n/
 
 run:
 	uv run gunicorn_anyblok_uvicorn --anyblok-configfile app.cfg -w 4 -b 0.0.0.0:5000 --timeout 5

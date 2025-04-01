@@ -2,6 +2,7 @@ from anyblok import Declarations
 
 from anyblok.column import Email, String
 from anyblok.relationship import Many2Many, One2Many
+from band_management import _t
 from band_management.exceptions import PermissionDenied, ValidationError
 
 register = Declarations.register
@@ -42,22 +43,33 @@ class Musician(Mixin.PrimaryColumn):
 
         if band not in self.my_bands:
             raise PermissionDenied(
-                "Permission denied. You must be part of the band to be able to active it."
+                _t(
+                    "Permission denied. You must be part of the band to be able to active it.",
+                    lang=self.lang,
+                )
             )
 
         if band not in self.active_bands:
             if self.member_of(band).invitation_state == "rejected":
                 raise ValidationError(
-                    f"You ({self.name}) should accept the invitation before activate this band: {band.name}."
+                    _t(
+                        "You, %s, should accept the invitation before activate "
+                        "this band: %s.",
+                        lang=self.lang,
+                    )
+                    % (
+                        self.name,
+                        band.name,
+                    )
                 )
-
             self.active_bands.append(band)
         else:
             self.active_bands.remove(band)
 
         if len(self.active_bands) == 0:
             raise ValidationError(
-                f"Musician {self.name} require at least one active band."
+                _t("You, %s, require at least one active band.", lang=self.lang)
+                % self.name
             )
 
     def member_of(self, band):
@@ -67,7 +79,9 @@ class Musician(Mixin.PrimaryColumn):
 
     def create_solo(self):
         BM = self.anyblok.BandManagement
-        return BM.Band.insert_by(self, name=f"{self.name} Solo")
+        return BM.Band.insert_by(
+            self, name=_t("%s Solo", lang=self.lang) % (self.name,)
+        )
 
     @classmethod
     def insert(cls, *args, create_solo_band: bool = True, **kwargs):

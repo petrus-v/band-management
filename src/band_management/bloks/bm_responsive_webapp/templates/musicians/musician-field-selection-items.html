@@ -10,6 +10,6 @@
   <a href="#" class="dropdown-item js-modal-trigger"
      hx-get="/musician/prepare?next_action={{ NextAction.EDIT_MODAL_FROM_VIEW }}&musician_name={{ search }}&band_uuid={{band and band.uuid or '' }}"
      hx-target="#musician-modal-content" data-target="musician-modal" hx-trigger="click" onclick="openModal(this)">
-    Create new musician {{ search }}...
+    {% trans %}Create new musician {{ search }}...{% endtrans %}
   </a>
 {% endif %}

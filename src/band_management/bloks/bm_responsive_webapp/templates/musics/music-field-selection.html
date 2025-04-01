@@ -1,11 +1,11 @@
 <div class="field" id="music-field-selection">
-    <label class="label">Music</label>
+    <label class="label">{{ _t("Music") }}</label>
     <div class="control">
         <div class="dropdown" id="music-dropdown" hx-on:click="this.classList.toggle('is-active')">
             <div class="dropdown-trigger">
                 <div class="control has-icons-left">
                     <input type="text" form="search-music" class="input" id="music-search"
-                           placeholder="Search a music..." name="search" hx-post="/musics/dropdown"
+                           placeholder="{{ _t('Search a music...') }}" name="search" hx-post="/musics/dropdown"
                            value="{{music and music.title or '' | default('', true)  }}"
                            hx-on:click="document.getElementById('music-dropdown').classList.toggle('is-active')"
                            hx-on:focus="document.getElementById('music-dropdown').classList.add('is-active')"
@@ -33,12 +33,12 @@
                 </section>
                 <footer class="modal-card-foot skeleton-block">
                     <div class="buttons">
-                        <button class="button is-success">Save changes</button>
-                        <button class="button">Cancel</button>
+                        <button class="button is-success">{{ _t("Save") }}</button>
+                        <button class="button">{{ _t("Cancel") }}</button>
                     </div>
                 </footer>
             </div>
         </div>
-        <p class="help">This is the music linked to the current score</p>
+        <p class="help">{{ _t("This is the music linked to the current score") }}</p>
     </div>
 </div>

@@ -7,7 +7,7 @@
           <span class="icon">
             <i class="fa fa-edit"></i>
           </span>
-          <span>Edit</span>
+          <span>{{ _t("Edit") }}</span>
         </a>
       </div>
       <div class="message-body">
@@ -15,17 +15,17 @@
           <ul>
             {%- if music.composer %}
               <li>
-                <span><strong>Composer: </strong></span>{{ music.composer }}
+                <span><strong>{{ _t("Composer: ") }}</strong></span>{{ music.composer }}
               </li>
             {%- endif %}
             {%- if music.author %}
               <li>
-                <span><strong>Author: </strong></span>{{ music.author }}
+                <span><strong>{{ _t("Author: ") }}</strong></span>{{ music.author }}
               </li>
             {%- endif %}
             {%- if music.dance %}
               <li>
-                <span><strong>Dance: </strong></span>{{ music.dance }}
+                <span><strong>{{ _t("Dance: ") }}</strong></span>{{ music.dance }}
               </li>
             {%- endif %}
           </ul>
@@ -37,12 +37,12 @@
             </span>
           {%- endfor %}
         </div>
-        <p>scores: {{music.scores_count}}</p>
+        <p>{% trans count=music.scores_count %}Scores: {{ count }}{% endtrans %}</p>
       </div>
     </article>
   {% endfor %} {% else %}
     <article>
-      <p>No Music found</p>
+      <p>{{ _t("No Music found.") }}</p>
     </article>
   {% endif %}
 </section>

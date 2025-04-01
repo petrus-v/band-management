@@ -12,6 +12,7 @@ from datetime import datetime, timedelta, timezone
 from jose import JWTError, jwt
 from fastapi import HTTPException, status
 from pydantic import ValidationError
+from band_management import _t, get_translations
 from band_management.exceptions import ValidationError as BMValidationError
 from band_management.bloks.http_auth_base.schemas.auth import (
     TokenDataSchema,
@@ -49,7 +50,7 @@ async def assert_valid_csrf_token(
 ):
     token_data = parse_jwt_token(csrf_token)
     if token_data.sub != "csrf":
-        raise BMValidationError("Not a valid csrf token !")
+        raise BMValidationError(_t("Not a valid csrf token !"))
     return True
 
 
@@ -85,14 +86,14 @@ async def get_authenticated_musician(
         if not token_data:
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
-                detail="Missing permissions",
+                detail=_t("Missing permissions"),
                 headers={"WWW-Authenticate": authenticate_value},
             )
 
         if scope not in token_data.scopes:
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
-                detail="Missing permissions",
+                detail=_t("Missing permissions"),
                 headers={"WWW-Authenticate": authenticate_value},
             )
     return token_data
@@ -107,16 +108,38 @@ def _get_musician_from_token(anyblok, token_data):
         if not musician:
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
-                detail="Not enough permissions",
+                detail=_t("Not enough permissions"),
             )
     return musician
 
 
+def get_locale(request: Request) -> str:
+    accept_language = request.headers.get("accept-language", "en")  # Langue par défaut
+    return accept_language.split(",")[0].split("-")[
+        0
+    ]  # Prend la première langue indiquée
+
+
 def _prepare_context(anyblok, request, token_data):
-    musician = _get_musician_from_token(anyblok, token_data)
+    if anyblok is not None:
+        musician = _get_musician_from_token(anyblok, token_data)
+    else:
+        musician = None
+
+    if musician:
+        lang = musician.lang
+    else:
+        lang = get_locale(request)
+
+    if lang not in config.AVAILABLE_LANGS:
+        lang = config.DEFAULT_LANG
+    translate = get_translations(lang)
     return {
         "is_authenticated": True if musician else False,
+        "lang": lang,
         "musician": musician,
+        "gettext": translate,  # support for {% trans %} using jinja2.ext.i18n
+        "_t": translate,  # support for {{ _t() }} in templates
     }
 
 
