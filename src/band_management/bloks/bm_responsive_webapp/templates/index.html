@@ -1,3 +1,10 @@
 {% extends "layouts/layout.html" %} {% block main %}
-    <h1>Landing page</h1>
+    <h1>{{ _t("Home page") }}</h1>
+    <p>
+        {%- trans %}
+            Run your band like a pro! Sheet music, rehearsals, gigs –
+            all in sync. Share, organize, play. Let the music
+            flow!
+        {%- endtrans %}
+    </p>
 {% endblock %}

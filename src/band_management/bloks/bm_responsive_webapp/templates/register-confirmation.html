@@ -1,15 +1,16 @@
 {% extends "layouts/layout.html" %} {% block main %}
-    <h1>Register</h1>
+    <h1>{{ _t("Register") }}</h1>
     <div>
         <p>
-            You, {{ invited_musician.name }}, have create a new account.
+            {%- trans invited_musician_name=invited_musician.name %}
+                You, {{ invited_musician_name }}, have create a new account.
 
-            Once we implement it, you should receive this link by Emai
-            that invite you to click on it to be able to finalyze your
-            registration and set your password.
-
-            <span hx-on:click="navigator.clipboard.writeText('{{invitation_url}}')">
-                Click me to put url to visit in your clipboard
+                Once we implement it, you should receive this link by Emai
+                that invite you to click on it to be able to finalyze your
+                registration and set your password.
+            {%- endtrans %}
+            <span class="tag is-link" hx-on:click="navigator.clipboard.writeText('{{invitation_url}}')">
+                {{ _t("Click me to put url to visit in your clipboard") }}
             </span>
 
         </p>

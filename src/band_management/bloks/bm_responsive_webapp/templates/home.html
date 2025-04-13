@@ -1,5 +1,6 @@
 {% extends "layouts/layout.html" %} {% block main %}
 
+  <h2>{{ _t("Hello, %(user)s!")|format(user=musician.name) }}</h2>
   <section>
     {%- for member in musician.members: %} {%- set is_active_band = member.band in
       musician.active_bands %}
@@ -23,7 +24,7 @@
                 {%- endfor %}
               </div>
             {% endif %}
-            <p>musicians: {{member.band.musicians_count}}</p>
+            <p>{% trans count=member.band.musicians_count%}Musicians: {{ count }}{% endtrans %}</p>
             <div class="tags">{%- for band_member in member.band.members: %}
               <div class="tag {{'is-link' if member != band_member else 'is-primary'}}">
                 {% if band_member.is_admin %}
@@ -35,7 +36,7 @@
               </div>
             {%- endfor %}
             </div>
-            <p>musics: {{member.band.musics_count}}</p>
+            <p>{% trans count=member.band.musics_count %}Musics: {{count}}{% endtrans %}</p>
           </div>
         {%- endif %}
       </article>

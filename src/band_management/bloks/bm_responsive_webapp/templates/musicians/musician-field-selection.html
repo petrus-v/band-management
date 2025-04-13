@@ -1,11 +1,11 @@
 <div class="field" id="musician-field-selection">
-    <label class="label">Musician</label>
+    <label class="label">{{ _t("Musician") }}</label>
     <div class="control">
         <div class="dropdown" id="musician-dropdown" hx-on:click="this.classList.toggle('is-active')">
             <div class="dropdown-trigger">
                 <div class="control has-icons-left">
                     <input type="text" form="search-musician" class="input" id="musician-search"
-                           placeholder="Search a musician..." name="search" hx-post="/musicians/dropdown"
+                           placeholder="{{ _t('Search a musician...') }}" name="search" hx-post="/musicians/dropdown"
                            value="{{invited_musician and invited_musician.name or '' | default('', true)  }}"
                            hx-include="#band-uuid"
                            hx-on:click="document.getElementById('musician-dropdown').classList.toggle('is-active')"
@@ -36,12 +36,12 @@
                 </section>
                 <footer class="modal-card-foot skeleton-block">
                     <div class="buttons">
-                        <button class="button is-success">Save changes</button>
-                        <button class="button">Cancel</button>
+                        <button class="button is-success">{{ _t("Save") }}</button>
+                        <button class="button">{{ _t("Cancel") }}</button>
                     </div>
                 </footer>
             </div>
         </div>
-        <p class="help">Select musician to invite</p>
+        <p class="help">{{ _t("Select musician to invite") }}</p>
     </div>
 </div>

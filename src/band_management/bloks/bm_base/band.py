@@ -1,5 +1,5 @@
 from anyblok import Declarations
-
+from band_management import _t
 from anyblok.column import String
 from anyblok.relationship import One2Many
 from band_management.exceptions import PermissionDenied, ValidationError
@@ -44,7 +44,15 @@ class Band(Mixin.PrimaryColumn):
     def update_by(self, admin_musician, **kwargs):
         if not admin_musician.member_of(self).is_admin:
             raise PermissionDenied(
-                f"You, {admin_musician.name}, are not allowed to edit this band {self.name}. Ask an existing band administrator to become a band administrator."
+                _t(
+                    "You, %s, are not allowed to edit this band %s. "
+                    "Ask an existing band administrator to become a band administrator.",
+                    lang=admin_musician.lang,
+                )
+                % (
+                    admin_musician.name,
+                    self.name,
+                )
             )
         self.update(**kwargs)
 
@@ -57,7 +65,15 @@ class Band(Mixin.PrimaryColumn):
 
         if not admin_musician.member_of(self).is_admin:
             raise PermissionDenied(
-                f"You, {admin_musician.name}, are not allowed to edit administrators's band {self.name}. Ask an existing band administrator to become a band administrator."
+                _t(
+                    "You, %s, are not allowed to edit administrators's band %s. "
+                    "Ask an existing band administrator to become a band administrator.",
+                    lang=admin_musician.lang,
+                )
+                % (
+                    admin_musician.name,
+                    self.name,
+                )
             )
 
         for member in self.members:
@@ -65,13 +81,26 @@ class Band(Mixin.PrimaryColumn):
 
         if len([member for member in self.members if member.is_admin]) == 0:
             raise ValidationError(
-                f"You should set at least one administrator to this band {self.name}"
+                _t(
+                    "You should set at least one administrator to this band %s",
+                    lang=admin_musician.lang,
+                )
+                % self.name
             )
 
     def add_member_by(self, admin_musician, invited_member, is_admin=False):
         if not admin_musician.member_of(self).is_admin:
             raise PermissionDenied(
-                f"You, {admin_musician.name}, are not allowed to invite new musician to this band {self.name}. Ask an existing band administrator to become a band administrator."
+                _t(
+                    "You, %s, are not allowed to invite new musician to this "
+                    "band %s. Ask an existing band administrator to "
+                    "become a band administrator.",
+                    lang=admin_musician.lang,
+                )
+                % (
+                    admin_musician.name,
+                    self.name,
+                )
             )
         return self.anyblok.BandManagement.Member.insert(
             musician=invited_member, band=self, is_admin=is_admin

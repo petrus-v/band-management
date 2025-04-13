@@ -5,6 +5,7 @@ from anyblok.column import Boolean, Selection
 from anyblok.schema import (
     UniqueConstraint,
 )
+from band_management import _t
 from band_management.exceptions import PermissionDenied
 
 register = Declarations.register
@@ -90,8 +91,12 @@ class Member(Mixin.PrimaryColumn):
             member = invited_by.member_of(band)
             if not (member.is_admin and member.invitation_state == "accepted"):
                 raise PermissionDenied(
-                    "You must have an acepted admin access to this band "
-                    f"{band.name} before invite new musicians."
+                    _t(
+                        "You must have an accepted invitation with admin access "
+                        "to this band %s before invite new musicians.",
+                        lang=invited_by.lang,
+                    )
+                    % band.name
                 )
 
         member = cls.insert(band=band, musician=invited_musician, invited_by=invited_by)

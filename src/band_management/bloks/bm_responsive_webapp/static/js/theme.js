@@ -43,7 +43,6 @@
     .split("; ")
     .find((row) => row.startsWith("theme="))
   ?.split("=")[1];
-  console.log("cookie theme", cookieTheme);
   if (cookieTheme) {
     ensure_theme(cookieTheme);
   } else {

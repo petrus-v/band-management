@@ -2,7 +2,7 @@
   %}
   <article class="message is-danger">
     <div class="message-header">
-      <p>Oops something went wrong</p>
+      <p>{{ _t("Oops something went wrong") }}</p>
     </div>
     <div class="message-body">{{ error_message }}</div>
   </article>
@@ -10,27 +10,27 @@
 
 <form hx-post="/login" class="box" hx-target="body">
   <div class="field">
-    <label class="label">Email</label>
+    <label class="label">{{ _t("Email") }}</label>
     <div class="control">
-      <input class="input" placeholder="user@example.com" id="username" name="username" required />
+      <input class="input" placeholder="{{ _t('user@example.com') }}" id="username" name="username" required />
     </div>
   </div>
 
   <div class="field">
-    <label class="label">Password</label>
+    <label class="label">{{ _t("Password") }}</label>
     <div class="control">
-      <input class="input" type="password" placeholder="Enter your password" id="password" name="password" required />
+      <input class="input" type="password" placeholder="{{ _t("Enter your password") }}" id="password" name="password" required />
     </div>
   </div>
   <div>
     <div class="control">
-      <button class="button is-success" type="submit">Login</button>
+      <button class="button is-success" type="submit">{{ _t("Login") }}</button>
     </div>
   </div>
 </form>
 
 <p class="mt-6 has-text-centered">
-  Don't have an account? Create one
-  <a href="/register" class="tag is-white is-medium">here</a>
+  {{ _t("Don't have an account? Create one") }}
+  <a href="/register" class="tag is-white is-medium">{{ _t("here") }}</a>
 </p>
 {% endblock %}

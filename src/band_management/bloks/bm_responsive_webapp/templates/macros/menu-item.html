@@ -26,14 +26,14 @@
               <span class="icon">
                 <i class="fas fa-check"></i>
               </span>
-              <span>Accept</span>
+              <span>{{ _t("Accept") }}</span>
             </button>
             <button class="button is-warning" title="Reject invitation from {{end_of_tooltip}}"
                     hx-put="/member/{{member.uuid}}/reject">
               <span class="icon">
                 <i class="fas fa-ban"></i>
               </span>
-              <span>Reject</span>
+              <span>{{ _t("Reject") }}</span>
             </button>
           {%- endif %}
         </span>

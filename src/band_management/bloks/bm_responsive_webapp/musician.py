@@ -13,6 +13,7 @@ from fastapi import Security
 from band_management.bloks.http_auth_base.schemas.auth import (
     TokenDataSchema,
 )
+from band_management import _t
 from band_management import config
 from band_management.bloks.bm_responsive_webapp.fastapi_utils import (
     get_authenticated_musician,
@@ -59,7 +60,10 @@ def toggle_musician_active_band(
         if musician_uuid != str(musician.uuid):
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
-                detail="Your are not allowed to update other user active bands",
+                detail=_t(
+                    "Your are not allowed to update other user active bands",
+                    lang=musician.lang,
+                ),
             )
 
         musician.toggle_musician_active_band(band_uuid)
@@ -231,3 +235,43 @@ def add_musician(
                 ),
             },
         )
+
+
+@router.put(
+    "/{musician_uuid}",
+    response_class=HTMLResponse | RedirectResponse,
+)
+def update_musician_profile(
+    request: Request,
+    csrf: check_csrf,
+    token_data: Annotated[TokenDataSchema, Security(get_authenticated_musician)],
+    musician_uuid: str,
+    musician_name: Annotated[str, Form()],
+    musician_lang: Annotated[str, Form()],
+    ab_registry: "Registry" = Depends(get_registry),
+):
+    with registry_transaction(ab_registry) as anyblok:
+        musician = _get_musician_from_token(anyblok, token_data)
+        if musician_uuid != str(musician.uuid):
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail=_t(
+                    "Your are not allowed to update other musician profiles",
+                    lang=musician.lang,
+                ),
+            )
+
+        musician.update(
+            name=musician_name,
+            lang=musician_lang
+            if musician_lang in config.AVAILABLE_LANGS
+            else config.DEFAULT_LANG,
+        )
+        response = RedirectResponse(
+            "/home",
+            status_code=200,
+            headers={
+                "HX-Redirect": "/home",
+            },
+        )
+        return response

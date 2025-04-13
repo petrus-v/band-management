@@ -1,40 +1,40 @@
 <div class="field">
-  <label class="label">Title</label>
+  <label class="label">{{ _t("Title") }}</label>
   <div class="control">
-    <input class="input" form="music-form" type="text" name="music_title" placeholder="Music title"
+    <input class="input" form="music-form" type="text" name="music_title" placeholder="{{ _t('Music title') }}"
            value="{{ music.title }}" />
   </div>
-  <p class="help">The music name</p>
+  <p class="help">{{ _t("The music name") }}</p>
 </div>
 
 <div class="field">
-  <label class="label">Composer</label>
+  <label class="label">{{ _t("Composer") }}</label>
   <div class="control">
-    <input class="input" form="music-form" type="text" name="music_composer" placeholder="Music composer"
+    <input class="input" form="music-form" type="text" name="music_composer" placeholder="{{ _t('Music composer') }}"
            value="{{ music.composer | default('', true) }}" />
   </div>
-  <p class="help">The first one who create the music</p>
+  <p class="help">{{ _t("The composer who create the music") }}</p>
 </div>
 
 <div class="field">
-  <label class="label">Lyrics author</label>
+  <label class="label">{{ _t("Lyricist") }}</label>
   <div class="control">
-    <input class="input" form="music-form" type="text" name="music_author" placeholder="Lyrics author"
+    <input class="input" form="music-form" type="text" name="music_author" placeholder="{{ _t('Lyricist') }}"
            value="{{ music.author | default('', true) }}" />
   </div>
-  <p class="help">The one who create the song and made Lyrics</p>
+  <p class="help">{{ _t("The one who made lyrics to this song") }}</p>
 </div>
 
 <div class="field">
-  <label class="label">Dance</label>
+  <label class="label">{{ _t("Dance") }}</label>
   <div class="control">
-    <input class="input" form="music-form" type="text" name="music_dance" placeholder="Dance"
+    <input class="input" form="music-form" type="text" name="music_dance" placeholder="{{ _t('Dance') }}"
            value="{{ music.dance | default('', true) }}" />
   </div>
-  <p class="help">What can you dance on this song ?</p>
+  <p class="help">{{ _t("What can you dance on this song ?") }}</p>
 </div>
 <div class="field">
-  <label><strong>Bands: </strong></label>
+  <label><strong>{{ _t("Bands: ") }}</strong></label>
   <fieldset class="checkboxes">
     <!-- a bit hacky otherwise you can remove all your bands from the current music -->
     <input type="hidden" name="music_bands" value="" />
@@ -47,10 +47,10 @@
 
     {%- endfor %}
   </fieldset>
-  <p class="help">Bands that I play this song at least once.</p>
+  <p class="help">{{ _t("Bands that I play this song at least once.") }}</p>
 </div>
 <div class="field">
-  <label><strong>Scores linked: </strong></label>
+  <label><strong>{{ _t("Scores linked: ") }}</strong></label>
 
   <div class="field is-grouped is-grouped-multiline">
     {%- for score in music.scores: %}

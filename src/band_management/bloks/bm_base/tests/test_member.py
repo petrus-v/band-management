@@ -35,8 +35,8 @@ def test_create_invitation_by_permission_denied_invited_member(
     with pytest.raises(
         PermissionDenied,
         match=(
-            "You must have an acepted admin access to this band "
-            "PAMH before invite new musicians."
+            "You must have an accepted invitation with admin "
+            "access to this band PAMH before invite new musicians."
         ),
     ):
         bm.Member.create_invitation_by(
@@ -50,12 +50,13 @@ def test_create_invitation_by_permission_denied_non_admin_member(
     bm, pverkest_musician, doe_musician, pamh_band
 ):
     pv_in_pamh = pverkest_musician.member_of(pamh_band)
+    pv_in_pamh.invitation_state = "accepted"
     pv_in_pamh.is_admin = False
     with pytest.raises(
         PermissionDenied,
         match=(
-            "You must have an acepted admin access to this band "
-            "PAMH before invite new musicians."
+            "You must have an accepted invitation with admin "
+            "access to this band PAMH before invite new musicians."
         ),
     ):
         bm.Member.create_invitation_by(

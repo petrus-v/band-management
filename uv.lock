@@ -106,6 +106,15 @@ wheels = [
 ]
 
 [[package]]
+name = "babel"
+version = "2.17.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/7d/6b/d52e42361e1aa00709585ecc30b3f9684b3ab62530771402248b1b1d6240/babel-2.17.0.tar.gz", hash = "sha256:0c54cffb19f690cdcc52a3b50bcbf71e07a808d1c80d549f2459b9d2cf0afb9d", size = 9951852 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/b7/b8/3fe70c75fe32afc4bb507f75563d39bc5642255d1d94f1f23604725780bf/babel-2.17.0-py3-none-any.whl", hash = "sha256:4d0b53093fdfb4b21c92b5213dba5a1b23885afa8383709427046b21c366e5f2", size = 10182537 },
+]
+
+[[package]]
 name = "band-management"
 version = "0.1.0"
 source = { editable = "." }
@@ -113,6 +122,7 @@ dependencies = [
     { name = "aiofile" },
     { name = "anyblok" },
     { name = "anyblok-fastapi" },
+    { name = "babel" },
     { name = "bcrypt" },
     { name = "jinja2" },
     { name = "passlib" },
@@ -139,6 +149,7 @@ requires-dist = [
     { name = "aiofile" },
     { name = "anyblok" },
     { name = "anyblok-fastapi", git = "https://github.com/AnyBlok/AnyBlok_fastapi?branch=master" },
+    { name = "babel" },
     { name = "bcrypt", specifier = "<4.0.0" },
     { name = "jinja2" },
     { name = "passlib" },

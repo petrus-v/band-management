@@ -54,3 +54,6 @@ RESET_PASSWORD_TOKEN_EXPIRE_MINUTES = os.environ.get(
 """How long the reset password token is valid
 Also used while registering new user
 """
+
+DEFAULT_LANG = os.environ.get("DEFAULT_LANG", "en")
+AVAILABLE_LANGS = ["fr", "en"]

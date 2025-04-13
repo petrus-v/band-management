@@ -6,6 +6,7 @@ from fastapi.responses import RedirectResponse
 from anyblok.registry import Registry
 from fastapi import Security
 
+from band_management import _t
 from band_management.bloks.http_auth_base.schemas.auth import (
     TokenDataSchema,
 )
@@ -41,7 +42,10 @@ def accept_member_invitation(
         if not member or member.musician != musician:
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
-                detail="Your are not allowed to update other user active bands",
+                detail=_t(
+                    "Your are not allowed to accept invitation for someone else.",
+                    lang=musician.lang,
+                ),
             )
 
         member.accept_invitation()
@@ -72,7 +76,10 @@ def reject_member_invitation(
         if not member or member.musician != musician:
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
-                detail="Your are not allowed to update other user active bands",
+                detail=_t(
+                    "Your are not allowed to update other user active bands",
+                    lang=musician.lang,
+                ),
             )
 
         member.reject_invitation()

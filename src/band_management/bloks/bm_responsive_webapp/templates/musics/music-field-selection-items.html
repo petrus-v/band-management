@@ -12,6 +12,6 @@
   <a href="#" class="dropdown-item js-modal-trigger"
      hx-get="/music/prepare?next_action={{ NextAction.EDIT_MODAL_FROM_VIEW }}&music_name={{ search }}"
      hx-target="#music-modal-content" data-target="music-modal" hx-trigger="click" onclick="openModal(this)">
-    Create {{ search }}...
+    {% trans %}Create new music {{ search }}...{% endtrans %}
   </a>
 {% endif %}

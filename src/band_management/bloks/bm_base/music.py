@@ -12,7 +12,7 @@ Model = Declarations.Model
 class Music(Mixin.PrimaryColumn):
     title: str = String(label="Title", nullable=False)
     composer: str = String(label="Music composer(s)")
-    author: str = String(label="Lyrics author(s)")
+    author: str = String(label="Lyricist(s)")
     dance: str = String(label="Dance name")
 
     bands: list["Declarations.Model.BandManagement.Band"] = Many2Many(

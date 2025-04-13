@@ -96,7 +96,7 @@ def test_already_connected_band_management_index(connected_musician):
         "/",
         follow_redirects=False,
     )
-    assert response.status_code == 200, response.text
+    assert response.status_code == 302, response.text
     assert response.headers["hx-redirect"] == "/home", response.text
 
 
@@ -107,7 +107,7 @@ def test_already_connected_band_management_login(connected_musician):
         "/login",
         follow_redirects=False,
     )
-    assert response.status_code == 200, response.text
+    assert response.status_code == 302, response.text
     assert response.headers["hx-redirect"] == "/home", response.text
     assert not response.cookies.get("auth-token")
 

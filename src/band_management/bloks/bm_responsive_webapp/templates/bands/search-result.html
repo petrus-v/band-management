@@ -11,19 +11,19 @@
                 <span class="icon">
                   <i class="fa fa-user-plus"></i>
                 </span>
-                <span>Invite</span>
+                <span>{{ _t("Invite") }}</span>
               </a>
               <a class="button" href="/band/{{ band.uuid }}">
                 <span class="icon">
                   <i class="fa fa-edit"></i>
                 </span>
-                <span>Edit</span>
+                <span>{{ _t("Edit") }}</span>
               </a>
             </div>
           {% endif %}
         </div>
         <div class="message-body">
-          <p>musicians: {{band.musicians_count}}</p>
+          <p>{% trans count=band.musicians_count %}Musicians: {{ count }}{% endtrans %}</p>
           <div class="tags">
             {%- for band_member in band.members: %}
               <div class="tag {{'is-link' if band_member != user_member else 'is-primary'}}">
@@ -37,13 +37,13 @@
             {%- endfor %}
           </div>
           <div>
-            <p>musics: {{band.musics_count}}</p>
+            <p>{% trans count=band.musics_count %}Musics: {{ count }}{% endtrans %}</p>
           </div>
         </div>
       </article>
     {% endfor %} {% else %}
     <article>
-      <p>No band</p>
+      <p>{{ _t("No band found.") }}</p>
     </article>
   {% endif %}
 </section>

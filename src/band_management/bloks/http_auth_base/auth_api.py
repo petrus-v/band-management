@@ -15,10 +15,10 @@ from band_management.bloks.http_auth_base.schemas.auth import (
     TokenDataSchema,
     UserSchema,
 )
-from band_management import config
+from band_management import config, _t
 from fastapi import APIRouter
 
-if TYPE_CHECKING:
+if TYPE_CHECKING:  # pragma: no cover
     from anyblok.registy import Registry as AnyblokRegistry
 
 logger = logging.getLogger(__name__)
@@ -31,12 +31,12 @@ oauth2_scheme = OAuth2PasswordBearer(
 
 router_auth = APIRouter(
     tags=["api"],
-    responses={404: {"description": "Not found"}},
+    responses={404: {"description": _t("Not found")}},
 )
 api_user = APIRouter(
     prefix="/api/user",
     tags=["api"],
-    responses={404: {"description": "Not found"}},
+    responses={404: {"description": _t("Not found")}},
 )
 
 
@@ -63,7 +63,7 @@ async def get_current_user(
         authenticate_value = "Bearer"
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
-        detail="Could not validate credentials",
+        detail=_t("Could not validate credentials."),
         headers={"WWW-Authenticate": authenticate_value},
     )
     try:
@@ -82,7 +82,7 @@ async def get_current_user(
         if scope not in token_data.scopes:
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
-                detail="Not enough permissions",
+                detail=_t("Not enough permissions."),
                 headers={"WWW-Authenticate": authenticate_value},
             )
     return token_data

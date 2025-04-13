@@ -6,14 +6,12 @@
     </form>
   </div>
 {% endblock main %} {% block progressbar %}
-  <progress id="score-import-progress" class="progress is-small is-warning" value="0" max="100" style="
-                                                                                                       position: absolute;
-                                                                                                       top: 0;
-                                                                                                       left: 0;
-                                                                                                       right: 0;
-                                                                                                       margin: 0;
-                                                                                                       height: 4px;
-                                                                                                      "></progress>
+  <progress
+    id="score-import-progress"
+    class="progress is-small is-warning"
+    value="0"
+    max="100"
+    style="position: absolute;top: 0;left: 0;right: 0;margin: 0;height: 4px;"></progress>
 {% endblock progressbar %} {% block footer_navbar_items %}
   <div class="navbar-start">
     <div class="navbar-item">
@@ -21,13 +19,13 @@
         <span class="icon">
           <i class="fa fa-undo"></i>
         </span>
-        <span>Cancel</span>
+        <span>{{ _t("Cancel") }}</span>
       </a>
       <button type="submit" form="score-form" class="button is-light is-pulled-right">
         <span class="icon">
           <i class="fa fa-save"></i>
         </span>
-        <span>Import</span>
+        <span>{{ _t("Import") }}</span>
       </button>
 
       <script>

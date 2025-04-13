@@ -1,9 +1,9 @@
 <div class="field">
-  <label class="label">Label</label>
+  <label class="label">{{ _t("Label") }}</label>
   <div class="control">
-    <input class="input" form="score-form" type="text" name="score_name" placeholder="1st voice"
+    <input class="input" form="score-form" type="text" name="score_name" placeholder="{{ _t('1st voice') }}"
            value="{{ score.name  | default('', true)}}" />
-    <p class="help">Your score name</p>
+    <p class="help">{{ _t("Your score name") }}</p>
   </div>
 </div>
 
@@ -12,16 +12,16 @@
 {% include "musics/music-field-selection.html" %}
 
 <div class="field">
-  <label class="label">Score writer</label>
+  <label class="label">{{ _t("Score writer") }}</label>
   <div class="control">
-    <input class="input" form="score-form" type="text" name="source_writer_credits" placeholder="Score writer"
+    <input class="input" form="score-form" type="text" name="source_writer_credits" placeholder="{{ _t('Score writer') }}"
            value="{{ score.source_writer_credits  | default('', true) }}" />
-    <p class="help">The person who write this score</p>
+    <p class="help">{{ _t("The person who write this score") }}</p>
   </div>
 </div>
 
 <div class="field">
-  <label class="label">Metatdata</label>
+  <label class="label">{{ _t("Metadata") }}</label>
   <textarea class="textarea" disabled="1">
     {{score.storage_file_metadata}}
   </textarea>
@@ -32,8 +32,8 @@
     <object type="{{score.storage_file_metadata.get('mime_type', 'appdlication/pdf')}}" data="/score/{{score.uuid}}/media"
             width="100%" height="600">
       <p>
-        Viewer not available on this browser for given file type
-        {{score.storage_file_metadata.get('mime_type', 'appdlication/pdf')}}
+        {{ _t("Viewer not available on this browser for given file type") }}
+        {{ score.storage_file_metadata.get('mime_type', 'appdlication/pdf') }}
         <a href="/score/{{score.uuid}}/media" target="_blank">download</a>.
       </p>
     </object>
