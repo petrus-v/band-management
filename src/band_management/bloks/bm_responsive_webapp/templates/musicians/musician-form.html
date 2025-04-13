@@ -10,11 +10,26 @@
 <div class="field">
   <label class="label">{{ _t("Email") }}</label>
   <div class="control">
-    <input class="input" form="musician-form" type="email" name="musician_email" placeholder="{{ _t('musician@band.com') }}"
-           value="{{ invited_musician.email | default('', true) }}" />
+    <input class="input" form="musician-form" type="email" name="musician_email"
+           placeholder="{{ _t('musician@band.com') }}" value="{{ invited_musician.email | default('', true) }}" />
   </div>
   <p class="help">{{ _t("Musician's email") }}</p>
 </div>
+
+<div class="field">
+  <label class="label" for="lang-select">{{ _t("Language") }}</label>
+  <div class="control">
+    <div class="select">
+      <select id="lang-select" name="musician_lang" form="musician-form">
+        {% for lang_key, lang_name in languages.items() %}
+          <option value="{{lang_key}}" {{ 'selected' if musician.lang==lang_key else '' }}>{{ lang_name }}</option>
+        {% endfor %}
+      </select>
+    </div>
+  </div>
+  <p class="help">{{ _t("Application language preference") }}</p>
+</div>
+
 <input type="hidden" name="csrf_token" value="{{csrf_token(10)}}" />
 <input type="hidden" name="band_uuid" id="band-uuid" form="musician-form"
        value="{{band and band.uuid or '' | default('', true)  }}" />

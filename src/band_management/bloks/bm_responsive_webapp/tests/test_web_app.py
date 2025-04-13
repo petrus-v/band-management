@@ -183,6 +183,17 @@ def test_band_register(anonymous):
     assert response.status_code == 200, response.text
 
 
+def test_already_connected_register(connected_musician):
+    token = connected_musician.cookies.get("auth-token")
+    assert token
+    response = connected_musician.get(
+        "/register",
+        follow_redirects=False,
+    )
+    assert response.status_code == 302, response.text
+    assert response.headers["hx-redirect"] == "/home", response.text
+
+
 def test_band_terms(anonymous):
     response = anonymous.get("/terms")
     assert response.status_code == 200, response.text

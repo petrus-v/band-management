@@ -113,7 +113,7 @@ def _get_musician_from_token(anyblok, token_data):
     return musician
 
 
-def get_locale(request: Request) -> str:
+def get_lang_from_headers(request: Request) -> str:
     accept_language = request.headers.get("accept-language", "en")  # Langue par défaut
     return accept_language.split(",")[0].split("-")[
         0
@@ -129,7 +129,7 @@ def _prepare_context(anyblok, request, token_data):
     if musician:
         lang = musician.lang
     else:
-        lang = get_locale(request)
+        lang = get_lang_from_headers(request)
 
     if lang not in config.AVAILABLE_LANGS:
         lang = config.DEFAULT_LANG

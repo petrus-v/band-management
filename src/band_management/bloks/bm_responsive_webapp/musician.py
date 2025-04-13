@@ -155,9 +155,11 @@ def prepare_musician(
     ab_registry: "Registry" = Depends(get_registry),
 ):
     with registry_transaction(ab_registry) as anyblok:
-        _get_musician_from_token(anyblok, token_data)
+        musician = _get_musician_from_token(anyblok, token_data)
         BM = anyblok.BandManagement
-        future_musician = BM.Musician(name=musician_name or "Musician name")
+        future_musician = BM.Musician(
+            name=musician_name or "Musician name", lang=musician.lang
+        )
         band = None
         if band_uuid:
             band = BM.Band.query().get(band_uuid)
@@ -166,6 +168,10 @@ def prepare_musician(
         # if next_action == NextAction.EDIT_MODAL_FROM_VIEW:
         template = "musicians/prepare-modal.html"
 
+        languages = {
+            "fr": _t("French", lang=musician.lang),
+            "en": _t("English", lang=musician.lang),
+        }
         return templates.TemplateResponse(
             name=template,
             request=request,
@@ -173,6 +179,7 @@ def prepare_musician(
                 **_prepare_context(anyblok, request, token_data),
                 "invited_musician": future_musician,
                 "band": band,
+                "languages": languages,
             },
         )
 

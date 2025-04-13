@@ -51,6 +51,7 @@ msgid "Administrators"
 msgstr ""
 
 #: src/band_management/bloks/bm_responsive_webapp/templates/musicians/musician-form-profile.html
+#: src/band_management/bloks/bm_responsive_webapp/templates/musicians/musician-form.html
 msgid "Application language preference"
 msgstr ""
 
@@ -165,6 +166,7 @@ msgid "Email"
 msgstr ""
 
 #: src/band_management/bloks/bm_responsive_webapp/main.py
+#: src/band_management/bloks/bm_responsive_webapp/musician.py
 msgid "English"
 msgstr ""
 
@@ -173,6 +175,7 @@ msgid "Enter your password"
 msgstr ""
 
 #: src/band_management/bloks/bm_responsive_webapp/main.py
+#: src/band_management/bloks/bm_responsive_webapp/musician.py
 msgid "French"
 msgstr ""
 
@@ -224,6 +227,7 @@ msgid "Label"
 msgstr ""
 
 #: src/band_management/bloks/bm_responsive_webapp/templates/musicians/musician-form-profile.html
+#: src/band_management/bloks/bm_responsive_webapp/templates/musicians/musician-form.html
 msgid "Language"
 msgstr ""
 

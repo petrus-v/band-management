@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Vous, %(invited_musician_name)s, avez créé un nouveau compte.\n"
 "\n"
-"Une fois que cela sera implémenté ! Vous receverez un lien par couriel \n"
+"Une fois que cela sera implémenté ! Vous receverez un lien par courriel \n"
 "permettant de finaliser l'enregistrement de votre compte \n"
 "et définir son mot de passe."
 
@@ -62,6 +62,7 @@ msgid "Administrators"
 msgstr "Administrateurs"
 
 #: src/band_management/bloks/bm_responsive_webapp/templates/musicians/musician-form-profile.html
+#: src/band_management/bloks/bm_responsive_webapp/templates/musicians/musician-form.html
 msgid "Application language preference"
 msgstr "Langue de l'application"
 
@@ -173,9 +174,10 @@ msgstr "Éditer"
 #: src/band_management/bloks/bm_responsive_webapp/templates/musicians/musician-form-profile.html
 #: src/band_management/bloks/bm_responsive_webapp/templates/musicians/musician-form.html
 msgid "Email"
-msgstr "Couriel"
+msgstr "Courriel"
 
 #: src/band_management/bloks/bm_responsive_webapp/main.py
+#: src/band_management/bloks/bm_responsive_webapp/musician.py
 msgid "English"
 msgstr "Anglais"
 
@@ -184,6 +186,7 @@ msgid "Enter your password"
 msgstr "Entrez votre mot de passe"
 
 #: src/band_management/bloks/bm_responsive_webapp/main.py
+#: src/band_management/bloks/bm_responsive_webapp/musician.py
 msgid "French"
 msgstr "Français"
 
@@ -235,6 +238,7 @@ msgid "Label"
 msgstr "Libellé"
 
 #: src/band_management/bloks/bm_responsive_webapp/templates/musicians/musician-form-profile.html
+#: src/band_management/bloks/bm_responsive_webapp/templates/musicians/musician-form.html
 msgid "Language"
 msgstr "Langue"
 
@@ -286,7 +290,7 @@ msgstr "Nom du musicien"
 
 #: src/band_management/bloks/bm_responsive_webapp/templates/musicians/musician-form.html
 msgid "Musician's email"
-msgstr "Couriel du musicien"
+msgstr "Courriel du musicien"
 
 #: src/band_management/bloks/bm_responsive_webapp/templates/bands/search-result.html
 #: src/band_management/bloks/bm_responsive_webapp/templates/home.html
@@ -571,7 +575,7 @@ msgstr "Nom du groupe"
 
 #: src/band_management/bloks/bm_responsive_webapp/templates/musicians/musician-form-profile.html
 msgid "Your email address to communicate with you."
-msgstr "Le couriel utilisé pour communiquer avec vous."
+msgstr "Le courriel utilisé pour communiquer avec vous."
 
 #: src/band_management/bloks/bm_responsive_webapp/templates/musicians/musician-form-profile.html
 msgid "Your name or musician name"

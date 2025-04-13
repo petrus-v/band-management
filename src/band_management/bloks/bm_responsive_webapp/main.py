@@ -239,13 +239,30 @@ def register(
     token_data: Annotated[TokenDataSchema, Security(get_authenticated_musician)],
     ab_registry: "Registry" = Depends(get_registry),
 ):
+    if token_data:
+        response = RedirectResponse(
+            "/home",
+            status_code=302,
+            headers={
+                "HX-Redirect": "/home",
+            },
+        )
+        return response
     with registry_transaction(ab_registry) as anyblok:
+        user_context = _prepare_context(anyblok, request, token_data)
+        languages = {
+            "fr": _t("French", lang=user_context["lang"]),
+            "en": _t("English", lang=user_context["lang"]),
+        }
         return templates.TemplateResponse(
             name="register.html",
             request=request,
             context={
-                **_prepare_context(anyblok, request, token_data),
-                "invited_musician": anyblok.BandManagement.Musician(),
+                **user_context,
+                "invited_musician": anyblok.BandManagement.Musician(
+                    lang=user_context["lang"]
+                ),
+                "languages": languages,
             },
         )
 
