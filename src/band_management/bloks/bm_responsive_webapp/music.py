@@ -7,6 +7,7 @@ from fastapi import Security
 from band_management.bloks.http_auth_base.schemas.auth import (
     TokenDataSchema,
 )
+from band_management.bloks.bm_responsive_webapp.paging import paging_query
 from band_management.bloks.bm_responsive_webapp.fastapi_utils import (
     get_authenticated_musician,
     _prepare_context,
@@ -72,15 +73,19 @@ def search_musics(
         TokenDataSchema, Security(get_authenticated_musician, scopes=["musician-auth"])
     ],
     search: Annotated[str, Form()],
+    page: Annotated[int, Form()] = 0,
     ab_registry: "Registry" = Depends(get_registry),
 ):
     with _search_musics(ab_registry, request, search, token_data) as (anyblok, musics):
+        displayed_musics, next_page, last_element = paging_query(musics, page)
         response = templates.TemplateResponse(
             name="musics/search-result.html",
             request=request,
             context={
                 **_prepare_context(anyblok, request, token_data),
-                "musics": musics.all(),
+                "musics": displayed_musics,
+                "next_page": next_page,
+                "last_element": last_element,
                 "search": search,
             },
         )
