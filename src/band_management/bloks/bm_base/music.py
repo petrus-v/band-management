@@ -1,5 +1,6 @@
-from anyblok import Declarations
+import sqlalchemy as sa
 
+from anyblok import Declarations
 from anyblok.relationship import Many2Many
 from anyblok.column import String
 
@@ -10,7 +11,8 @@ Model = Declarations.Model
 
 @register(Model.BandManagement)
 class Music(Mixin.PrimaryColumn):
-    title: str = String(label="Title", nullable=False)
+    title: str = String(label="Title", nullable=False, size=256)
+
     composer: str = String(label="Music composer(s)")
     author: str = String(label="Lyricist(s)")
     dance: str = String(label="Dance name")
@@ -47,3 +49,14 @@ class Music(Mixin.PrimaryColumn):
             self.bands.append(band)
             for band in set(musician.active_bands) - set(self.bands)
         ]
+
+    @classmethod
+    def query_any(cls, search: str):
+        term_filter = sa.or_(
+            cls.title.ilike(f"%{search}%"),
+            cls.composer.ilike(f"%{search}%"),
+            cls.author.ilike(f"%{search}%"),
+        )
+        term_filter.description = "or-search-clause"
+        musics_query = cls.query().filter(term_filter)
+        return musics_query

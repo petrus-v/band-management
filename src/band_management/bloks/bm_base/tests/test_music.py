@@ -17,3 +17,8 @@ def test_update_bands_add_allowed(
     )
     assert len(elle_music.bands) == 2
     assert set(elle_music.bands) == set([pamh_band, trib_band])
+
+
+def test_query_any(bm, elle_music):
+    query = bm.Music.query_any("elle")
+    assert elle_music in query.all()
