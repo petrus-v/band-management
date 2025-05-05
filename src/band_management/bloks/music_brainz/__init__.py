@@ -5,28 +5,21 @@ VERSION = __version__
 
 
 def import_declarations(reload=None):
-    # from . import mixins
+    from . import music
+    from . import musicbrainz
 
     if reload is not None:
-        # reload(mixins)
-        pass
+        reload(music)
+        reload(musicbrainz)
 
 
-class BandManagement(Blok):
-    """Main blok that install the entire app
-    when you install this one
-
-    This will mainly contains integration blok tests
-    and may contains some data to setup and migration
-    tests.
-    """
+class MusicBrainz(Blok):
+    """MusicBrainz data integration"""
 
     version = VERSION
     author = "Pierre Verkest"
     required = [
         "band-management-base",
-        "band-management-responsive-webapp",
-        "music-brainz",
     ]
 
     @classmethod

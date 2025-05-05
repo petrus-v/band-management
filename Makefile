@@ -18,13 +18,13 @@ help:
 install: ## install python project dependencies
 	uv sync
 
-setup-demo:
+setup-demo: ## setup database with demo data
 	uv run anyblok_createdb --with-demo -c app.cfg || uv run anyblok_updatedb -c app.cfg
 
 setup-tests: ## install python project dependencies for tests
 	uv run anyblok_createdb --with-demo -c app.test.cfg || uv run anyblok_updatedb -c app.test.cfg
 
-test:
+test: ## launch unit tests
 	ANYBLOK_CONFIG_FILE=app.test.cfg uv run pytest -v -s src/
 
 translations: ## Regenerate pot file and merges translations

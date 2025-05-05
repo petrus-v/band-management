@@ -1,3 +1,4 @@
+from band_management.bloks.bm_responsive_webapp.paging import paging_query
 from typing import Annotated
 from anyblok_fastapi.fastapi import get_registry, registry_transaction
 from fastapi import Depends, Request, Form
@@ -60,6 +61,7 @@ def search_scores(
         TokenDataSchema, Security(get_authenticated_musician, scopes=["musician-auth"])
     ],
     search: Annotated[str, Form()],
+    page: Annotated[int, Form()] = 0,
     ab_registry: "Registry" = Depends(get_registry),
 ):
     with registry_transaction(ab_registry) as anyblok:
@@ -70,7 +72,7 @@ def search_scores(
         if search:
             score_query = score_query.filter(BM.Score.name.ilike(f"%{search}%"))
 
-        scores = score_query.all()
+        scores, next_page, last_element = paging_query(score_query, page=page)
 
         response = templates.TemplateResponse(
             name="scores/search-result.html",
@@ -78,6 +80,8 @@ def search_scores(
             context={
                 **_prepare_context(anyblok, request, token_data),
                 "scores": scores,
+                "next_page": next_page,
+                "last_element": last_element,
                 "search": search,
             },
         )

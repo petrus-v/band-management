@@ -57,3 +57,8 @@ Also used while registering new user
 
 DEFAULT_LANG = os.environ.get("DEFAULT_LANG", "en")
 AVAILABLE_LANGS = ["fr", "en"]
+
+
+ITEM_PER_PAGE = os.environ.get("ITEM_PER_PAGE", 60)
+"""How many items per page
+"""

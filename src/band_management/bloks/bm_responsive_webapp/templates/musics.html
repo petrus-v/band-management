@@ -1,8 +1,10 @@
 {% extends "layouts/layout.html" %} {% block top_menu_start %}
   <div class="navbar-item is-pulled-right">
     <div class="control">
-      <input class="form-control" type="search" name="search" placeholder="{{ _t('Begin Typing To Search music...') }}"
+      <input class="form-control" type="search"
+             id="search-input" name="search" placeholder="{{ _t('Begin Typing To Search music...') }}"
              hx-post="/musics/" hx-trigger="input changed delay:500ms, keyup[key=='Enter'], load"
+             hx-swap="innerHTML"
              hx-target="#search-results" />
     </div>
   </div>

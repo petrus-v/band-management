@@ -25,6 +25,7 @@ class BandManagementResponsiveWebApp(Blok):
     required = [
         "band-management-base",
         "http-auth-base",
+        "music-brainz",
     ]
 
     @classmethod

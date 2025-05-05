@@ -7,6 +7,7 @@ from fastapi import Security
 from band_management.bloks.http_auth_base.schemas.auth import (
     TokenDataSchema,
 )
+from band_management.bloks.bm_responsive_webapp.paging import paging_query
 from band_management.bloks.bm_responsive_webapp.fastapi_utils import (
     get_authenticated_musician,
     _prepare_context,
@@ -15,7 +16,6 @@ from band_management.bloks.bm_responsive_webapp.fastapi_utils import (
 )
 from contextlib import contextmanager
 from .jinja import templates, NextAction
-import sqlalchemy as sa
 
 from fastapi import APIRouter
 from fastapi.responses import HTMLResponse
@@ -55,17 +55,7 @@ def _search_musics(ab_registry, request, search, token_data):
     with registry_transaction(ab_registry) as anyblok:
         _get_musician_from_token(anyblok, token_data)
         BM = anyblok.BandManagement
-        musics_query = BM.Music.query()
-        # .join(BM.Music.bands)
-        musics_query = musics_query.filter(
-            sa.or_(
-                BM.Music.title.ilike(f"%{search}%"),
-                BM.Music.composer.ilike(f"%{search}%"),
-                BM.Music.author.ilike(f"%{search}%"),
-            )
-        )
-        # musics_query = musics_query.filter(BM.Band.uuid.in_(musician.active_bands.uuid))
-
+        musics_query = BM.Music.query_any(search)
         musics_query = musics_query.order_by(
             BM.Music.title,
             BM.Music.composer,
@@ -83,15 +73,19 @@ def search_musics(
         TokenDataSchema, Security(get_authenticated_musician, scopes=["musician-auth"])
     ],
     search: Annotated[str, Form()],
+    page: Annotated[int, Form()] = 0,
     ab_registry: "Registry" = Depends(get_registry),
 ):
     with _search_musics(ab_registry, request, search, token_data) as (anyblok, musics):
+        displayed_musics, next_page, last_element = paging_query(musics, page)
         response = templates.TemplateResponse(
             name="musics/search-result.html",
             request=request,
             context={
                 **_prepare_context(anyblok, request, token_data),
-                "musics": musics.all(),
+                "musics": displayed_musics,
+                "next_page": next_page,
+                "last_element": last_element,
                 "search": search,
             },
         )

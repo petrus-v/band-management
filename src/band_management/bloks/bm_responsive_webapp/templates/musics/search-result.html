@@ -1,6 +1,18 @@
 <section>
-  {% if musics %} {% for music in musics %}
-    <article class="message">
+  {% if musics %}
+    {% for music in musics %}
+      {%- if next_page and music == last_element %}
+        <article class="message"
+                 hx-post="/musics/"
+                 hx-trigger="intersect once"
+                 hx-target="#search-results"
+                 hx-swap="beforeend"
+                 hx-include="#search-input"
+                 hx-vals='{"page": {{ next_page }}}'
+        >
+      {%- else %}
+        <article class="message">
+      {%- endif %}
       <div class="message-header">
         <span>{{ music.title | highlight(search) | safe }}</span>
         <a class="button" href="/music/{{ music.uuid }}">
@@ -13,14 +25,19 @@
       <div class="message-body">
         <p>
           <ul>
+            {%- if music.musicbrainz_artists %}
+              <li>
+                <span><strong>{{ _t("Artists: ") }}</strong></span>{{ music.musicbrainz_artists | highlight(search) | safe }}
+              </li>
+            {%- endif %}
             {%- if music.composer %}
               <li>
-                <span><strong>{{ _t("Composer: ") }}</strong></span>{{ music.composer }}
+                <span><strong>{{ _t("Composer: ") }}</strong></span>{{ music.composer| highlight(search) | safe }}
               </li>
             {%- endif %}
             {%- if music.author %}
               <li>
-                <span><strong>{{ _t("Author: ") }}</strong></span>{{ music.author }}
+                <span><strong>{{ _t("Author: ") }}</strong></span>{{ music.author | highlight(search) | safe }}
               </li>
             {%- endif %}
             {%- if music.dance %}
@@ -39,8 +56,8 @@
         </div>
         <p>{% trans count=music.scores_count %}Scores: {{ count }}{% endtrans %}</p>
       </div>
-    </article>
-  {% endfor %} {% else %}
+      </article>
+    {% endfor %} {% else %}
     <article>
       <p>{{ _t("No Music found.") }}</p>
     </article>

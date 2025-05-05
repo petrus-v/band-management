@@ -55,6 +55,18 @@ msgstr ""
 msgid "Application language preference"
 msgstr ""
 
+#: src/band_management/bloks/bm_responsive_webapp/templates/musics/music-form.html
+msgid "Artists"
+msgstr ""
+
+#: src/band_management/bloks/bm_responsive_webapp/templates/musics/music-form.html
+msgid "Artists information from Music Brainz's data - readonly"
+msgstr ""
+
+#: src/band_management/bloks/bm_responsive_webapp/templates/musics/search-result.html
+msgid "Artists: "
+msgstr ""
+
 #: src/band_management/bloks/bm_responsive_webapp/templates/musics/search-result.html
 msgid "Author: "
 msgstr ""
