@@ -15,7 +15,6 @@ from band_management.bloks.bm_responsive_webapp.fastapi_utils import (
 )
 from contextlib import contextmanager
 from .jinja import templates, NextAction
-import sqlalchemy as sa
 
 from fastapi import APIRouter
 from fastapi.responses import HTMLResponse
@@ -55,17 +54,7 @@ def _search_musics(ab_registry, request, search, token_data):
     with registry_transaction(ab_registry) as anyblok:
         _get_musician_from_token(anyblok, token_data)
         BM = anyblok.BandManagement
-        musics_query = BM.Music.query()
-        # .join(BM.Music.bands)
-        musics_query = musics_query.filter(
-            sa.or_(
-                BM.Music.title.ilike(f"%{search}%"),
-                BM.Music.composer.ilike(f"%{search}%"),
-                BM.Music.author.ilike(f"%{search}%"),
-            )
-        )
-        # musics_query = musics_query.filter(BM.Band.uuid.in_(musician.active_bands.uuid))
-
+        musics_query = BM.Music.query_any(search)
         musics_query = musics_query.order_by(
             BM.Music.title,
             BM.Music.composer,

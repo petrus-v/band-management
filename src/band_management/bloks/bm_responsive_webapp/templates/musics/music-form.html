@@ -6,7 +6,16 @@
   </div>
   <p class="help">{{ _t("The music name") }}</p>
 </div>
-
+{%- if music.musicbrainz_artists %}
+  <div class="field">
+    <label class="label">{{ _t("Artists") }}</label>
+    <div class="control">
+      <input class="input" disabled="1" type="text"
+             value="{{ music.musicbrainz_artists }}" />
+    </div>
+    <p class="help">{{ _t("Artists information from Music Brainz's data - readonly") }}</p>
+  </div>
+{% endif %}
 <div class="field">
   <label class="label">{{ _t("Composer") }}</label>
   <div class="control">

@@ -3,10 +3,14 @@
                                                  document.getElementById('music-search').value = '{{ music.title }}';">
     <span> {{ music.title | highlight(search) | safe}} </span>
     {%- if music.composer %} -
-      <span> {{ music.composer | highlight(search) | safe}} </span> {%- endif %}{%-
-    if music.author %} -
-    <span> {{ music.author | highlight(search) | safe}} </span>
-{%- endif %}
+      <span> {{ music.composer | highlight(search) | safe}} </span>
+    {%- endif %}
+    {%- if music.author %} -
+      <span> {{ music.author | highlight(search) | safe}} </span>
+    {%- endif %}
+    {%- if music.musicbrainz_artists %} -
+      <span> {{ music.musicbrainz_artists | highlight(search) | safe}} </span>
+    {%- endif %}
   </a>
 {% endfor %} {% else %}
   <a href="#" class="dropdown-item js-modal-trigger"
