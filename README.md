@@ -44,3 +44,10 @@ ANYBLOK_CONFIG_FILE=app.test.cfg uv run pytest -v -s src/
 ```bash
 uvx pre-commit run --all-files
 ```
+
+* To import music brainz data [downloaded from here](
+  https://data.metabrainz.org/pub/musicbrainz/data/json-dumps/)
+
+```bash
+uv run musicbrainz-importer -c app.cfg  --limit 30000 --insert-buffer 1000 ~/path/to/recording 
+```

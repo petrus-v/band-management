@@ -33,12 +33,14 @@ dependencies = [
 ]
 
 [project.scripts]
+musicbrainz-importer = "band_management.bloks.music_brainz.scripts.musicbrainz_importer:sync"
 
 [project.entry-points.bloks]
 http-auth-base="band_management.bloks.http_auth_base:HTTPAuthBase"
 band-management-base="band_management.bloks.bm_base:BandManagementBase"
 band-management-responsive-webapp="band_management.bloks.bm_responsive_webapp:BandManagementResponsiveWebApp"
 band-management="band_management.bloks.band_management:BandManagement"
+music-brainz="band_management.bloks.music_brainz:MusicBrainz"
 
 
 [dependency-groups]
