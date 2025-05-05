@@ -1,36 +1,47 @@
 <section>
   {% if scores %} {% for score in scores %}
-    <article class="message {{ '' if score.music else 'is-danger'}}">
-      <div class="message-header">
-        <span>{{ score.name | highlight(search) | safe }}</span>
-        <a class="button" href="/score/{{ score.uuid }}">
-          <span class="icon">
-            <i class="fa fa-edit"></i>
-          </span>
-          <span>{{ _t("Edit") }}</span>
-        </a>
-      </div>
-      <div class="message-body">
-        <ul>
-          <li>
-            <span><strong>{{ _t("Music: ") }}</strong></span>{{ score.music.title }}
-          </li>
-          <li>
-            <span><strong>{{ _t("Score writer: ") }}</strong></span>{{
-            score.music.source_writer_credits }}
-          </li>
-        </ul>
-        <div class="field">
-          <label><strong>{{ _t("Interpreted by: ") }}</strong></label>
-          <div class="field is-grouped is-grouped-multiline">
-            {%- for band in musician.members.band: %} {%- if band in
-              score.music.bands %}
-              <div class="control">
-                <div class="tags has-addons">
-                  <a class="tag is-link">{{ band.name }}</a>
-                </div>
+    {%- if next_page and score == last_element %}
+      <article class="message {{ '' if score.music else 'is-danger'}}"
+               hx-post="/scores/"
+               hx-trigger="intersect once"
+               hx-target="#search-results"
+               hx-swap="beforeend"
+               hx-include="#search-input"
+               hx-vals='{"page": {{ next_page }}}'
+      >
+    {%- else %}
+      <article class="message {{ '' if score.music else 'is-danger'}}">
+    {%- endif %}
+    <div class="message-header">
+      <span>{{ score.name | highlight(search) | safe }}</span>
+      <a class="button" href="/score/{{ score.uuid }}">
+        <span class="icon">
+          <i class="fa fa-edit"></i>
+        </span>
+        <span>{{ _t("Edit") }}</span>
+      </a>
+    </div>
+    <div class="message-body">
+      <ul>
+        <li>
+          <span><strong>{{ _t("Music: ") }}</strong></span>{{ score.music.title }}
+        </li>
+        <li>
+          <span><strong>{{ _t("Score writer: ") }}</strong></span>{{
+          score.music.source_writer_credits }}
+        </li>
+      </ul>
+      <div class="field">
+        <label><strong>{{ _t("Interpreted by: ") }}</strong></label>
+        <div class="field is-grouped is-grouped-multiline">
+          {%- for band in musician.members.band: %} {%- if band in
+            score.music.bands %}
+            <div class="control">
+              <div class="tags has-addons">
+                <a class="tag is-link">{{ band.name }}</a>
               </div>
-            {%- endif %}{%- endfor %}
+            </div>
+          {%- endif %}{%- endfor %}
     </div>
     </div>
     </div>
