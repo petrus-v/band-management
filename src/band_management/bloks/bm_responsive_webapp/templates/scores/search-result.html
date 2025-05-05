@@ -1,7 +1,7 @@
 <section>
   {% if scores %} {% for score in scores %}
     {%- if next_page and score == last_element %}
-      <article class="message {{ '' if score.music else 'is-danger'}}"
+      <article class="message {{ '' if score.music else 'is-info'}}"
                hx-post="/scores/"
                hx-trigger="intersect once"
                hx-target="#search-results"
@@ -10,7 +10,7 @@
                hx-vals='{"page": {{ next_page }}}'
       >
     {%- else %}
-      <article class="message {{ '' if score.music else 'is-danger'}}">
+      <article class="message {{ '' if score.music else 'is-info'}}">
     {%- endif %}
     <div class="message-header">
       <span>{{ score.name | highlight(search) | safe }}</span>
