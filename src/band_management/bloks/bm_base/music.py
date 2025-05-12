@@ -11,10 +11,10 @@ Model = Declarations.Model
 
 @register(Model.BandManagement)
 class Music(Mixin.PrimaryColumn):
-    title: str = String(label="Title", nullable=False, size=256)
+    title: str = String(label="Title", nullable=False, size=256, index=True)
 
-    composer: str = String(label="Music composer(s)")
-    author: str = String(label="Lyricist(s)")
+    composer: str = String(label="Music composer(s)", size=256, index=True)
+    author: str = String(label="Lyricist(s)", size=256, index=True)
     dance: str = String(label="Dance name")
 
     bands: list["Declarations.Model.BandManagement.Band"] = Many2Many(

@@ -8,8 +8,8 @@ Model = Declarations.Model
 
 @register(Model.BandManagement)
 class Music:
-    musicbrainz_title: str = String(size=256)
-    musicbrainz_artists: str = Text(label="Musicbrainz's artist")
+    musicbrainz_title: str = String(size=256, index=True)
+    musicbrainz_artists: str = Text(label="Musicbrainz's artist", index=True)
     musicbrainz_uuid: UUID = UUID(
         label="Musicbrainz's reference", index=True, unique=True, nullable=True
     )
