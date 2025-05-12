@@ -6,14 +6,14 @@ from unittest import mock
 
 
 @pytest.fixture
-def recording_file():
-    return Path(__file__).parent / "fixtures" / "recording"
+def work_file():
+    return Path(__file__).parent / "fixtures" / "work"
 
 
-def test_import(anyblok, recording_file):
+def test_import(anyblok, work_file):
     count_before = anyblok.BandManagement.Music.query().count()
     anyblok.MusicBrainz.synchronize(
-        recording_file.open(mode="r"),
+        work_file.open(mode="r"),
         commit=False,
         parse_limit=2,
         commit_buffer=3,
@@ -21,10 +21,10 @@ def test_import(anyblok, recording_file):
     assert 2 == (anyblok.BandManagement.Music.query().count() - count_before)
 
 
-def test_import_flushing_by_rollback(anyblok, recording_file):
+def test_import_flushing_by_rollback(anyblok, work_file):
     count_before = anyblok.BandManagement.Music.query().count()
     anyblok.MusicBrainz.synchronize(
-        recording_file.open(mode="r"),
+        work_file.open(mode="r"),
         commit=False,
         commit_buffer=2,
     )
@@ -35,7 +35,7 @@ def test_import_flushing_by_rollback(anyblok, recording_file):
     assert 1 == (anyblok.BandManagement.Music.query().count() - count_before)
 
 
-def test_import_flushing_by_commit(request, anyblok, recording_file):
+def test_import_flushing_by_commit(request, anyblok, work_file):
     original_commit = anyblok.commit
 
     def restore_commit():
@@ -46,7 +46,7 @@ def test_import_flushing_by_commit(request, anyblok, recording_file):
     anyblok.commit = mock.MagicMock()
     count_before = anyblok.BandManagement.Music.query().count()
     anyblok.MusicBrainz.synchronize(
-        recording_file.open(mode="r"),
+        work_file.open(mode="r"),
         commit=True,
         commit_buffer=2,
     )
@@ -56,26 +56,26 @@ def test_import_flushing_by_commit(request, anyblok, recording_file):
     assert 5 == (anyblok.BandManagement.Music.query().count() - count_before)
 
 
-def test_import_import_twice_no_duplicate(anyblok, recording_file):
+def test_import_import_twice_no_duplicate(anyblok, work_file):
     count_before = anyblok.BandManagement.Music.query().count()
     anyblok.MusicBrainz.synchronize(
-        recording_file.open(mode="r"),
+        work_file.open(mode="r"),
         commit=False,
     )
     anyblok.MusicBrainz.synchronize(
-        recording_file.open(mode="r"),
+        work_file.open(mode="r"),
         commit=False,
     )
     assert 5 == (anyblok.BandManagement.Music.query().count() - count_before)
 
 
-def test_parser_01(anyblok, recording_file):
+def test_parser_01(anyblok, work_file):
     with (
         mock.patch(
             "sys.argv",
             [
                 "import-prog",
-                str(recording_file),
+                str(work_file),
             ],
         ),
         mock.patch(
@@ -93,13 +93,13 @@ def test_parser_01(anyblok, recording_file):
             assert sync_mock.call_args.kwargs[key] == expected_value
 
 
-def test_parser_02(anyblok, recording_file):
+def test_parser_02(anyblok, work_file):
     with (
         mock.patch(
             "sys.argv",
             [
                 "import-prog",
-                str(recording_file),
+                str(work_file),
                 "-n",
                 "--limit",
                 "20",
@@ -122,13 +122,13 @@ def test_parser_02(anyblok, recording_file):
             assert sync_mock.call_args.kwargs[key] == expected_value
 
 
-def test_parser_03(anyblok, recording_file):
+def test_parser_03(anyblok, work_file):
     with (
         mock.patch(
             "sys.argv",
             [
                 "import-prog",
-                str(recording_file),
+                str(work_file),
                 "-n",
                 "--limit",
                 "20",

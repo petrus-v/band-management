@@ -1,5 +1,6 @@
 import json
 import logging
+import textwrap
 
 from anyblok import Declarations
 
@@ -39,15 +40,36 @@ class MusicBrainz:
             )
             if exists:
                 continue
+
+            composers = []
+            authors = []
+            artists = []
+            for relation in brainz_music.get("relations", []):
+                if relation.get("target-type") != "artist":
+                    continue
+                if not (artist_name := relation.get("artist", {}).get("name")):
+                    continue
+                if relation.get("type") in ["composer", "librettist"]:
+                    composers.append(artist_name)
+                if relation.get("type") == "orchestrator":
+                    artists.append(artist_name)
+                if relation.get("type") in ["lyricist", "writer"]:
+                    authors.append(artist_name)
+
             cls.anyblok.BandManagement.Music.insert(
-                title=brainz_music["title"][:256],
-                musicbrainz_title=brainz_music["title"][:256],
-                musicbrainz_artists="".join(
-                    [
-                        artist["name"] + artist["joinphrase"]
-                        for artist in brainz_music["artist-credit"]
-                    ]
+                title=textwrap.shorten(
+                    brainz_music["title"], width=256, placeholder="..."
                 ),
+                composer=textwrap.shorten(
+                    ", ".join(composers), width=256, placeholder="..."
+                ),
+                author=textwrap.shorten(
+                    ", ".join(authors), width=256, placeholder="..."
+                ),
+                musicbrainz_title=textwrap.shorten(
+                    brainz_music["title"], width=256, placeholder="..."
+                ),
+                musicbrainz_artists=", ".join(artists),
                 musicbrainz_uuid=brainz_music["id"],
             )
             inserted += 1
