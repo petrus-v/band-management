@@ -8,10 +8,13 @@
       <title>Amné'Zik</title>
       <link rel="icon" type="image/png" href="/static/assets/favicon.png" />
       <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" crossorigin="anonymous" />
-      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css" />
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.4/css/bulma.min.css" />
       <link rel="stylesheet" href="/static/css/style.css" />
       <link rel="stylesheet" href="/static/css/navbar.css" />
-      <script src="https://unpkg.com/htmx.org"></script>
+      <link rel="stylesheet" href="/static/css/sortable.css" />
+      <script src="https://unpkg.com/htmx.org@1.9.12/dist/htmx.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/sortablejs@v1.15.6/Sortable.min.js"></script>
+      <!-- <script src="https://unpkg.com/uuidv7@1.0.2/dist/index.js"></script> -->
     </head>
 {% endif %}
 
@@ -89,6 +92,7 @@
   <script async type="text/javascript" src="/static/js/navbar.js"></script>
   <script async type="text/javascript" src="/static/js/theme.js"></script>
   <script async type="text/javascript" src="/static/js/modal.js"></script>
+  <script async type="text/javascript" src="/static/js/sortable.js"></script>
 </body>
 {% if not request.headers.get('HX-Boosted') %}
 

@@ -10,6 +10,15 @@
     }
 } */
 
+/* Amné'Zik themes color reference
+ - Grey: #292929
+ - Green: #3b7c70
+ - Red: #992800
+ - Orange: #cf4a24
+ - Yellow: #ffae02
+ - Blue: #00a99d
+*/
+
 :root {
   --custom-background-color-dark: hsl(0, 0%, 14%);
   --custom-background-color-light: hsl(0, 0%, 96%);
@@ -44,4 +53,12 @@ body > header {
 
 body > footer {
   background-color: var(--custom-theme-background-color);
+}
+
+article.media {
+  margin: 0px !important;
+}
+
+textarea {
+  margin-bottom: 1em;
 }

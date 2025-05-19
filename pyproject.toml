@@ -15,21 +15,22 @@ authors = [
 dynamic = ["__version__"]
 
 dependencies = [
+    "aiofile",
     "anyblok",
     "anyblok-fastapi",
     "babel",
-    "python-multipart",
+    "bcrypt<4.0.0",
     "jinja2",
+    "passlib",
     "psycopg",
-    "uuid7",
     "pydantic[email]",
     "pydantic-extra-types",
     "pycountry",
-    "bcrypt<4.0.0",
     "python-jose[cryptography]",
-    #  "libpass",
-    "passlib",
-    "aiofile",
+    "python-multipart",
+    "uuid7",
+    "weasyprint",
+    "qrcode[pil]",
 ]
 
 [project.scripts]
@@ -38,6 +39,8 @@ musicbrainz-importer = "band_management.bloks.music_brainz.scripts.musicbrainz_i
 [project.entry-points.bloks]
 http-auth-base="band_management.bloks.http_auth_base:HTTPAuthBase"
 band-management-base="band_management.bloks.bm_base:BandManagementBase"
+band-management-event="band_management.bloks.bm_event:BandManagementEvent"
+band-management-report="band_management.bloks.bm_report:BandManagementReport"
 band-management-responsive-webapp="band_management.bloks.bm_responsive_webapp:BandManagementResponsiveWebApp"
 band-management="band_management.bloks.band_management:BandManagement"
 music-brainz="band_management.bloks.music_brainz:MusicBrainz"

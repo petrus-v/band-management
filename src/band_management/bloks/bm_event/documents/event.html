@@ -1,0 +1,110 @@
+{% extends "layaout_portrait_a4.html" %}
+
+{% block header_title %}{{ event.name }}{% endblock %}
+
+{% block custom_style %}
+    <style type="text/css">
+        #event_header h1 {
+            text-align: center;
+        }
+
+        table {
+            width: 100%;
+        }
+
+    /* 
+- Grey: #292929
+ - Green: #3b7c70
+ - Red: #992800
+ - Orange: #cf4a24
+ - Yellow: #ffae02
+ - Blue: #00a99d */
+        th {
+            background-color: #ffae02;
+            text-align: center;
+        }
+
+        td,
+        th {
+            border-bottom: 1px solid #292929;
+        }
+
+        tbody>tr>th {
+            width: auto;
+            background-color: #fff;
+        }
+
+
+        .flex-container {
+            flex: 0 0 auto;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .flex-item {
+            margin: 0;
+        }
+    </style>
+{% endblock %}
+{% block heading_right %}
+    <div>
+        <img src="{{ amnezik_event_qrcode }}" />
+    </div>
+{% endblock%}
+
+{% block header_content %}
+    <div id="event_header">
+        <h1>{{event.name}}</h1>
+
+        <div class="flex-container">
+            <div class="flex-item">
+                {%trans event_band_name=event.band.name %}
+                    <strong>Band: </strong>{{ event_band_name }}
+                {% endtrans %}
+            </div>
+            <div class="flex-item">
+                {%trans event_date=event.date|format_datetime %}
+                    <strong>date: </strong>{{ event_date }}
+                {% endtrans %}
+            </div>
+        </div>
+        <div class="flex-container">
+            <div class="flex-item">
+                {%trans event_place=event.place %}
+                    <strong>Place: </strong>{{ event_place }}
+                {% endtrans %}
+            </div>
+        </div>
+        <p>{{event.header}}</p>
+    </div>
+{% endblock%}
+{% block main_content %}
+    <div id="event_content">
+        <table>
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>{{_t("Music")}}</th>
+                    <th>{{_t("Dance")}}</th>
+                    <th>{{_t("Comment")}}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for event_music in event.musics %}
+                    <tr>
+                        <th>{{ loop.index }}</th>
+                        <td>{{event_music.music.title}}</td>
+                        <td>{{event_music.music.dance}}</td>
+                        <td>{{event_music.comment}}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock%}
+{% block footer_content %}
+    <div id="event_footer">
+        <p>{{event.footer}}</p>
+    </div>
+{% endblock %}

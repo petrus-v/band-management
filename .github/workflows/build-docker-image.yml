@@ -44,7 +44,7 @@ jobs:
           pull: true
           load: true
       -
-        name: Test install oca_all in docker image
+        name: Test install all bloks in docker image
         run: |
           docker compose up -d db
           sleep 10 # Attendre que PostgreSQL soit prêt

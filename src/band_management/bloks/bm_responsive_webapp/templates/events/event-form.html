@@ -1,0 +1,129 @@
+<div class="field">
+  <label class="label">{{ _t("Name") }}</label>
+  <div class="control">
+    <input class="input" form="event-form" type="text" name="name" placeholder="{{ _t('event name') }}"
+           value="{{ event.name }}" />
+  </div>
+  <p class="help">{{ _t("The event name") }}</p>
+</div>
+
+<div class="field">
+  <label class="label" for="band-select">{{ _t("Band") }}</label>
+  <div class="control">
+    <div class="select">
+      <select id="band-select" name="band_uuid" form="event-form">
+        {% for band in musician.active_bands %}
+          <option value="{{band.uuid}}" {{ 'selected' if event.band==band else '' }}>{{ band.name }}</option>
+        {% endfor %}
+      </select>
+    </div>
+  </div>
+  <p class="help">{{ _t("Application language preference") }}</p>
+</div>
+<div class="field">
+  <label class="label">{{ _t("Date") }}</label>
+  <div class="control">
+    <input class="input" form="event-form" type="datetime-local" name="event_date" placeholder="{{ _t('event date') }}"
+           value="{{ event.date.strftime('%Y-%m-%dT%H:%M')}}" />
+  </div>
+  <p class="help">{{ _t("The event datetime") }}</p>
+</div>
+
+<div class="field">
+  <label class="label">{{ _t("Place") }}</label>
+  <div class="control">
+    <input class="input" form="event-form" type="text" name="place" placeholder="{{ _t('Place') }}"
+           value="{{ event.place | default('', true) }}" />
+  </div>
+  <p class="help">{{ _t("Event place") }}</p>
+</div>
+
+<div class="field">
+  <label class="label">{{ _t("Comment") }}</label>
+  <div class="control">
+    <textarea class="textarea input" form="event-form" name="comment"
+              placeholder="{{ _t('Comment') }}">{{ event.comment | default('', true) }}</textarea>
+  </div>
+  <p class="help">{{ _t("Internal notes. These are not shown on the printed document.") }}</p>
+</div>
+
+<div class="field">
+  <label class="label">{{ _t("Header") }}</label>
+  <div class="control">
+    <textarea class="textarea input" form="event-form" name="header"
+              placeholder="{{ _t('Header') }}">{{ event.header | default('', true) }}</textarea>
+  </div>
+  <p class="help">{{ _t("Event header: shown before the list of musics on the printed document.") }}</p>
+</div>
+
+<form name="add-music-form">
+  {% include "musics/music-field-selection.html" %}
+  <button type="button" class="button is-primary" id="add-music">{{ _t('Add music') }}</button>
+</form>
+<!-- template used by event-form.js while adding music event to the current event -->
+<template id="music-template">
+  <article class="media">
+    <figure class="sortable-handler media-left">
+    </figure>
+    <div class="media-content">
+      <div class="content">
+        <p class="music-description"></p>
+        <input type="hidden" form="event-form" name="event_music_uuids" class="event-music-uuid" />
+        <input type="hidden" form="event-form" name="event_music_music_uuids" class="music-uuid" />
+        <textarea class="textarea input" form="event-form" name="event_music_comments"></textarea>
+      </div>
+    </div>
+    <div class="media-right">
+      <button type="button" class="delete remove-music"></button>
+    </div>
+  </article>
+</template>
+
+<div class="field">
+  <label class="label">{{ _t("Musics") }}</label>
+  <div class="control sortable" id="musics-list">
+    {% for event_music in event.musics %}
+      {% set music = event_music.music %}
+      <article class="media">
+        <figure class="sortable-handler media-left">
+        </figure>
+        <div class="media-content">
+          <div class="content">
+            <p>
+              <strong>{{ music.title}}</strong>
+              {% if music.dance %}
+                <span> - {{music.dance}}</span>
+              {% endif %}
+              {% if music.composer %}
+                <small> - {{music.composer}}</small>
+              {% endif %}
+              {% if music.author %}
+                <small> - {{music.author}}</small>
+              {% endif %}
+              <br />
+              <input type="hidden" form="event-form" name="event_music_uuids" value="{{event_music.uuid}}" />
+              <input type="hidden" form="event-form" name="event_music_music_uuids" value="{{event_music.music.uuid}}" />
+              <textarea class="textarea input" form="event-form"
+                        name="event_music_comments">{{event_music.comment}}</textarea>
+            </p>
+          </div>
+        </div>
+        <div class="media-right">
+          <button type="button" class="delete remove-music"></button>
+        </div>
+      </article>
+    {% endfor %}
+  </div>
+
+  <p class="help">{{ _t("List of musics to play at the event.") }}</p>
+</div>
+<div class="field">
+  <label class="label">{{ _t("Footer") }}</label>
+  <div class="control">
+    <textarea class="textarea input" form="event-form" name="footer"
+              placeholder="{{ _t('Footer') }}">{{ event.footer | default('', true) }}</textarea>
+  </div>
+  <p class="help">{{ _t("Event footer: shown after the list of musics on the printed document.") }}</p>
+</div>
+
+<script async type="text/javascript" src="/static/js/event-form.js"></script>

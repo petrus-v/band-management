@@ -1,0 +1,23 @@
+<header class="modal-card-head">
+  <p class="modal-card-title">{{ _t("Create a new event") }}</p>
+  <button type="button" class="delete" data-target="event-modal" onclick="closeModal(this)" aria-label="close"></button>
+</header>
+<section class="modal-card-body">
+  <form id="event-form" hx-post="/event/" hx-target="#event-field-selection" hw-swap="outerHTML">
+    {% include "events/event-form.html" %}
+    <input type="hidden" name="next_action" form="event-form" value="{{NextAction.UPDATE_FIELD_SELECTION}}" />
+  </form>
+</section>
+<footer class="modal-card-foot">
+  <div class="buttons">
+    <button class="button is-success" type="submit" form="event-form">
+      <span class="icon">
+        <i class="fa fa-save"></i>
+      </span>{{ _t("Save") }}</span>
+  </button>
+  <button type="button" class="button" data-target="event-modal" onclick="closeModal(this)"
+          aria-label="close">
+    {{ _t("Cancel") }}
+  </button>
+</div>
+</footer>
