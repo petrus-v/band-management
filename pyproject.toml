@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "band-management"
-version = "0.1.0"
+version = "0.0.4"
 description = "Band management web server"
 readme = "README.md"
 requires-python = ">=3.13"
@@ -72,3 +72,28 @@ show_missing = true
 
 [tool.babel]
 mapping_file = "babel.cfg"
+
+[tool.bumpversion]
+current_version = "0.0.4"
+search = "{current_version}"
+replace = "{new_version}"
+regex = false
+ignore_missing_version = false
+ignore_missing_files = false
+tag = true
+sign_tags = false
+tag_name = "v{new_version}"
+tag_message = "Release Version: {new_version}"
+allow_dirty = false
+commit = true
+message = "Bump version: {current_version} → {new_version}"
+moveable_tags = []
+commit_args = ""
+setup_hooks = []
+pre_commit_hooks = []
+post_commit_hooks = []
+
+[[tool.bumpversion.files]]
+filename = "uv.lock"
+search = "name = \"band-management\"\nversion = \"{current_version}\""
+replace = "name = \"band-management\"\nversion = \"{new_version}\""

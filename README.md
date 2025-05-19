@@ -51,3 +51,9 @@ uvx pre-commit run --all-files
 ```bash
 uv run musicbrainz-importer -c app.cfg  --limit 30000 --insert-buffer 1000 ~/path/to/work 
 ```
+
+## Create a new release
+
+We are using [bump-my-version](https://pypi.org/project/bump-my-version/) to bump
+patch / minor / major version and add the git tag. At the moment changelog and
+github release are done manually. we have no changelog file yet.
