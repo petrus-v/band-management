@@ -116,7 +116,7 @@ wheels = [
 
 [[package]]
 name = "band-management"
-version = "0.0.4"
+version = "0.0.5"
 source = { editable = "." }
 dependencies = [
     { name = "aiofile" },

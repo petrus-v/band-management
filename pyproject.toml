@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "band-management"
-version = "0.0.4"
+version = "0.0.5"
 description = "Band management web server"
 readme = "README.md"
 requires-python = ">=3.13"
@@ -74,7 +74,7 @@ show_missing = true
 mapping_file = "babel.cfg"
 
 [tool.bumpversion]
-current_version = "0.0.4"
+current_version = "0.0.5"
 search = "{current_version}"
 replace = "{new_version}"
 regex = false
