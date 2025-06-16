@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <title>{% block header_title %}Band Management A4 portrait report layout{% endblock %}</title>
+    <style type="text/css">
+
+      @page {
+        size: A4 portrait;
+        margin: 3cm 1cm 2cm 1cm;
+
+        @top-left {
+          content: element(heading-left);
+        }
+        @top-center {
+          content: element(heading-center);
+        }
+        @top-right {
+          content: element(heading-right);
+        }
+
+        @bottom-left {
+          color: #909090;
+          font-family: Pacifico;
+          content: '{{ _t("Print at %(print_date)s") % {"print_date": print_date|format_datetime('short')} }}';
+          font-size: 10pt;
+        }
+        @bottom-center {
+          color: #494949;
+          content: counter(page) " / " counter(pages);
+          font-family: Pacifico;
+          font-size: 10pt;
+        }
+        @bottom-right {
+          color: #494949;
+          content: "Made with ❤️ by Pierre Verkest & Waadoo";
+          font-family: Pacifico;
+          font-size: 10pt;
+        }
+      }
+
+      .repeat-header-left {
+        position: running(heading-left);
+      }
+      .repeat-header-center {
+        position: running(heading-center);
+      }
+      .repeat-header-right {
+        position: running(heading-right);
+      }
+
+      html {
+        font-family: Source Sans Pro;
+        font-size: 11pt;
+        line-height: 1.6;
+      }
+      .heading {
+        max-height: 0;
+      }
+      .heading, img {
+        height: 26mm;
+      }
+
+      header {
+        margin-bottom: 1cm;
+      }
+      h1 {
+        font-family: Pacifico;
+        margin: 0;
+        color: #3b7c70;
+      }
+
+      footer {
+        margin-top: 15mm;
+      }
+
+
+    </style>
+    {% block custom_style %}
+    {% endblock%}
+  </head>
+
+  <body>
+    <div class="heading">
+      <div class="repeat-header-left">
+        <img  src="bm:url:logo.png" />
+      </div>
+      <div class="repeat-header-center">
+        <a  href="https://www.manezike.com">www.AmneZik.com</a>
+      </div>
+      <div class="repeat-header-right"
+           {% block heading_right %}
+           {% endblock%}
+           </div>
+      </div>
+
+      <header >
+        {% block header_content %}
+        {% endblock%}
+      </header>
+      <main>
+        {% block main_content %}
+        {% endblock%}
+      </main>
+      <footer>
+        {% block footer_content %}
+        {% endblock%}
+      </footer>
+    </body>
+
+  </html>

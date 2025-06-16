@@ -93,10 +93,10 @@ class Member(Mixin.PrimaryColumn):
                 raise PermissionDenied(
                     _t(
                         "You must have an accepted invitation with admin access "
-                        "to this band %s before invite new musicians.",
+                        "to this band %(band_name)s before invite new musicians.",
                         lang=invited_by.lang,
                     )
-                    % band.name
+                    % {"band_name": band.name}
                 )
 
         member = cls.insert(band=band, musician=invited_musician, invited_by=invited_by)

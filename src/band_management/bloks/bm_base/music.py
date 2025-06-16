@@ -50,6 +50,9 @@ class Music(Mixin.PrimaryColumn):
             for band in set(musician.active_bands) - set(self.bands)
         ]
 
+    def is_played_by(self, band):
+        return band in self.bands
+
     @classmethod
     def query_any(cls, search: str):
         term_filter = sa.or_(

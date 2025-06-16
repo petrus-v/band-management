@@ -18,6 +18,9 @@ RUN apt update \
         nano                                        \
         gosu                                        \
         postgresql-client                           \
+        libpango-1.0-0                              \
+        libpangoft2-1.0-0                           \
+        libharfbuzz-subset0                         \
     && apt -y clean                                 \
     && rm -rf /var/lib/apt/lists/*
 

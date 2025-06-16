@@ -1,0 +1,24 @@
+{% extends "layouts/layout.html" %} {% block main %}
+  <div>
+    <form id="event-form" hx-post="/event/" hx-target="body">
+      {% include "events/event-form.html" %}
+    </form>
+  </div>
+{% endblock %} {% block footer_navbar_items %}
+  <div class="navbar-start">
+    <div class="navbar-item">
+      <a href="/events/" class="button is-outlined">
+        <span class="icon">
+          <i class="fa fa-undo"></i>
+        </span>
+        <span>{{ _t("Cancel") }}</span>
+      </a>
+      <button type="submit" form="event-form" class="button is-light is-pulled-right">
+        <span class="icon">
+          <i class="fa fa-save"></i>
+        </span>
+        <span>{{ _t("Save") }}</span>
+      </button>
+    </div>
+  </div>
+{% endblock footer_navbar_items %}

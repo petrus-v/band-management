@@ -1,0 +1,58 @@
+<section>
+  {% if events %}
+    {% for event in events %}
+      {%- if next_page and event == last_element %}
+        <article class="message"
+                 hx-post="/events/"
+                 hx-trigger="intersect once"
+                 hx-target="#search-results"
+                 hx-swap="beforeend"
+                 hx-include="#search-input"
+                 hx-vals='{"page": {{ next_page }}}'
+        >
+      {%- else %}
+        <article class="message">
+      {%- endif %}
+      <div class="message-header">
+        <span>{{ event.name | highlight(search) | safe }}</span>
+        <a class="button" href="/event/{{ event.uuid }}/print" target="_blank">
+          <span class="icon">
+            <i class="fa fa-print"></i>
+          </span>
+          <span>{{ _t("Print") }}</span>
+        </a>
+        <a class="button" href="/event/{{ event.uuid }}">
+          <span class="icon">
+            <i class="fa fa-edit"></i>
+          </span>
+          <span>{{ _t("Edit") }}</span>
+        </a>
+      </div>
+      <div class="message-body">
+        <p>
+          <ul>
+            {%- if event.date %}
+              <li>
+                <span><strong>{{ _t("Date: ") }}</strong></span>{{ event.date | safe }}
+              </li>
+            {%- endif %}
+            {%- if event.place %}
+              <li>
+                <span><strong>{{ _t("Place: ") }}</strong></span>{{ event.place | safe }}
+              </li>
+            {%- endif %}
+            {%- if event.band %}
+              <li>
+                <span><strong>{{ _t("Band: ") }}</strong></span>{{ event.band.name }}
+              </li>
+            {%- endif %}
+          </ul>
+        </p>
+      </div>
+      </article>
+    {% endfor %} {% else %}
+    <article>
+      <p>{{ _t("No Event found.") }}</p>
+    </article>
+  {% endif %}
+</section>

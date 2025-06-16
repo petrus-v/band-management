@@ -24,6 +24,7 @@ class BandManagementResponsiveWebApp(Blok):
     author = "Pierre Verkest"
     required = [
         "band-management-base",
+        "band-management-event",
         "http-auth-base",
         "music-brainz",
     ]
@@ -53,6 +54,7 @@ class BandManagementResponsiveWebApp(Blok):
         from . import music
         from . import musician
         from . import score
+        from . import event
 
         app.mount(
             "/static",
@@ -70,3 +72,5 @@ class BandManagementResponsiveWebApp(Blok):
         app.include_router(musician.router)
         app.include_router(score.scores_router)
         app.include_router(score.router)
+        app.include_router(event.events_router)
+        app.include_router(event.router)
