@@ -8,6 +8,7 @@ from band_management.bloks.http_auth_base.schemas.auth import (
     TokenDataSchema,
 )
 from band_management import _t
+from band_management.tools import slugify
 from band_management.bloks.bm_responsive_webapp.paging import paging_query
 from band_management.bloks.bm_responsive_webapp.fastapi_utils import (
     get_authenticated_musician,
@@ -159,7 +160,7 @@ def event(
 @router.get(
     "/{event_uuid_or_uri_code}/print",
 )
-async def print_event(
+def print_event(
     request: Request,
     token_data: Annotated[
         TokenDataSchema, Security(get_authenticated_musician, scopes=["musician-auth"])
@@ -175,9 +176,16 @@ async def print_event(
             event = event.get(event_uuid_or_uri_code)
         else:
             event = event.filter_by(uri_code=event_uuid_or_uri_code).one()
+        if not event:
+            raise ValueError("Event not found %s" % event_uuid_or_uri_code)
+        filename = slugify(f"{event.date.strftime('%Y%m%d')}-{event.name}")
         pdf = event.print_for(musician)
 
-    return StreamingResponse(BytesIO(pdf), media_type="application/pdf")
+    return StreamingResponse(
+        BytesIO(pdf),
+        media_type="application/pdf",
+        headers={"Content-Disposition": f'attachment; filename="{filename}"'},
+    )
 
 
 @router.post(

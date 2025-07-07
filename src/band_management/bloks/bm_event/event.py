@@ -53,6 +53,10 @@ class Event(Mixin.PrimaryColumn):
         label="Footer comment",
     )
 
+    @property
+    def ordered_musics(self):
+        return sorted(self.musics, key=lambda music: music.sequence)
+
     def print_for(self, musician):
         return self.print(musician.lang)
 

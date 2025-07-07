@@ -91,7 +91,7 @@
                 </tr>
             </thead>
             <tbody>
-                {% for event_music in event.musics %}
+                {% for event_music in event.ordered_musics %}
                     <tr>
                         <th>{{ loop.index }}</th>
                         <td>{{event_music.music.title}}</td>

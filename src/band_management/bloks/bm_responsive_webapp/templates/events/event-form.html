@@ -82,7 +82,7 @@
 <div class="field">
   <label class="label">{{ _t("Musics") }}</label>
   <div class="control sortable" id="musics-list">
-    {% for event_music in event.musics %}
+    {% for event_music in event.ordered_musics %}
       {% set music = event_music.music %}
       <article class="media">
         <figure class="sortable-handler media-left">
