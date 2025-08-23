@@ -11,6 +11,7 @@ Model = Declarations.Model
 class EventMusic(Mixin.PrimaryColumn):
     event: "Model.BandManagement.Event" = Many2One(
         model="Model.BandManagement.Event",
+        foreign_key_options={"ondelete": "cascade"},
         nullable=False,
         one2many="musics",
     )
