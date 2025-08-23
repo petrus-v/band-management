@@ -166,3 +166,9 @@ def test_event_copy(bm, event):
         event_music.music_uuid for event_music in event.musics
     ]
     assert new_event.uri_code != event.uri_code
+
+
+def test_delete_event(bm, event):
+    event_music_0_uuid = str(event.musics[0].uuid)
+    event.delete()
+    assert bm.EventMusic.query().get(event_music_0_uuid) is None

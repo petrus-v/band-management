@@ -15,6 +15,18 @@
       {%- endif %}
       <div class="message-header">
         <span>{{ event.name | highlight(search) | safe }}</span>
+        <a class="button is-outlined is-light" hx-post="/event/{{ event.uuid }}/duplicate">
+          <span class="icon">
+            <i class="fa fa-copy"></i>
+          </span>
+          <span>{{ _t("Duplicate") }}</span>
+        </a>
+        <a class="button is-outlined is-light" hx-delete="/event/{{ event.uuid }}">
+          <span class="icon">
+            <i class="fa fa-trash"></i>
+          </span>
+          <span>{{ _t("Delete") }}</span>
+        </a>
         <a class="button" href="/event/{{ event.uuid }}/print" target="_blank">
           <span class="icon">
             <i class="fa fa-print"></i>
@@ -26,12 +38,6 @@
             <i class="fa fa-edit"></i>
           </span>
           <span>{{ _t("Edit") }}</span>
-        </a>
-        <a class="button" hx-post="/event/{{ event.uuid }}/duplicate">
-          <span class="icon">
-            <i class="fa fa-copy"></i>
-          </span>
-          <span>{{ _t("Duplicate") }}</span>
         </a>
       </div>
       <div class="message-body">

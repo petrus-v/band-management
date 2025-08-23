@@ -123,3 +123,17 @@ def test_duplicate_event(
     )
 
     assert response.headers["hx-redirect"] == f"/event/{new_event.uuid}", response.text
+
+
+def test_delete_event(
+    bm,
+    connected_musician,
+):
+    event = bm.Event.query().filter(bm.Event.name.ilike("A great event")).one()
+    response = connected_musician.delete(f"/event/{event.uuid}")
+
+    assert response.headers["hx-redirect"] == "/events/", response.text
+    assert (
+        bm.Event.query().filter(bm.Event.name.ilike("A great event")).one_or_none()
+        is None
+    )

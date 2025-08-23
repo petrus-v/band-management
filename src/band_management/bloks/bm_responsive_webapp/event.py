@@ -307,3 +307,28 @@ def duplicate_event(
                 "HX-Redirect": f"/event/{new_event.uuid}",
             },
         )
+
+
+@router.delete(
+    "/{event_uuid}",
+)
+def delete_event(
+    request: Request,
+    token_data: Annotated[
+        TokenDataSchema, Security(get_authenticated_musician, scopes=["musician-auth"])
+    ],
+    event_uuid: str,
+    ab_registry: "Registry" = Depends(get_registry),
+):
+    with registry_transaction(ab_registry) as anyblok:
+        _get_musician_from_token(anyblok, token_data)
+        BM = anyblok.BandManagement
+        BM.Event.query().get(event_uuid).delete()
+
+    return RedirectResponse(
+        "/events/",
+        status_code=200,
+        headers={
+            "HX-Redirect": "/events/",
+        },
+    )
