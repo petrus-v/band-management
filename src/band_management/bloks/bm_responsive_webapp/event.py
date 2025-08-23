@@ -281,3 +281,29 @@ def update_music(
             "HX-Redirect": "/events/",
         },
     )
+
+
+@router.post(
+    "/{event_uuid}/duplicate",
+)
+def duplicate_event(
+    request: Request,
+    token_data: Annotated[
+        TokenDataSchema, Security(get_authenticated_musician, scopes=["musician-auth"])
+    ],
+    event_uuid: str,
+    ab_registry: "Registry" = Depends(get_registry),
+):
+    with registry_transaction(ab_registry) as anyblok:
+        _get_musician_from_token(anyblok, token_data)
+        BM = anyblok.BandManagement
+        new_event = BM.Event.query().get(event_uuid).copy()
+        BM.anyblok.flush()
+        new_event.refresh()
+        return RedirectResponse(
+            f"/event/{new_event.uuid}",
+            status_code=201,
+            headers={
+                "HX-Redirect": f"/event/{new_event.uuid}",
+            },
+        )
