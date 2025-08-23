@@ -153,3 +153,16 @@ def test_update_event_non_band_related_music(bm, event, new_music, music_without
                 "comment new music",
             ],
         )
+
+
+def test_event_copy(bm, event):
+    new_event = event.copy()
+    assert new_event.uuid != event.uuid
+    assert len(new_event.musics) == len(event.musics)
+    assert [event_music.uuid for event_music in new_event.musics] != [
+        event_music.uuid for event_music in event.musics
+    ]
+    assert [event_music.music_uuid for event_music in new_event.musics] == [
+        event_music.music_uuid for event_music in event.musics
+    ]
+    assert new_event.uri_code != event.uri_code

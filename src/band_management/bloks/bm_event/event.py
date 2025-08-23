@@ -53,6 +53,26 @@ class Event(Mixin.PrimaryColumn):
         label="Footer comment",
     )
 
+    def copy(self):
+        BM = self.anyblok.BandManagement
+        event = BM.Event.insert(
+            name=self.name + _t(" (copy)"),
+            date=self.date,
+            band=self.band,
+            place=self.place,
+            comment=self.comment,
+            header=self.header,
+            footer=self.footer,
+        )
+        for music in self.musics:
+            BM.EventMusic.insert(
+                event=event,
+                music_uuid=music.music_uuid,
+                sequence=music.sequence,
+                comment=music.comment,
+            )
+        return event
+
     @property
     def ordered_musics(self):
         return sorted(self.musics, key=lambda music: music.sequence)

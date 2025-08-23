@@ -110,3 +110,16 @@ def test_connected_musician_get_event_print_with_uuid(
     event = bm.Event.query().filter(bm.Event.name.ilike("A great event")).one()
     response = connected_musician.get(f"/event/{event.uuid}/print")
     assert response.status_code == 200, response.text
+
+
+def test_duplicate_event(
+    bm,
+    connected_musician,
+):
+    event = bm.Event.query().filter(bm.Event.name.ilike("A great event")).one()
+    response = connected_musician.post(f"/event/{event.uuid}/duplicate")
+    new_event = (
+        bm.Event.query().filter(bm.Event.name.ilike("A great event (copy)")).one()
+    )
+
+    assert response.headers["hx-redirect"] == f"/event/{new_event.uuid}", response.text

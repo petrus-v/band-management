@@ -27,6 +27,12 @@
           </span>
           <span>{{ _t("Edit") }}</span>
         </a>
+        <a class="button" hx-post="/event/{{ event.uuid }}/duplicate">
+          <span class="icon">
+            <i class="fa fa-copy"></i>
+          </span>
+          <span>{{ _t("Duplicate") }}</span>
+        </a>
       </div>
       <div class="message-body">
         <p>
