@@ -77,10 +77,10 @@ def test_create_invitation(bm, doe_musician, pamh_band):
 
 
 def test_reject_invitation_remove_active_band(bm, pverkest_musician, pamh_band):
-    assert pamh_band in pverkest_musician.active_bands
+    assert pamh_band == pverkest_musician.active_band
     pv_in_pamh = pverkest_musician.member_of(pamh_band)
     pv_in_pamh.reject_invitation()
-    assert pamh_band not in pverkest_musician.active_bands
+    assert pamh_band != pverkest_musician.active_band
 
 
 def test_members_relationship_ingore_reject(pverkest_musician, pamh_band, trib_band):
@@ -95,3 +95,16 @@ def test_rejected_invitations_relationship(pverkest_musician, pamh_band, trib_ba
     pv_in_pamh = pverkest_musician.member_of(pamh_band)
     pv_in_pamh.reject_invitation()
     assert pverkest_musician.rejected_invitations.band == [pamh_band]
+
+
+def test_reject_lastest_active_band(bm, doe_musician, trib_band, tradamuse_band):
+    doe_in_trib = doe_musician.member_of(trib_band)
+    doe_in_tradamuse = doe_musician.member_of(tradamuse_band)
+    doe_in_tradamuse.reject_invitation()
+    # bm.anyblok.flush()
+    # doe_musician.refresh()
+    with pytest.raises(
+        ValueError,
+        match="You must be part of at least one band, create an other one if you want to leave the current one",
+    ):
+        doe_in_trib.reject_invitation()

@@ -1,20 +1,21 @@
 {% extends "layouts/base.html" %} {% block top_menu_end %}
+  {% from "macros/navbar-item.html" import render_musician_bands_navbar_items with context %}
   <div class="navbar-item">
+    {{ render_musician_bands_navbar_items(musician )}}
+    <hr class="navbar-divider" />
     <div class="field is-grouped">
       <div class="navbar-item has-dropdown is-hoverable">
         <a class="navbar-link is-hidden-touch"> {{ musician.name }} </a>
 
         <div class="navbar-dropdown">
           {{ render_navbar_item('/profile', _t('Profile'), 'fa-user-cog')}}
-          {{ render_navbar_item('/logout', _t('Logout'), 'a-sign-out-alt', method='post')}}
+          {{ render_navbar_item('/logout', _t('Logout'), 'fa-sign-out-alt', method='post')}}
         </div>
       </div>
     </div>
   </div>
 {% endblock top_menu_end %}
 {% block side_menu %}
-  {% from "macros/menu-item.html" import render_musician_bands_menu with context %}
-  {{ render_musician_bands_menu(_t('Active bands'), musician )}}
   {{
   render_menu(
   _t('General'),
@@ -22,15 +23,15 @@
   {'name': _t('Home'), 'path': '/home'},
   {'name': _t('Bands'), 'path':'/bands/'},
   {'name': _t('Musics'), 'path':'/musics/'},
-  {'name': _t('Scores'), 'path': '/scores/'},
   ]
   )
   }}
   {{
   render_menu(
-  _t('Events'),
+  _t('Active Band'),
   [
-  {'name': _t('Program'), 'path': '/events'},
+  {'name': _t('Scores'), 'path': '/scores/'},
+  {'name': _t('Program'), 'path': '/events/'},
   ]
   )
   }}

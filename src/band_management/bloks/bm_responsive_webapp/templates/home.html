@@ -2,8 +2,8 @@
 
   <h2>{{ _t("Hello, %(user)s!")|format(user=musician.name) }}</h2>
   <section>
-    {%- for member in musician.members: %} {%- set is_active_band = member.band in
-      musician.active_bands %}
+    {%- for member in musician.members: %}
+      {%- set is_active_band = member.band==musician.active_band %}
       <article class="message">
         <div class="message-header" hx-put="/musician/{{musician.uuid}}/toggle-active-band/{{member.band.uuid}}">
           <p>{{member.band.name}}</p>

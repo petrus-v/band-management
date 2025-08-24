@@ -66,7 +66,9 @@ def search_bands(
         BM = anyblok.BandManagement
         bands_query = BM.Band.query()
         bands_query = bands_query.filter(BM.Band.name.ilike(f"%{search}%"))
-        bands_query = bands_query.filter(BM.Band.uuid.in_(musician.active_bands.uuid))
+        bands_query = bands_query.filter(
+            BM.Band.uuid.in_([band.uuid for band in musician.my_bands])
+        )
         bands = bands_query.all()
         response = templates.TemplateResponse(
             name="bands/search-result.html",

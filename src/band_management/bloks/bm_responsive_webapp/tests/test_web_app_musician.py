@@ -3,19 +3,17 @@ from band_management.bloks.bm_responsive_webapp.jinja import NextAction
 from band_management.bloks.bm_responsive_webapp.fastapi_utils import csrf_token
 
 
-def test_toggle_musician_active_band(connected_musician, joe_user, pamh_band):
+def test_set_active_band(connected_musician, joe_user, pamh_band):
     response = connected_musician.put(
-        f"/musician/{joe_user.musician_uuid}/toggle-active-band/{pamh_band.uuid}"
+        f"/musician/{joe_user.musician_uuid}/set-active-band/{pamh_band.uuid}"
     )
     assert response.status_code == 201, response.text
     assert response.headers["HX-Refresh"] == "true"
 
 
-def test_toggle_musician_active_band_permission_denied(
-    connected_musician, doe_musician, pamh_band
-):
+def test_set_active_band_permission_denied(connected_musician, doe_musician, pamh_band):
     response = connected_musician.put(
-        f"/musician/{doe_musician.uuid}/toggle-active-band/{pamh_band.uuid}"
+        f"/musician/{doe_musician.uuid}/set-active-band/{pamh_band.uuid}"
     )
     assert response.status_code == 401, response.text
 
@@ -58,7 +56,7 @@ def test_prepare_musician_with_band_uuid(connected_musician, pamh_band):
     assert response.status_code == 200, response.text
 
 
-def test_add_musician_modal_mode(bm, connected_musician):
+def test_add_musician_modal_mode(bm, connected_musician, joe_musician):
     response = connected_musician.post(
         "/musician",
         data={
@@ -81,6 +79,34 @@ def test_add_musician_modal_mode(bm, connected_musician):
         musician.user.invitation_token_expiration_date
         - datetime.datetime.now(tz=datetime.timezone.utc)
     ) > datetime.timedelta(days=5, hours=-1)
+    assert musician.active_band != joe_musician.active_band
+
+
+def test_add_musician_modal_mode_with_band_uuid(bm, connected_musician, joe_musician):
+    response = connected_musician.post(
+        "/musician",
+        data={
+            "musician_name": "abc",
+            "musician_email": "abc@band.name",
+            "next_action": NextAction.UPDATE_FIELD_SELECTION,
+            "csrf_token": csrf_token(5),
+            "band_uuid": str(joe_musician.active_band.uuid),
+        },
+    )
+    assert response.status_code == 200
+    musician = bm.Musician.query().filter_by(name="abc").one()
+    assert musician.email == "abc@band.name"
+    assert musician.lang == "en"
+    assert (
+        musician.user.invitation_token_expiration_date
+        - datetime.datetime.now(tz=datetime.timezone.utc)
+    ) < datetime.timedelta(days=5, hours=1)
+
+    assert (
+        musician.user.invitation_token_expiration_date
+        - datetime.datetime.now(tz=datetime.timezone.utc)
+    ) > datetime.timedelta(days=5, hours=-1)
+    assert musician.active_band == joe_musician.active_band
 
 
 def test_add_musician(bm, connected_musician):

@@ -172,3 +172,19 @@ def test_delete_event(bm, event):
     event_music_0_uuid = str(event.musics[0].uuid)
     event.delete()
     assert bm.EventMusic.query().get(event_music_0_uuid) is None
+
+
+def test_query_for_musician_no_event(bm, joe_musician, trib_band):
+    joe_musician._set_active_band(trib_band)
+    assert len(bm.Event.query_for_musician(joe_musician).all()) == 0
+
+
+def test_query_for_musician(bm, joe_musician, pamh_band, event):
+    joe_musician._set_active_band(pamh_band)
+    assert bm.Event.query_for_musician(joe_musician).all() == [event]
+
+
+def test_query_for_musician_with_query(bm, joe_musician, pamh_band, event):
+    joe_musician._set_active_band(pamh_band)
+    event_query = bm.Event.query().filter_by(name="unknown")
+    assert len(bm.Event.query_for_musician(joe_musician, query=event_query).all()) == 0

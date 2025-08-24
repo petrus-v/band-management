@@ -132,7 +132,7 @@ def prepare_music(
         musician = _get_musician_from_token(anyblok, token_data)
         BM = anyblok.BandManagement
         music = BM.Music(title=music_name or "Default Music")
-        [music.bands.append(b) for b in musician.active_bands]
+        music.bands.append(musician.active_band)
         template = "music-prepare.html"
         future_action = NextAction.BACK_TO_LIST
         if next_action == NextAction.EDIT_MODAL_FROM_VIEW:

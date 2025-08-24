@@ -57,13 +57,13 @@ def events(
 @contextmanager
 def _search_events(ab_registry, request, search, token_data):
     with registry_transaction(ab_registry) as anyblok:
-        _get_musician_from_token(anyblok, token_data)
+        musician = _get_musician_from_token(anyblok, token_data)
         BM = anyblok.BandManagement
-        events_query = BM.Event.query().filter(
-            BM.Event.name.ilike(f"%{search}%"),
+        events_query = BM.Event.query_for_musician(
+            musician,
         )
-        events_query = events_query.order_by(
-            BM.Event.date.desc(),
+        events_query = events_query.filter(
+            BM.Event.name.ilike(f"%{search}%"),
         )
         yield anyblok, events_query
 
@@ -113,7 +113,7 @@ def prepare_event(
         BM = anyblok.BandManagement
         event = BM.Event(
             name=event_name or _t("New event", lang=musician.lang),
-            band=musician.active_bands[0] if musician.active_bands else None,
+            band=musician.active_band,
             date=datetime.now(),
         )
         template = "event-prepare.html"

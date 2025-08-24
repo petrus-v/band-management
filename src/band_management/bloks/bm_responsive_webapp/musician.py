@@ -44,9 +44,9 @@ router = APIRouter(
 
 
 @router.put(
-    "/{musician_uuid}/toggle-active-band/{band_uuid}",
+    "/{musician_uuid}/set-active-band/{band_uuid}",
 )
-def toggle_musician_active_band(
+def set_active_band(
     request: Request,
     token_data: Annotated[
         TokenDataSchema, Security(get_authenticated_musician, scopes=["musician-auth"])
@@ -66,7 +66,7 @@ def toggle_musician_active_band(
                 ),
             )
 
-        musician.toggle_musician_active_band(band_uuid)
+        musician.set_active_band(band_uuid)
         return RedirectResponse(
             request.headers.get("HX-Current-URL", "/"),
             status_code=201,
@@ -195,7 +195,7 @@ def add_musician(
     musician_name: Annotated[str, Form()],
     musician_email: Annotated[str, Form()],
     musician_lang: Annotated[str, Form()] = "en",
-    band_uuid: Annotated[str, Form()] = "",
+    band_uuid: Annotated[str | None, Form()] = None,
     next_action: Annotated[NextAction, Form()] = NextAction.UPDATE_FIELD_SELECTION,
     ab_registry: "Registry" = Depends(get_registry),
 ):
@@ -210,11 +210,15 @@ def add_musician(
             expiration_delta = datetime.timedelta(
                 minutes=config.RESET_PASSWORD_TOKEN_EXPIRE_MINUTES
             )
+        band = None
+        if band_uuid:
+            band = BM.Band.query().filter_by(uuid=band_uuid).one_or_none()
         new_musician = BM.Musician.insert(
             name=musician_name,
             email=musician_email,
             lang=musician_lang,
             invitation_token_delta=expiration_delta,
+            active_band=band,
         )
         if next_action == NextAction.UPDATE_FIELD_SELECTION:
             return templates.TemplateResponse(
@@ -223,7 +227,7 @@ def add_musician(
                 context={
                     **_prepare_context(anyblok, request, token_data),
                     "invited_musician": new_musician,
-                    "band": BM.Band.query().get(band_uuid) if band_uuid else None,
+                    "band": band,
                 },
             )
         return templates.TemplateResponse(
@@ -232,7 +236,7 @@ def add_musician(
             context={
                 **_prepare_context(anyblok, request, token_data),
                 "invited_musician": new_musician,
-                "band": BM.Band.query().get(band_uuid) if band_uuid else None,
+                "band": band,
                 "invitation_url": str(
                     request.base_url.replace(
                         path="user/reset-password"

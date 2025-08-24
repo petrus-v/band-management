@@ -10,3 +10,43 @@
     <span> {{ title }} </span>
   </a>
 {% endmacro %}
+
+
+{% macro render_musician_bands_navbar_items(musician) -%}
+
+  <div class="navbar-item has-dropdown is-hoverable">
+
+    <a class="navbar-link is-hidden-touch"> {{ musician.active_band.name }} </a>
+    <div class="navbar-dropdown">
+      {%- for member in musician.members: %}
+
+        <div
+          hx-put="/musician/{{musician.uuid}}/set-active-band/{{member.band.uuid}}"
+          hx-target="body"
+          hx-push-url="true"
+          hx-trigger="click"
+          class="navbar-item {{ 'is-active' if member.band == musician.active_band else ''}}"
+        >
+          <span> {{ member.band.name }} </span>
+
+          {%- if member.invitation_state == 'invited' %}
+            {%- set end_of_tooltip = 'from ' + member.invited_by.name if member.invited_by else '' %}
+            <button class="button is-success" title="Accept invitation{{end_of_tooltip}}"
+                    hx-put="/member/{{member.uuid}}/accept">
+              <span class="icon" title="{{ _t('Accept') }}">
+                <i class="fas fa-check"></i>
+              </span>
+            </button>
+            <button class="button is-warning" title="Reject invitation from {{end_of_tooltip}}"
+                    hx-put="/member/{{member.uuid}}/reject">
+              <span class="icon" title="{{ _t('Reject') }}">
+                <i class="fas fa-ban"></i>
+              </span>
+              <!-- <span>{{ _t("Reject") }}</span> -->
+            </button>
+          {%- endif %}
+        </div>
+      {%- endfor %}
+    </div>
+  </div>
+{%- endmacro %}

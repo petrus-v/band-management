@@ -47,7 +47,7 @@ class Score(Mixin.PrimaryColumn):
         query = query.join(BM.Music.bands, isouter=with_draft_score)
         query = query.filter(
             sa.or_(
-                BM.Band.uuid.in_(musician.active_bands.uuid),
+                BM.Band.uuid == musician.active_band.uuid,
                 sa.and_(
                     BM.Band.uuid.is_(None),
                     BM.Score.imported_by == musician,
@@ -83,5 +83,5 @@ class Score(Mixin.PrimaryColumn):
         if music_uuid:
             music = BM.Music.query().filter_by(uuid=music_uuid).one_or_none()
         if music and self.music != music:
-            music.ensure_musician_active_bands(musician)
+            music.ensure_musician_active_band(musician)
         self.music = music

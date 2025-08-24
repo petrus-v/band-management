@@ -1,5 +1,7 @@
+import pytest
 from datetime import datetime
 from band_management.bloks.bm_responsive_webapp.jinja import NextAction
+from uuid_extensions import uuid7
 
 
 def test_connected_musician_get_events(connected_musician):
@@ -110,6 +112,15 @@ def test_connected_musician_get_event_print_with_uuid(
     event = bm.Event.query().filter(bm.Event.name.ilike("A great event")).one()
     response = connected_musician.get(f"/event/{event.uuid}/print")
     assert response.status_code == 200, response.text
+
+
+def test_connected_musician_get_event_print_with_unkwnon_uuid(
+    bm,
+    connected_musician,
+):
+    bm.Event.query().filter(bm.Event.name.ilike("A great event")).one()
+    with pytest.raises(ValueError, match="Event not found"):
+        connected_musician.get(f"/event/{uuid7()}/print")
 
 
 def test_duplicate_event(
