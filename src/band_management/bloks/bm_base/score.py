@@ -1,9 +1,10 @@
 from pathlib import PurePath
 from anyblok import Declarations
-
+from band_management import _t
+from band_management.exceptions import ValidationError, PermissionDenied
+from band_management.storage import storage_factory
 from anyblok.relationship import Many2One
 from anyblok.column import Text, Json
-
 import sqlalchemy as sa
 
 
@@ -31,6 +32,12 @@ class Score(Mixin.PrimaryColumn):
         nullable=False,
         one2many="my_scores",
     )
+
+    @property
+    def is_deletable(self):
+        if self.music:
+            return False
+        return True
 
     @classmethod
     def name_from_filename(cls, filename: str) -> str:
@@ -66,6 +73,44 @@ class Score(Mixin.PrimaryColumn):
 
         return query
 
+    @classmethod
+    def get_by(cls, ref, musician):
+        """Score must be imported by the musician or
+        the related music must be present in the musician
+        active band"""
+        score = cls.query().get(ref)
+        if not score:
+            return
+        if score.imported_by == musician or (
+            score.music and score.music.is_played_by(musician.active_band)
+        ):
+            return score
+        raise PermissionDenied(
+            _t(
+                "You are not allowed to access to this score not link to your current band %(band_name)s",
+                lang=musician.lang,
+            )
+            % {"band_name": musician.active_band.name}
+        )
+
+    @classmethod
+    async def delete_by(cls, ref, musician):
+        """Score can be removed only by the one who import
+        it"""
+        score = cls.query().get(ref)
+        if not score.is_deletable:
+            raise ValidationError(
+                _t("Only scores unlink to its music can be removed", lang=musician.lang)
+            )
+        if score.imported_by != musician:
+            raise PermissionDenied(
+                _t(
+                    "You are not allowed to delete this score. Only the one who imported it can remove it.",
+                    lang=musician.lang,
+                )
+            )
+        return await score.delete()
+
     def update_by(
         self,
         musician,
@@ -85,3 +130,11 @@ class Score(Mixin.PrimaryColumn):
         if music and self.music != music:
             music.ensure_musician_active_band(musician)
         self.music = music
+
+    async def delete(self):
+        StorageClass = storage_factory()
+        medium = StorageClass(
+            reference=self.uuid, storage_metadata=self.storage_file_metadata
+        )
+        await medium.remove()
+        return super().delete()

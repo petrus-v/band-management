@@ -64,3 +64,8 @@ def test_insert_musician_with_defined_uuid(bm, pamh_band):
         active_band=pamh_band,
     )
     assert musician.uuid == str(musician_uuid)
+
+
+def test_set_active_band_already_active(joe_pamh_current_active_band, pamh_band):
+    joe_pamh_current_active_band._set_active_band(pamh_band)
+    assert joe_pamh_current_active_band.active_band == pamh_band

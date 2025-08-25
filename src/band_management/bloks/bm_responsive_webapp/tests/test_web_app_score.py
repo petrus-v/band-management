@@ -139,8 +139,8 @@ def test_connected_musician_prepare_score(bm, connected_musician):
     assert response.status_code == 200, response.text
 
 
-def test_connected_musician_get_score(bm, connected_musician):
-    score = bm.Band.insert(name="test")
+def test_connected_musician_get_score(bm, connected_musician, joe_musician):
+    score = bm.Score.insert(name="test", imported_by=joe_musician)
     response = connected_musician.get(f"/score/{score.uuid}")
     assert response.status_code == 200, response.text
 
@@ -199,3 +199,9 @@ def test_connected_musician_update_score_without_music(
     assert score.name == "other"
     assert score.source_writer_credits == "writer credit"
     assert score.music is None
+
+
+@pytest.mark.asyncio
+async def test_delete_score(bm, connected_musician, imported_score):
+    response = connected_musician.delete(f"/score/{imported_score.uuid}")
+    assert response.status_code == 204, response.text

@@ -19,7 +19,7 @@ class FileSystemStorageMetadata(StorageMetadata):
 
 
 class IStorage(ABC):
-    """Iterface to manage files in an async way
+    """Interface to manage files in an async way
     that should make easier to move from filesystem to an
     other backend such as s3 likes / postgreql large object / nextcloud...
     """
@@ -46,9 +46,16 @@ class IStorage(ABC):
         self.storage_metadata.size = upload_file.size
         await self._save(upload_file)
 
+    async def remove(self):
+        await self._remove()
+
     @abstractmethod
     async def _save(self, file_pointer: UploadFile):
         """Save file somewhere in an async way"""
+
+    @abstractmethod
+    async def _remove(self, file_pointer: UploadFile):
+        """Remove file somewhere in an async way"""
 
     @property
     def file_metadata(self):
@@ -81,3 +88,7 @@ class FileSystemStorage(IStorage):
             async for chunk in src.iter_chunked():
                 await dest.write(chunk)
         self.storage_metadata.relative_path = self.relative_path
+
+    async def _remove(self):
+        """Remove file somewhere in an async way"""
+        self.path.unlink(missing_ok=True)

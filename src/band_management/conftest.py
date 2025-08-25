@@ -3,6 +3,22 @@ from pathlib import Path
 from band_management import config
 from anyblok.conftest import *  # noqa: F401,F403
 
+from fastapi import UploadFile
+
+
+@pytest.fixture()
+def score_attachment(tmp_path):
+    score_path = tmp_path / "myscore.pdf"
+
+    with score_path.open("w") as f:
+        f.write("score data")
+    return score_path
+
+
+@pytest.fixture()
+def uploaded_score_attachment(score_attachment):
+    return UploadFile(score_attachment.open("rb"), filename=score_attachment.name)
+
 
 @pytest.fixture(scope="function")
 def anyblok(rollback_registry):
