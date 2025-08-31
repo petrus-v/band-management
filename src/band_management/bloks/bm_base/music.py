@@ -44,11 +44,9 @@ class Music(Mixin.PrimaryColumn):
         [self.bands.append(band) for band in expected_bands - current_bands]
         [self.bands.remove(band) for band in current_bands - expected_bands]
 
-    def ensure_musician_active_bands(self, musician):
-        [
-            self.bands.append(band)
-            for band in set(musician.active_bands) - set(self.bands)
-        ]
+    def ensure_musician_active_band(self, musician):
+        if musician.active_band not in self.bands:
+            self.bands.append(musician.active_band)
 
     def is_played_by(self, band):
         return band in self.bands

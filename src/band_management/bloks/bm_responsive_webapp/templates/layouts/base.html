@@ -42,6 +42,9 @@
       </div>
 
       <div class="navbar-end navbar-menu is-pulled-right" id="navMenu">
+        {% from "macros/navbar-item.html" import render_navbar_item with
+        context %} {% block top_menu_end %} {% endblock %}
+        <hr class="navbar-divider" />
         <div class="navbar-item">
           <div class="field has-addons">
             <p class="control">
@@ -60,9 +63,6 @@
             </p>
           </div>
         </div>
-        <hr class="navbar-divider" />
-        {% from "macros/navbar-item.html" import render_navbar_item with
-        context %} {% block top_menu_end %} {% endblock %}
       </div>
     </nav>
   </header>

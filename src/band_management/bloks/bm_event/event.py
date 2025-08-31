@@ -164,3 +164,14 @@ class Event(Mixin.PrimaryColumn):
                 sequence=position,
                 comment=event_music_comment,
             )
+
+    @classmethod
+    def query_for_musician(cls, musician, query=None):
+        if not query:
+            query = cls.query()
+
+        query = query.filter(cls.band == musician.active_band)
+
+        query = query.order_by(cls.date.desc())
+
+        return query

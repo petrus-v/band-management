@@ -9,8 +9,8 @@ def test_add_band(bm, joe_pamh_current_active_band, pamh_band):
     assert len(band.members) == 1
     assert band.members[0].musician == joe_pamh_current_active_band
     assert band.members[0].is_admin is True
-    assert band in joe_pamh_current_active_band.active_bands
-    assert pamh_band in joe_pamh_current_active_band.active_bands
+    assert band == joe_pamh_current_active_band.active_band
+    assert pamh_band != joe_pamh_current_active_band.active_band
 
 
 def test_non_admin_update_by(joe_musician, pamh_band):

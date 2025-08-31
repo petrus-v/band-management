@@ -107,5 +107,13 @@ class Member(Mixin.PrimaryColumn):
 
     def reject_invitation(self):
         self.invitation_state = "rejected"
-        if self.band in self.musician.active_bands:
-            self.musician.toggle_musician_active_band(str(self.band.uuid))
+        self.anyblok.flush()
+        self.musician.refresh()
+        if self.musician.active_band == self.band:
+            if len(self.musician.my_bands) == 0:
+                raise ValueError(
+                    _t(
+                        "You must be part of at least one band, create an other one if you want to leave the current one"
+                    )
+                )
+            self.musician.set_active_band(str(self.musician.my_bands[0].uuid))
