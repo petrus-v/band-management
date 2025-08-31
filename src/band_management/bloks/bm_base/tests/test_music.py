@@ -32,3 +32,12 @@ def test_is_played_by_true(bm, zelda_music, esperanza_music, pamh_band, trib_ban
 
 def test_is_played_by_false(bm, esperanza_music, pamh_band):
     assert esperanza_music.is_played_by(pamh_band) is False
+
+
+def test_ensure_musician_active_band_already_present(
+    zelda_music, joe_musician, tradamuse_band
+):
+    assert tradamuse_band in zelda_music.bands
+    joe_musician.active_band = tradamuse_band
+    zelda_music.ensure_musician_active_band(joe_musician)
+    assert tradamuse_band in zelda_music.bands

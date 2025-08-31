@@ -123,14 +123,39 @@ def score(
     ab_registry: "Registry" = Depends(get_registry),
 ):
     with registry_transaction(ab_registry) as anyblok:
+        musician = _get_musician_from_token(anyblok, token_data)
         BM = anyblok.BandManagement
-        score = BM.Score.query().get(score_uuid)
+        score = BM.Score.get_by(score_uuid, musician)
         return templates.TemplateResponse(
             name="score-update.html",
             request=request,
             context={
                 **_prepare_context(anyblok, request, token_data),
                 "score": score,
+            },
+        )
+
+
+@router.delete(
+    "/{score_uuid}",
+)
+async def delete_score(
+    request: Request,
+    token_data: Annotated[
+        TokenDataSchema, Security(get_authenticated_musician, scopes=["musician-auth"])
+    ],
+    score_uuid: str,
+    ab_registry: "Registry" = Depends(get_registry),
+):
+    with registry_transaction(ab_registry) as anyblok:
+        musician = _get_musician_from_token(anyblok, token_data)
+        BM = anyblok.BandManagement
+        await BM.Score.delete_by(score_uuid, musician)
+        return RedirectResponse(
+            "/scores/",
+            status_code=204,
+            headers={
+                "HX-Redirect": "/scores/",
             },
         )
 
@@ -149,9 +174,8 @@ async def score_media(
 ):
     with registry_transaction(ab_registry) as anyblok:
         BM = anyblok.BandManagement
-        score = BM.Score.query().get(score_uuid)
-        _get_musician_from_token(anyblok, token_data)
-        # TODO: make sure musician is allowed to read this score
+        musician = _get_musician_from_token(anyblok, token_data)
+        score = BM.Score.get_by(score_uuid, musician)
         StorageClass = storage_factory()
         medium = StorageClass(
             reference=score.uuid, storage_metadata=score.storage_file_metadata
@@ -223,7 +247,7 @@ def update_score(
     with registry_transaction(ab_registry) as anyblok:
         musician = _get_musician_from_token(anyblok, token_data)
         BM = anyblok.BandManagement
-        score = BM.Score.query().get(score_uuid)
+        score = BM.Score.get_by(score_uuid, musician)
         if score:
             score.update_by(
                 musician,
