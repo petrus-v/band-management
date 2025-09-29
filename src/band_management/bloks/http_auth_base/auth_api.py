@@ -2,7 +2,7 @@ import logging
 from datetime import datetime, timedelta, timezone
 from typing import Annotated, TYPE_CHECKING, Optional
 from anyblok_fastapi.fastapi import get_registry, registry_transaction
-from fastapi import Depends, HTTPException, Security, status
+from fastapi import Depends, Security
 from fastapi.security import (
     OAuth2PasswordBearer,
     OAuth2PasswordRequestForm,
@@ -15,6 +15,7 @@ from band_management.bloks.http_auth_base.schemas.auth import (
     TokenDataSchema,
     UserSchema,
 )
+from band_management.exceptions import PermissionDenied
 from band_management import config, _t
 from fastapi import APIRouter
 
@@ -61,9 +62,8 @@ async def get_current_user(
         authenticate_value = f'Bearer scope="{security_scopes.scope_str}"'
     else:
         authenticate_value = "Bearer"
-    credentials_exception = HTTPException(
-        status_code=status.HTTP_401_UNAUTHORIZED,
-        detail=_t("Could not validate credentials."),
+    credentials_exception = PermissionDenied(
+        _t("Could not validate credentials."),
         headers={"WWW-Authenticate": authenticate_value},
     )
     try:
@@ -80,9 +80,8 @@ async def get_current_user(
 
     for scope in security_scopes.scopes:
         if scope not in token_data.scopes:
-            raise HTTPException(
-                status_code=status.HTTP_401_UNAUTHORIZED,
-                detail=_t("Not enough permissions."),
+            raise PermissionDenied(
+                _t("Not enough permissions."),
                 headers={"WWW-Authenticate": authenticate_value},
             )
     return token_data
@@ -108,7 +107,7 @@ async def login_for_access_token(
     with registry_transaction(anyblok_registry) as anyblok:
         user = anyblok.Auth.authenticate(form_data.username, form_data.password)
         if not user:
-            raise HTTPException(status_code=400, detail="Incorrect authentication")
+            raise PermissionDenied(_t("Incorrect authentication"))
         access_token_expires = timedelta(minutes=config.ACCESS_TOKEN_EXPIRE_MINUTES)
         access_token = create_access_token(
             data=user.get_access_token_data(),

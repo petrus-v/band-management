@@ -1,6 +1,5 @@
 import pytest
 from unittest import mock
-from fastapi import HTTPException
 from fastapi.security import SecurityScopes
 from band_management.bloks.bm_responsive_webapp.fastapi_utils import (
     get_authenticated_musician,
@@ -12,6 +11,7 @@ from datetime import timedelta
 from uuid_extensions import uuid7
 from freezegun import freeze_time
 from band_management import config
+from band_management.exceptions import PermissionDenied
 from datetime import datetime, timezone
 
 
@@ -20,46 +20,58 @@ def test_invalid_token_ignored_public_page(anonymous):
     anonymous.get("/terms")
 
 
-def test_invalid_token_return_401(anonymous):
+def test_invalid_token_redirect_to_login_page(anonymous):
     anonymous.cookies["auth-token"] = "invalid"
-    response = anonymous.get("/bands")
-    assert response.status_code == 401
-    assert response.json()["detail"] == "Missing permissions"
+    response = anonymous.get(
+        "/bands/",
+        follow_redirects=False,
+    )
+    assert response.status_code == 307
+    assert response.next_request.url.path == "/login"
 
 
-def test_expired_token_return_401(anonymous, joe_user):
+def test_expired_token_return_redirect_to_login_page(anonymous, joe_user):
     expired_token_session = anonymous
     expired_token = create_access_token(
         data=joe_user.get_access_token_data(),
         expires_delta=timedelta(minutes=-1),
     )
     expired_token_session.cookies["auth-token"] = f"{expired_token}"
-    response = anonymous.get("/bands")
-    assert response.status_code == 401
-    assert response.json()["detail"] == "Missing permissions"
+    response = anonymous.get(
+        "/bands/",
+        follow_redirects=False,
+    )
+    assert response.status_code == 307
+    assert response.next_request.url.path == "/login"
 
 
-def test_valid_token_unknown_user_return_401(anonymous):
+def test_valid_token_unknown_user_redirect_to_login_page(anonymous):
     unknown_user_session = anonymous
     unknown_user_token = create_access_token(
         data=TokenDataSchema(sub=str(uuid7()), scopes=["musician-auth"]),
         expires_delta=timedelta(minutes=10),
     )
     unknown_user_session.cookies["auth-token"] = f"{unknown_user_token}"
-    response = unknown_user_session.get("/bands")
-    assert response.status_code == 401
-    assert response.json()["detail"] == "Not enough permissions"
+    response = unknown_user_session.get(
+        "/bands/",
+        follow_redirects=False,
+    )
+    assert response.status_code == 307
+    assert response.next_request.url.path == "/login"
 
 
-def test_notken_return_401(anonymous):
-    response = anonymous.get("/bands")
-    assert response.status_code == 401
-    assert response.json()["detail"] == "Missing permissions"
+def test_notken_return_redirect_to_login_page(anonymous):
+    response = anonymous.get(
+        "/bands/",
+        follow_redirects=False,
+    )
+    assert response.status_code == 307
+    assert response.next_request.url.path == "/login"
 
 
 @pytest.mark.asyncio
 async def test_get_authenticated_musician(connected_musician):
-    with pytest.raises(HTTPException, match="Missing permissions"):
+    with pytest.raises(PermissionDenied, match="Missing permissions"):
         await get_authenticated_musician(
             mock.Mock(),
             SecurityScopes(["test"]),

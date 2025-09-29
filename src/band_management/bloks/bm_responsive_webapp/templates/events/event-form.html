@@ -7,19 +7,9 @@
   <p class="help">{{ _t("The event name") }}</p>
 </div>
 
-<div class="field">
-  <label class="label" for="band-select">{{ _t("Band") }}</label>
-  <div class="control">
-    <div class="select">
-      <select id="band-select" name="band_uuid" form="event-form">
-        {% for band in musician.active_bands %}
-          <option value="{{band.uuid}}" {{ 'selected' if event.band==band else '' }}>{{ band.name }}</option>
-        {% endfor %}
-      </select>
-    </div>
-  </div>
-  <p class="help">{{ _t("Application language preference") }}</p>
-</div>
+<input type="hidden" form="event-form" name="band_uuid"
+       value="{{ event.band.uuid if event.band else musician.active_band.uuid }}" />
+
 <div class="field">
   <label class="label">{{ _t("Date") }}</label>
   <div class="control">

@@ -66,7 +66,6 @@
       </div>
     </nav>
   </header>
-
   <div class="container" id="main-container">
     <div class="columns">
       <aside id="sideBarMenuLeft" class="menu column is-3">
@@ -75,7 +74,9 @@
         {'name': _t('Credits'), 'path': '/credits'}, {'name': _t('Terms'),
         'path':'/terms'}, ]) }}
       </aside>
-      <main class="column">{% block main %} {% endblock %}</main>
+      <main class="column">
+        <div id="error-message"></div>
+        {% block main %} {% endblock %}</main>
     </div>
   </div>
 
@@ -93,6 +94,7 @@
   <script async type="text/javascript" src="/static/js/theme.js"></script>
   <script async type="text/javascript" src="/static/js/modal.js"></script>
   <script async type="text/javascript" src="/static/js/sortable.js"></script>
+  <script async type="text/javascript" src="/static/js/error.js"></script>
 </body>
 {% if not request.headers.get('HX-Boosted') %}
 

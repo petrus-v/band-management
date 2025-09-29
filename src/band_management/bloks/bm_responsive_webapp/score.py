@@ -8,7 +8,6 @@ from fastapi.responses import RedirectResponse
 from anyblok.registry import Registry
 from fastapi import Security
 from band_management.storage import storage_factory
-
 from band_management.bloks.http_auth_base.schemas.auth import (
     TokenDataSchema,
 )
@@ -24,12 +23,10 @@ from fastapi import APIRouter
 
 scores_router = APIRouter(
     prefix="/scores",
-    responses={404: {"description": "Not found"}},
     route_class=RenewTokenRoute,
 )
 router = APIRouter(
     prefix="/score",
-    responses={404: {"description": "Not found"}},
     route_class=RenewTokenRoute,
 )
 
@@ -73,7 +70,6 @@ def search_scores(
             score_query = score_query.filter(BM.Score.name.ilike(f"%{search}%"))
 
         scores, next_page, last_element = paging_query(score_query, page=page)
-
         response = templates.TemplateResponse(
             name="scores/search-result.html",
             request=request,

@@ -5,8 +5,8 @@ from band_management.bloks.http_auth_base.schemas.auth import (
     TokenDataSchema,
     UserSchema,
 )
+from band_management.exceptions import PermissionDenied
 from jose import jwt
-from fastapi import HTTPException
 from fastapi.security import SecurityScopes
 from datetime import timedelta, datetime, timezone
 
@@ -42,11 +42,12 @@ def test_auth_user_without_scope(no_scope_user, webserver):
 
 
 def test_auth_unknown_user(webserver):
-    response = webserver.post("/token", data={"username": "abc", "password": "def"})
-    assert response.status_code == 400
-    assert response.json() == {
-        "detail": "Incorrect authentication",
-    }
+    response = webserver.post(
+        "/token",
+        data={"username": "abc", "password": "def"},
+    )
+    assert response.status_code == 401
+    assert "Incorrect authentication" in response.text
 
 
 def test_user_me(joe_rest_api_client, joe_user):
@@ -69,9 +70,7 @@ def test_user_me_with_expired_token(webserver, joe_user):
         "/api/user/me",
     )
     assert response.status_code == 401
-    assert response.json() == {
-        "detail": "Could not validate credentials.",
-    }
+    assert "Could not validate credentials." in response.text
 
 
 def test_create_access_token_default_timedelta(joe_user):
@@ -94,7 +93,7 @@ async def test_valid_token_without_sub_raises(joe_user):
         data=user_data,
         expires_delta=timedelta(minutes=5),
     )
-    with pytest.raises(HTTPException, match="Could not validate credentials") as ex:
+    with pytest.raises(PermissionDenied, match="Could not validate credentials") as ex:
         await get_current_user(
             SecurityScopes(),
             token,
@@ -107,7 +106,5 @@ def test_access_denied_no_scope_user(webserver_no_scope_user):
         "/api/user/me",
     )
     assert response.status_code == 401
-    assert response.json() == {
-        "detail": "Not enough permissions.",
-    }
+    assert "Not enough permissions." in response.text
     assert response.headers["WWW-Authenticate"] == 'Bearer scope="musician-auth"'

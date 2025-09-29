@@ -10,10 +10,12 @@ from fastapi.security import (
 )
 from datetime import datetime, timedelta, timezone
 from jose import JWTError, jwt
-from fastapi import HTTPException, status
 from pydantic import ValidationError
 from band_management import _t, get_translations
-from band_management.exceptions import ValidationError as BMValidationError
+from band_management.exceptions import (
+    ValidationError as BMValidationError,
+    PermissionDenied,
+)
 from band_management.bloks.http_auth_base.schemas.auth import (
     TokenDataSchema,
 )
@@ -84,17 +86,17 @@ async def get_authenticated_musician(
         authenticate_value = "Bearer"
     for scope in security_scopes.scopes:
         if not token_data:
-            raise HTTPException(
-                status_code=status.HTTP_401_UNAUTHORIZED,
-                detail=_t("Missing permissions"),
+            raise PermissionDenied(
+                _t("Missing permissions"),
                 headers={"WWW-Authenticate": authenticate_value},
+                redirect="/login",
             )
 
         if scope not in token_data.scopes:
-            raise HTTPException(
-                status_code=status.HTTP_401_UNAUTHORIZED,
-                detail=_t("Missing permissions"),
+            raise PermissionDenied(
+                _t("Missing permissions"),
                 headers={"WWW-Authenticate": authenticate_value},
+                redirect="..",
             )
     return token_data
 
@@ -106,10 +108,7 @@ def _get_musician_from_token(anyblok, token_data):
         if user:
             musician = user.musician
         if not musician:
-            raise HTTPException(
-                status_code=status.HTTP_401_UNAUTHORIZED,
-                detail=_t("Not enough permissions"),
-            )
+            raise PermissionDenied(_t("Missing permissions"), redirect="/login")
     return musician
 
 
