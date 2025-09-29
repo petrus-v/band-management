@@ -5,7 +5,7 @@
     {%- for member in musician.members: %}
       {%- set is_active_band = member.band==musician.active_band %}
       <article class="message">
-        <div class="message-header" hx-put="/musician/{{musician.uuid}}/toggle-active-band/{{member.band.uuid}}">
+        <div class="message-header" hx-put="/musician/{{musician.uuid}}/set-active-band/{{member.band.uuid}}">
           <p>{{member.band.name}}</p>
           <span class="icon is-small is-pulled-right">
             {%- if is_active_band %}

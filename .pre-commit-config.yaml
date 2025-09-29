@@ -9,6 +9,7 @@ repos:
   rev: 'v9.18.0'
   hooks:
   -   id: eslint
+      args: ["--fix"]
 - repo: https://github.com/rtts/djhtml
   rev: '3.0.7'
   hooks:

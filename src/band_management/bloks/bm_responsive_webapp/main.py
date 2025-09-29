@@ -34,7 +34,6 @@ logger = logging.getLogger(__name__)
 
 router = APIRouter(
     tags=["main"],
-    responses={404: {"description": _t("Not found :cry:")}},
     route_class=RenewTokenRoute,
 )
 
@@ -74,22 +73,27 @@ def login(
     token_data: Annotated[
         TokenDataSchema, Security(get_authenticated_musician, scopes=[])
     ],
+    next_path: Annotated[str, Query()] = "",
     ab_registry: "Registry" = Depends(get_registry),
 ):
     if token_data:
         response = RedirectResponse(
-            "/home",
+            next_path or "/home",
             status_code=302,
             headers={
                 # "Content-Language": user.musician.lang,
-                "HX-Redirect": "/home",
+                "HX-Redirect": next_path or "/home",
             },
         )
         return response
     return templates.TemplateResponse(
         name="login.html",
         request=request,
-        context={**_prepare_context(None, request, token_data), "error_message": None},
+        context={
+            **_prepare_context(None, request, token_data),
+            "error_message": None,
+            "next_path": next_path,
+        },
     )
 
 
@@ -100,6 +104,7 @@ def login_post(
     request: Request,
     form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
     anyblok_registry: Annotated["Registry", Depends(get_registry)],
+    next_path: Annotated[str, Form()] = "",
 ):
     """Authentication end point"""
     with registry_transaction(anyblok_registry) as anyblok:
@@ -115,11 +120,11 @@ def login_post(
                 },
             )
         response = RedirectResponse(
-            "/home",
+            next_path or "/home",
             status_code=202,
             headers={
                 # "Content-Language": user.musician.lang,
-                "HX-Redirect": "/home",
+                "HX-Redirect": next_path or "/home",
             },
         )
         response.set_cookie(

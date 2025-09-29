@@ -111,21 +111,28 @@ async def test_connected_musician_post_multiple_files(
 
 
 @pytest.mark.asyncio
-async def test_get_score_media_no_user_found_raises(anonymous, imported_score):
+async def test_get_score_media_no_user_found_redirect(anonymous, imported_score):
     token = create_access_token(
         data=TokenDataSchema(sub=str(uuid7()), scopes=["musician-auth"]),
         expires_delta=timedelta(minutes=10),
     )
     anonymous.cookies["auth-token"] = f"{token}"
-    response = anonymous.get(f"/score/{imported_score.uuid}/media")
-    assert response.status_code == 401, response.text
-    assert response.json()["detail"] == "Not enough permissions"
+    response = anonymous.get(
+        f"/score/{imported_score.uuid}/media",
+        follow_redirects=False,
+    )
+    assert response.status_code == 307, response.text
+    assert response.next_request.url.path == "/login"
 
 
 @pytest.mark.asyncio
-async def test_get_score_media_anonymous_raises(anonymous, imported_score):
-    response = anonymous.get(f"/score/{imported_score.uuid}/media")
-    assert response.status_code == 401, response.text
+async def test_get_score_media_anonymous_redirect(anonymous, imported_score):
+    response = anonymous.get(
+        f"/score/{imported_score.uuid}/media",
+        follow_redirects=False,
+    )
+    assert response.status_code == 307, response.text
+    assert response.next_request.url.path == "/login"
 
 
 @pytest.mark.asyncio

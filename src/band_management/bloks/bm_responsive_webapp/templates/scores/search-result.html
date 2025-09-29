@@ -13,6 +13,7 @@
       <article class="message {{ '' if score.music else 'is-info'}}">
     {%- endif %}
     <div class="message-header">
+      <span>{{ score.music.title }}</span>
       <span>{{ score.name | highlight(search) | safe }}</span>
       {%- if score.is_deletable and score.imported_by == musician %}
         <a class="button is-outlined is-light" hx-delete="/score/{{ score.uuid }}">

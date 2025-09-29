@@ -1,6 +1,6 @@
 from typing import Annotated
 from anyblok_fastapi.fastapi import get_registry, registry_transaction
-from fastapi import Depends, Request, APIRouter, HTTPException, status
+from fastapi import Depends, Request, APIRouter
 from fastapi.responses import RedirectResponse
 
 from anyblok.registry import Registry
@@ -10,6 +10,7 @@ from band_management import _t
 from band_management.bloks.http_auth_base.schemas.auth import (
     TokenDataSchema,
 )
+from band_management.exceptions import PermissionDenied
 from band_management.bloks.bm_responsive_webapp.fastapi_utils import (
     get_authenticated_musician,
     _get_musician_from_token,
@@ -40,9 +41,8 @@ def accept_member_invitation(
         musician = _get_musician_from_token(anyblok, token_data)
         member = anyblok.BandManagement.Member.query().get(member_uuid)
         if not member or member.musician != musician:
-            raise HTTPException(
-                status_code=status.HTTP_401_UNAUTHORIZED,
-                detail=_t(
+            raise PermissionDenied(
+                _t(
                     "Your are not allowed to accept invitation for someone else.",
                     lang=musician.lang,
                 ),
@@ -74,9 +74,8 @@ def reject_member_invitation(
         musician = _get_musician_from_token(anyblok, token_data)
         member = anyblok.BandManagement.Member.query().get(member_uuid)
         if not member or member.musician != musician:
-            raise HTTPException(
-                status_code=status.HTTP_401_UNAUTHORIZED,
-                detail=_t(
+            raise PermissionDenied(
+                _t(
                     "Your are not allowed to update other user active bands",
                     lang=musician.lang,
                 ),

@@ -1,0 +1,19 @@
+{% extends "layouts/layout.html" %} {% block main %}
+    <h1>{{ _t("Error") }}</h1>
+    <article class="message is-danger">
+        <div class="message-header">
+            <p>{{ _t("Oops something went wrong") }}</p>
+        </div>
+        <div class="message-body">
+            <p>
+                {{ error_message }}
+            </p>
+            <a class="button is-danger" href="/">
+                <span class="icon">
+                    <i class="fa fa-world"></i>
+                </span>
+                <span>{{ _t("Back exploring...") }}</span>
+            </a>
+        </div>
+    </article>
+{% endblock %}

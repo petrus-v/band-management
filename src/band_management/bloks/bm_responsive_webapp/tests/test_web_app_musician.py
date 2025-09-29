@@ -180,9 +180,11 @@ def test_update_other_musician_profile(bm, doe_musician, connected_musician):
             "musician_lang": "fr",
             "csrf_token": csrf_token(5),
         },
+        headers={"HX-Request": "1"},
     )
-    assert response.status_code == 401
+    assert response.status_code == 307
     assert (
-        response.json()["detail"]
+        response.json()["message"]
         == "Your are not allowed to update other musician profiles"
     )
+    assert response.headers["HX-Redirect"] == "/home", response.text

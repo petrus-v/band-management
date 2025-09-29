@@ -16,7 +16,7 @@
       <li>
         <div class="field has-addons">
           <a class="{{ 'is-active' if member.band == musician.active_band else ''}}"
-             hx-put="/musician/{{musician.uuid}}/toggle-active-band/{{member.band.uuid}}">
+             hx-put="/musician/{{musician.uuid}}/set-active-band/{{member.band.uuid}}">
             {{ member.band.name }}
           </a>
           {%- if member.invitation_state == 'invited' %}

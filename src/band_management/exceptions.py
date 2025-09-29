@@ -7,4 +7,9 @@ class ValidationError(BandManagementException):
 
 
 class PermissionDenied(BandManagementException):
-    pass
+    def __init__(self, *args, headers: dict = None, redirect: str = "", **kwargs):
+        super().__init__(*args, **kwargs)
+        if not headers:
+            headers = {}
+        self.headers = headers
+        self.redirect = redirect

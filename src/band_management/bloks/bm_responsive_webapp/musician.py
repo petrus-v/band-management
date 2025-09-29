@@ -3,7 +3,7 @@ import logging
 
 from typing import Annotated
 from anyblok_fastapi.fastapi import get_registry, registry_transaction
-from fastapi import Depends, Request, Form, APIRouter, HTTPException, status
+from fastapi import Depends, Request, Form, APIRouter
 from fastapi.responses import RedirectResponse
 
 from .jinja import templates, NextAction
@@ -15,6 +15,7 @@ from band_management.bloks.http_auth_base.schemas.auth import (
 )
 from band_management import _t
 from band_management import config
+from band_management.exceptions import PermissionDenied
 from band_management.bloks.bm_responsive_webapp.fastapi_utils import (
     get_authenticated_musician,
     _prepare_context,
@@ -58,9 +59,8 @@ def set_active_band(
     with registry_transaction(ab_registry) as anyblok:
         musician = _get_musician_from_token(anyblok, token_data)
         if musician_uuid != str(musician.uuid):
-            raise HTTPException(
-                status_code=status.HTTP_401_UNAUTHORIZED,
-                detail=_t(
+            raise PermissionDenied(
+                _t(
                     "Your are not allowed to update other user active bands",
                     lang=musician.lang,
                 ),
@@ -264,12 +264,12 @@ def update_musician_profile(
     with registry_transaction(ab_registry) as anyblok:
         musician = _get_musician_from_token(anyblok, token_data)
         if musician_uuid != str(musician.uuid):
-            raise HTTPException(
-                status_code=status.HTTP_401_UNAUTHORIZED,
-                detail=_t(
+            raise PermissionDenied(
+                _t(
                     "Your are not allowed to update other musician profiles",
                     lang=musician.lang,
                 ),
+                redirect="/home",
             )
 
         musician.update(
