@@ -49,7 +49,9 @@
 {% endblock %}
 {% block heading_right %}
     <div>
-        <img src="{{ amnezik_event_qrcode }}" />
+        <a href="https://www.amnezik.com/event/{{ event.uri_code }}">
+            <img src="{{ amnezik_event_qrcode }}" />
+        </a>
     </div>
 {% endblock%}
 
