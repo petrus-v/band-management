@@ -55,6 +55,10 @@ msgstr ""
 "concerts – tout est fluide et collaboratif. Partagez, organisez, jouez. "
 "Faites vibrer votre musique !"
 
+#: src/band_management/bloks/bm_event/event.py
+msgid " (copy)"
+msgstr " (copie)"
+
 #: src/band_management/bloks/bm_base/musician.py
 #, python-format
 msgid "%s Solo"
@@ -69,12 +73,13 @@ msgid "About us"
 msgstr "A propos"
 
 #: src/band_management/bloks/bm_responsive_webapp/templates/macros/menu-item.html
+#: src/band_management/bloks/bm_responsive_webapp/templates/macros/navbar-item.html
 msgid "Accept"
 msgstr "Accepter"
 
 #: src/band_management/bloks/bm_responsive_webapp/templates/layouts/connected.html
-msgid "Active bands"
-msgstr "Groupe actifs"
+msgid "Active Band"
+msgstr "Groupe actif"
 
 #: src/band_management/bloks/bm_responsive_webapp/templates/band-invite.html
 #, python-format
@@ -89,7 +94,6 @@ msgstr "Ajouter une musique"
 msgid "Administrators"
 msgstr "Administrateurs"
 
-#: src/band_management/bloks/bm_responsive_webapp/templates/events/event-form.html
 #: src/band_management/bloks/bm_responsive_webapp/templates/musicians/musician-form-profile.html
 #: src/band_management/bloks/bm_responsive_webapp/templates/musicians/musician-form.html
 msgid "Application language preference"
@@ -112,9 +116,9 @@ msgstr "Artistes : "
 msgid "Author: "
 msgstr "Auteur : "
 
-#: src/band_management/bloks/bm_responsive_webapp/templates/events/event-form.html
-msgid "Band"
-msgstr "Groupe"
+#: src/band_management/bloks/bm_responsive_webapp/templates/error.html
+msgid "Back exploring..."
+msgstr "Retour à l'exploration..."
 
 #: src/band_management/bloks/bm_responsive_webapp/templates/bands/band-form.html
 msgid "Band's administrators"
@@ -234,9 +238,18 @@ msgstr "Date"
 msgid "Date: "
 msgstr "Date : "
 
+#: src/band_management/bloks/bm_responsive_webapp/templates/events/search-result.html
+#: src/band_management/bloks/bm_responsive_webapp/templates/scores/search-result.html
+msgid "Delete"
+msgstr "Supprimer"
+
 #: src/band_management/bloks/bm_responsive_webapp/templates/login.html
 msgid "Don't have an account? Create one"
 msgstr "Vous n'avez pas de compte ? Créez s'en un !"
+
+#: src/band_management/bloks/bm_responsive_webapp/templates/events/search-result.html
+msgid "Duplicate"
+msgstr "Dupliquer"
 
 #: src/band_management/bloks/bm_responsive_webapp/templates/band-invite.html
 #: src/band_management/bloks/bm_responsive_webapp/templates/bands/search-result.html
@@ -261,6 +274,10 @@ msgstr "Anglais"
 msgid "Enter your password"
 msgstr "Entrez votre mot de passe"
 
+#: src/band_management/bloks/bm_responsive_webapp/templates/error.html
+msgid "Error"
+msgstr "Erreur"
+
 #: src/band_management/bloks/bm_responsive_webapp/templates/events/event-form.html
 msgid "Event footer: shown after the list of musics on the printed document."
 msgstr ""
@@ -276,10 +293,6 @@ msgstr ""
 #: src/band_management/bloks/bm_responsive_webapp/templates/events/event-form.html
 msgid "Event place"
 msgstr "Lieu de l'événement"
-
-#: src/band_management/bloks/bm_responsive_webapp/templates/layouts/connected.html
-msgid "Events"
-msgstr "Evénements"
 
 #: src/band_management/bloks/bm_responsive_webapp/templates/events/event-form.html
 msgid "Footer"
@@ -317,6 +330,7 @@ msgid "Import"
 msgstr "Importer"
 
 #: src/band_management/bloks/bm_responsive_webapp/main.py
+#: src/band_management/bloks/http_auth_base/auth_api.py
 msgid "Incorrect authentication"
 msgstr "Authentification incorrecte"
 
@@ -465,10 +479,6 @@ msgstr "Aucune partition trouvée."
 msgid "Not a valid csrf token !"
 msgstr "Token CSRF invalide !"
 
-#: src/band_management/bloks/bm_responsive_webapp/fastapi_utils.py
-msgid "Not enough permissions"
-msgstr "Permissions insuffisantes"
-
 #: src/band_management/bloks/http_auth_base/auth_api.py
 msgid "Not enough permissions."
 msgstr "Permissions insuffisantes."
@@ -477,18 +487,24 @@ msgstr "Permissions insuffisantes."
 msgid "Not found"
 msgstr "Page non trouvée :cry:"
 
-#: src/band_management/bloks/bm_responsive_webapp/main.py
-msgid "Not found :cry:"
-msgstr "Page non trouvée :cry:"
-
 #: src/band_management/bloks/bm_responsive_webapp/templates/band-invite.html
 msgid "Old/Revoked/Refused members"
 msgstr "Membres: Anciens/Révoqué/ayant refusé"
 
+#: src/band_management/bloks/bm_base/score.py
+msgid "Only scores unlink to its music can be removed"
+msgstr "Seul les partiions non lié à une misique peuvent être supprimées"
+
+#: src/band_management/bloks/bm_responsive_webapp/templates/error.html
 #: src/band_management/bloks/bm_responsive_webapp/templates/login.html
 #: src/band_management/bloks/bm_responsive_webapp/templates/reset-password.html
 msgid "Oops something went wrong"
 msgstr "hoo non ! Quelque chose c'est mal passé..."
+
+#: src/band_management/bloks/bm_responsive_webapp/__init__.py
+#, python-format
+msgid "Page not found %(current_url)s"
+msgstr "Page non trouvé %(current_url)s"
 
 #: src/band_management/bloks/bm_responsive_webapp/templates/login.html
 #: src/band_management/bloks/bm_responsive_webapp/templates/reset-password.html
@@ -545,6 +561,7 @@ msgid "Register"
 msgstr "Créer un compte"
 
 #: src/band_management/bloks/bm_responsive_webapp/templates/macros/menu-item.html
+#: src/band_management/bloks/bm_responsive_webapp/templates/macros/navbar-item.html
 msgid "Reject"
 msgstr "Refuser"
 
@@ -650,8 +667,8 @@ msgstr "Musique liée à cette partition"
 #, python-format
 msgid "This music %(music)s is not played by the current band %(band)s"
 msgstr ""
-"Impossible de lier cette musique %(music)s à "
-"l'évènement qui n'est pas joué par le groupe %(band)s."
+"Impossible de lier cette musique %(music)s à l'évènement qui n'est pas joué "
+"par le groupe %(band)s."
 
 #: src/band_management/bloks/bm_responsive_webapp/templates/musics/music-form.html
 msgid "Title"
@@ -668,6 +685,31 @@ msgstr "Le lecteur de ce médium n'est pas pris en charge sur votre navigateur."
 #: src/band_management/bloks/bm_responsive_webapp/templates/musics/music-form.html
 msgid "What can you dance on this song ?"
 msgstr "Ce que vous dansez sur cette musique."
+
+#: src/band_management/bloks/bm_base/score.py
+#, python-format
+msgid ""
+"You are not allowed to access to this score not link to your current band "
+"%(band_name)s"
+msgstr ""
+"Vous n'êtes pas autorisé à accéder à cette partition qui n'est pas lié à "
+"votre groupe actif %(band_name)s"
+
+#: src/band_management/bloks/bm_base/score.py
+msgid ""
+"You are not allowed to delete this score. Only the one who imported it can "
+"remove it."
+msgstr ""
+"Vous n'êtes pas autorisé à supprimer cette partition. Seule la personne qui "
+"l'a importée peut la supprimer."
+
+#: src/band_management/bloks/bm_base/member.py
+msgid ""
+"You must be part of at least one band, create an other one if you want to "
+"leave the current one"
+msgstr ""
+"Vous devez faire parti d'au moins un groupe, créez en un autre si vous voulez "
+"quitter le groupe actuel"
 
 #: src/band_management/bloks/bm_base/member.py
 #, python-format
@@ -711,16 +753,6 @@ msgstr ""
 "Vous, %s, n'êtes pas autorisé à inviter de nouveaux musiciens à ce groupe "
 "%s. Demandez à un administrateur de groupe pour devenir administrateur "
 "également."
-
-#: src/band_management/bloks/bm_base/musician.py
-#, python-format
-msgid "You, %s, require at least one active band."
-msgstr "Vous, %s, devez avoir au moins un groupe actif."
-
-#: src/band_management/bloks/bm_base/musician.py
-#, python-format
-msgid "You, %s, should accept the invitation before activate this band: %s."
-msgstr "Vous, %s, devez accepter l'invitation avant d'activer ce groupe: %s."
 
 #: src/band_management/bloks/bm_responsive_webapp/member.py
 msgid "Your are not allowed to accept invitation for someone else."

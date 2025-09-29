@@ -44,6 +44,10 @@ msgid ""
 "            flow!"
 msgstr ""
 
+#: src/band_management/bloks/bm_event/event.py
+msgid " (copy)"
+msgstr ""
+
 #: src/band_management/bloks/bm_base/musician.py
 #, python-format
 msgid "%s Solo"
@@ -58,11 +62,12 @@ msgid "About us"
 msgstr ""
 
 #: src/band_management/bloks/bm_responsive_webapp/templates/macros/menu-item.html
+#: src/band_management/bloks/bm_responsive_webapp/templates/macros/navbar-item.html
 msgid "Accept"
 msgstr ""
 
 #: src/band_management/bloks/bm_responsive_webapp/templates/layouts/connected.html
-msgid "Active bands"
+msgid "Active Band"
 msgstr ""
 
 #: src/band_management/bloks/bm_responsive_webapp/templates/band-invite.html
@@ -78,7 +83,6 @@ msgstr ""
 msgid "Administrators"
 msgstr ""
 
-#: src/band_management/bloks/bm_responsive_webapp/templates/events/event-form.html
 #: src/band_management/bloks/bm_responsive_webapp/templates/musicians/musician-form-profile.html
 #: src/band_management/bloks/bm_responsive_webapp/templates/musicians/musician-form.html
 msgid "Application language preference"
@@ -100,8 +104,8 @@ msgstr ""
 msgid "Author: "
 msgstr ""
 
-#: src/band_management/bloks/bm_responsive_webapp/templates/events/event-form.html
-msgid "Band"
+#: src/band_management/bloks/bm_responsive_webapp/templates/error.html
+msgid "Back exploring..."
 msgstr ""
 
 #: src/band_management/bloks/bm_responsive_webapp/templates/bands/band-form.html
@@ -222,8 +226,17 @@ msgstr ""
 msgid "Date: "
 msgstr ""
 
+#: src/band_management/bloks/bm_responsive_webapp/templates/events/search-result.html
+#: src/band_management/bloks/bm_responsive_webapp/templates/scores/search-result.html
+msgid "Delete"
+msgstr ""
+
 #: src/band_management/bloks/bm_responsive_webapp/templates/login.html
 msgid "Don't have an account? Create one"
+msgstr ""
+
+#: src/band_management/bloks/bm_responsive_webapp/templates/events/search-result.html
+msgid "Duplicate"
 msgstr ""
 
 #: src/band_management/bloks/bm_responsive_webapp/templates/band-invite.html
@@ -249,6 +262,10 @@ msgstr ""
 msgid "Enter your password"
 msgstr ""
 
+#: src/band_management/bloks/bm_responsive_webapp/templates/error.html
+msgid "Error"
+msgstr ""
+
 #: src/band_management/bloks/bm_responsive_webapp/templates/events/event-form.html
 msgid "Event footer: shown after the list of musics on the printed document."
 msgstr ""
@@ -259,10 +276,6 @@ msgstr ""
 
 #: src/band_management/bloks/bm_responsive_webapp/templates/events/event-form.html
 msgid "Event place"
-msgstr ""
-
-#: src/band_management/bloks/bm_responsive_webapp/templates/layouts/connected.html
-msgid "Events"
 msgstr ""
 
 #: src/band_management/bloks/bm_responsive_webapp/templates/events/event-form.html
@@ -301,6 +314,7 @@ msgid "Import"
 msgstr ""
 
 #: src/band_management/bloks/bm_responsive_webapp/main.py
+#: src/band_management/bloks/http_auth_base/auth_api.py
 msgid "Incorrect authentication"
 msgstr ""
 
@@ -448,10 +462,6 @@ msgstr ""
 msgid "Not a valid csrf token !"
 msgstr ""
 
-#: src/band_management/bloks/bm_responsive_webapp/fastapi_utils.py
-msgid "Not enough permissions"
-msgstr ""
-
 #: src/band_management/bloks/http_auth_base/auth_api.py
 msgid "Not enough permissions."
 msgstr ""
@@ -460,17 +470,23 @@ msgstr ""
 msgid "Not found"
 msgstr ""
 
-#: src/band_management/bloks/bm_responsive_webapp/main.py
-msgid "Not found :cry:"
-msgstr ""
-
 #: src/band_management/bloks/bm_responsive_webapp/templates/band-invite.html
 msgid "Old/Revoked/Refused members"
 msgstr ""
 
+#: src/band_management/bloks/bm_base/score.py
+msgid "Only scores unlink to its music can be removed"
+msgstr ""
+
+#: src/band_management/bloks/bm_responsive_webapp/templates/error.html
 #: src/band_management/bloks/bm_responsive_webapp/templates/login.html
 #: src/band_management/bloks/bm_responsive_webapp/templates/reset-password.html
 msgid "Oops something went wrong"
+msgstr ""
+
+#: src/band_management/bloks/bm_responsive_webapp/__init__.py
+#, python-format
+msgid "Page not found %(current_url)s"
 msgstr ""
 
 #: src/band_management/bloks/bm_responsive_webapp/templates/login.html
@@ -526,6 +542,7 @@ msgid "Register"
 msgstr ""
 
 #: src/band_management/bloks/bm_responsive_webapp/templates/macros/menu-item.html
+#: src/band_management/bloks/bm_responsive_webapp/templates/macros/navbar-item.html
 msgid "Reject"
 msgstr ""
 
@@ -648,6 +665,25 @@ msgstr ""
 msgid "What can you dance on this song ?"
 msgstr ""
 
+#: src/band_management/bloks/bm_base/score.py
+#, python-format
+msgid ""
+"You are not allowed to access to this score not link to your current band"
+" %(band_name)s"
+msgstr ""
+
+#: src/band_management/bloks/bm_base/score.py
+msgid ""
+"You are not allowed to delete this score. Only the one who imported it "
+"can remove it."
+msgstr ""
+
+#: src/band_management/bloks/bm_base/member.py
+msgid ""
+"You must be part of at least one band, create an other one if you want to"
+" leave the current one"
+msgstr ""
+
 #: src/band_management/bloks/bm_base/member.py
 #, python-format
 msgid ""
@@ -679,16 +715,6 @@ msgstr ""
 msgid ""
 "You, %s, are not allowed to invite new musician to this band %s. Ask an "
 "existing band administrator to become a band administrator."
-msgstr ""
-
-#: src/band_management/bloks/bm_base/musician.py
-#, python-format
-msgid "You, %s, require at least one active band."
-msgstr ""
-
-#: src/band_management/bloks/bm_base/musician.py
-#, python-format
-msgid "You, %s, should accept the invitation before activate this band: %s."
 msgstr ""
 
 #: src/band_management/bloks/bm_responsive_webapp/member.py
