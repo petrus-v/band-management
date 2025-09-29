@@ -4,7 +4,6 @@
   <head>
     <title>{% block header_title %}Band Management A4 portrait report layout{% endblock %}</title>
     <style type="text/css">
-
       @page {
         size: A4 portrait;
         margin: 3cm 1cm 2cm 1cm;
@@ -12,9 +11,11 @@
         @top-left {
           content: element(heading-left);
         }
+
         @top-center {
           content: element(heading-center);
         }
+
         @top-right {
           content: element(heading-right);
         }
@@ -22,15 +23,17 @@
         @bottom-left {
           color: #909090;
           font-family: Pacifico;
-          content: '{{ _t("Print at %(print_date)s") % {"print_date": print_date|format_datetime('short')} }}';
+          content: '{{ _t("Print at %(print_date)s") % {"print_date": print_date|format_datetime(' short')} }}';
           font-size: 10pt;
         }
+
         @bottom-center {
           color: #494949;
           content: counter(page) " / " counter(pages);
           font-family: Pacifico;
           font-size: 10pt;
         }
+
         @bottom-right {
           color: #494949;
           content: "Made with ❤️ by Pierre Verkest & Waadoo";
@@ -42,9 +45,11 @@
       .repeat-header-left {
         position: running(heading-left);
       }
+
       .repeat-header-center {
         position: running(heading-center);
       }
+
       .repeat-header-right {
         position: running(heading-right);
       }
@@ -54,16 +59,20 @@
         font-size: 11pt;
         line-height: 1.6;
       }
+
       .heading {
         max-height: 0;
       }
-      .heading, img {
+
+      .heading,
+      img {
         height: 26mm;
       }
 
       header {
         margin-bottom: 7mm;
       }
+
       h1 {
         font-family: Pacifico;
         margin: 0;
@@ -73,8 +82,6 @@
       footer {
         margin-top: 7mm;
       }
-
-
     </style>
     {% block custom_style %}
     {% endblock%}
@@ -83,18 +90,15 @@
   <body>
     <div class="heading">
       <div class="repeat-header-left">
-        <img  src="bm:url:logo.png" />
+        <img src="bm:url:logo.png" />
       </div>
       <div class="repeat-header-center">
-        <a  href="https://www.manezike.com">www.AmneZik.com</a>
+        <a href="https://www.amnezik.com">www.AmneZik.com</a>
       </div>
-      <div class="repeat-header-right"
-           {% block heading_right %}
-           {% endblock%}
-           </div>
+      <div class="repeat-header-right" {% block heading_right %} {% endblock%} </div>
       </div>
 
-      <header >
+      <header>
         {% block header_content %}
         {% endblock%}
       </header>
