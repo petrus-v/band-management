@@ -16,15 +16,24 @@ services:
       JWT_SECRET_KEY: CHANGE_ME
 
   db:
-    image: postgres
+    image: postgres:18.0
     volumes:
-      - pg_data:/var/lib/postgresql/data
+      - pg_data:/var/lib/postgresql
     environment:
       POSTGRES_DB: ${POSTGRES_DB:-emptydb}
       POSTGRES_USER: ${POSTGRES_USER:-bmuser}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-bmpwd}
     networks:
       - internal
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "sh -c 'pg_isready -U ${POSTGRES_USER:-bmuser} -d ${POSTGRES_DB:-emptydb}'",
+        ]
+      interval: 3s
+      timeout: 2s
+      retries: 3
 
 networks:
   internal:
