@@ -1,6 +1,6 @@
 {% if musics %} {% for music in musics %}
   <a href="#" class="dropdown-item music" hx-on:click="document.getElementById('selected-music-uuid').value = '{{ music.uuid }}';
-                                                       document.getElementById('music-search').value = '{{ music.title }}';">
+                                                       document.getElementById('music-search').value = `{{ music.title }}`;">
     <strong>{{ music.title | highlight(search) | safe }}</strong>
     {% if music.dance %} -
       <span>{{ music.dance }}</span>
