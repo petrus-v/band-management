@@ -6,47 +6,74 @@ An application helping managing **band** focused around
 **band's music scores**.
 
 
+## Prerequisites
+> **note**: I'm using linux machine with `build-essential`.
+
+- [Setup uv](https://github.com/astral-sh/uv) – used for managing dependencies
+- [Setup PostgreSQL](https://www.postgresql.org/download/) – required for database setup
+
+> **MacOS**: You may need additional dependencies in order to setup the database
+```bash
+# Install WeasyPrint (includes required dependencies)
+brew install weasyprint
+
+# Restart PostgreSQL service
+brew services restart postgresql
+```
+
 ## Setup development environment
 
-> **note**: I'm using linux machine with `build-essential` and postgresql client installed.
-
-* clone the project
-
+- clone the project:
 ```bash
 git clone https://github.com/petrus-v/band-management
 ```
-
-* setup git pre-commit hooks outside the current env to launch linter at git commit
+- setup git pre-commit hooks outside the current env to launch linter at git commit
 
 ```bash
 uv tool install --with pre-commit-uv pre-commit
 uvx pre-commit install --install-hooks
 ```
 
-* you have postgresql access and your user account is able to create database
-  like `createdb testdb`, if not you'll need to tweak app.test.cfg file according
-  your settings.
-
-* Install dependency and setup db
-
+-  Install dependencies
 ```bash
-uv run anyblok_createdb -c app.test.cfg
+make install
 ```
 
-* launch test
-
+-  Setup database with demo data
 ```bash
-ANYBLOK_CONFIG_FILE=app.test.cfg uv run pytest -v -s src/
+make setup-demo
 ```
 
-* launch linters
+- Setup tests database  with demo data
+```bash
+make setup-tests
+```
+
+- Run tests
+```bash
+make test
+```
+
+- Regenerate translations
+```bash
+make translations
+make compile-translations
+```
+
+- Start the application
+```bash
+make run
+```
+
+- launch linters
 
 ```bash
 uvx pre-commit run --all-files
 ```
 
-* To import music brainz data (`work` table) [downloaded from here](
-  https://data.metabrainz.org/pub/musicbrainz/data/json-dumps/)
+
+You may want to import music brainz data (`work` table) [downloaded from here](
+  https://data.metabrainz.org/pub/musicbrainz/data/json-dumps/) to populate the music catalog.
 
 ```bash
 uv run musicbrainz-importer -c app.cfg  --limit 30000 --insert-buffer 1000 ~/path/to/work 
