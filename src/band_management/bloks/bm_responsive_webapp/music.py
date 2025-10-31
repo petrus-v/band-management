@@ -116,6 +116,32 @@ def search_dropdown_musics(
         return response
 
 
+@musics_router.get(
+    "/dropdown/{music_uuid}",
+)
+def search_dropdown_musics_filled(
+    request: Request,
+    token_data: Annotated[
+        TokenDataSchema, Security(get_authenticated_musician, scopes=["musician-auth"])
+    ],
+    music_uuid: str,
+    ab_registry: "Registry" = Depends(get_registry),
+):
+    with registry_transaction(ab_registry) as anyblok:
+        BM = anyblok.BandManagement
+        music = BM.Music.query().get(music_uuid)
+        response = templates.TemplateResponse(
+            name="musics/music-field-selection.html",
+            request=request,
+            context={
+                **_prepare_context(anyblok, request, token_data),
+                "music_uuid": music_uuid,
+                "music": music
+            },
+        )
+        return response
+
+
 @router.get(
     "/prepare",
 )
