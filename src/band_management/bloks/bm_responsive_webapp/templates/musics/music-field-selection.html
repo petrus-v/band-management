@@ -5,11 +5,11 @@
       <div class="dropdown-trigger">
         <div class="control has-icons-left">
           <input type="text" form="search-music" class="input" id="music-search"
-            placeholder="{{ _t('Search a music...') }}" name="search" hx-post="/musics/dropdown"
-            value="{{music and music.title or '' | default('', true)  }}"
-            hx-on:click="document.getElementById('music-dropdown').classList.toggle('is-active')"
-            hx-on:focus="document.getElementById('music-dropdown').classList.add('is-active')"
-            hx-trigger="keyup changed delay:300ms, load" hx-target="#music-item-dropdown-items" />
+                 placeholder="{{ _t('Search a music...') }}" name="search" hx-post="/musics/dropdown"
+                 value="{{music and music.title or '' | default('', true)  }}"
+                 hx-on:click="document.getElementById('music-dropdown').classList.toggle('is-active')"
+                 hx-on:focus="document.getElementById('music-dropdown').classList.add('is-active')"
+                 hx-trigger="keyup changed delay:300ms, load" hx-target="#music-item-dropdown-items" />
           <span class="icon is-medium is-left">
             <i class="fas fa-music"></i>
           </span>
@@ -19,7 +19,7 @@
         <div class="dropdown-content" id="music-dropdown-items"></div>
       </div>
       <input type="hidden" name="score_music" form="score-form" id="selected-music-uuid"
-        value="{{music and music.uuid or '' | default('', true)  }}" />
+             value="{{music and music.uuid or '' | default('', true)  }}" />
     </div>
     <div class="modal" id="music-modal">
       <div class="modal-background"></div>
