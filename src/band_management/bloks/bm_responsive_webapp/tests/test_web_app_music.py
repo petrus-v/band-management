@@ -16,6 +16,13 @@ def test_connected_musician_search_musics_dropdown(bm, connected_musician):
     assert response.status_code == 200, response.text
 
 
+def test_connected_musician_search_musics_dropdown_filled(
+    bm, connected_musician, zelda_music
+):
+    response = connected_musician.get(f"/musics/dropdown/{zelda_music.uuid}")
+    assert response.status_code == 200, response.text
+
+
 def test_connected_musician_post_music(
     bm,
     connected_musician,
