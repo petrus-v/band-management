@@ -1,5 +1,6 @@
 {% if musics %} {% for music in musics %}
   <div class="dropdown-item music"
+       hx-swap="outerHTML"
        hx-get="/musics/dropdown/{{ music.uuid }}"
        hx-target="#music-field-selection">
     <strong>{{ music.title | highlight(search) | safe }}</strong>
