@@ -51,11 +51,13 @@ def musics(
 
 
 @contextmanager
-def _search_musics(ab_registry, request, search, token_data):
+def _search_musics(ab_registry, request, search, token_data, active_band: bool = False):
     with registry_transaction(ab_registry) as anyblok:
-        _get_musician_from_token(anyblok, token_data)
+        musician = _get_musician_from_token(anyblok, token_data)
         BM = anyblok.BandManagement
-        musics_query = BM.Music.query_any(search)
+        musics_query = BM.Music.query_any(
+            search, band=musician.active_band if active_band else None
+        )
         musics_query = musics_query.order_by(
             BM.Music.title,
             BM.Music.composer,
@@ -103,13 +105,29 @@ def search_dropdown_musics(
     search: Annotated[str, Form()],
     ab_registry: "Registry" = Depends(get_registry),
 ):
-    with _search_musics(ab_registry, request, search, token_data) as (anyblok, musics):
+    with registry_transaction(ab_registry) as anyblok:
+        musician = _get_musician_from_token(anyblok, token_data)
+        BM = anyblok.BandManagement
+        band = musician.active_band
+        musics_in_band = (
+            BM.Music.query_any(search, band=band)
+            .order_by(BM.Music.title)
+            .limit(5)
+            .all()
+        )
+        musics_others = (
+            BM.Music.query_any(search, band_exclude=band)
+            .order_by(BM.Music.title)
+            .limit(5)
+            .all()
+        )
         response = templates.TemplateResponse(
             name="musics/music-field-selection-items.html",
             request=request,
             context={
                 **_prepare_context(anyblok, request, token_data),
-                "musics": musics.limit(7).all(),
+                "musics_in_band": musics_in_band,
+                "musics_others": musics_others,
                 "search": search,
             },
         )

@@ -52,7 +52,7 @@ class Music(Mixin.PrimaryColumn):
         return band in self.bands
 
     @classmethod
-    def query_any(cls, search: str):
+    def query_any(cls, search: str, band=None, band_exclude=None):
         term_filter = sa.or_(
             cls.title.ilike(f"%{search}%"),
             cls.composer.ilike(f"%{search}%"),
@@ -60,4 +60,8 @@ class Music(Mixin.PrimaryColumn):
         )
         term_filter.description = "or-search-clause"
         musics_query = cls.query().filter(term_filter)
+        if band:
+            musics_query = musics_query.filter(cls.bands.contains(band))
+        if band_exclude:
+            musics_query = musics_query.filter(~cls.bands.contains(band_exclude))
         return musics_query

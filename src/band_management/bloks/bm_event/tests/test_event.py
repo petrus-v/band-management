@@ -138,21 +138,22 @@ def test_update_event_unknown_music(bm, event, new_music):
 
 def test_update_event_non_band_related_music(bm, event, new_music, music_without_band):
     new_uuid = uuid7()
-    with pytest.raises(
-        ValueError,
-        match=f"This music {music_without_band.title} is not played by the current band {event.band.name}",
-    ):
-        event.update_event_musics(
-            [str(new_uuid), str(new_music.uuid)],
-            [
-                str(music_without_band.uuid),
-                str(new_music.uuid),
-            ],
-            [
-                "Unknown music",
-                "comment new music",
-            ],
-        )
+    # 1. Add music not in band -> Should SUCCESS and AUTO-LINK
+    event.update_event_musics(
+        [str(new_uuid), str(new_music.uuid)],
+        [
+            str(music_without_band.uuid),
+            str(new_music.uuid),
+        ],
+        [
+            "Auto linked music",
+            "comment new music",
+        ],
+    )
+
+    # Verify music is now in the band!
+    assert music_without_band.is_played_by(event.band)
+    assert len(event.musics) == 2
 
 
 def test_event_copy(bm, event):

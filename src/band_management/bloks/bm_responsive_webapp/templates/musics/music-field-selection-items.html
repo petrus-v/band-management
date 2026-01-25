@@ -1,23 +1,30 @@
-{% if musics %} {% for music in musics %}
-  <div class="dropdown-item music"
-       hx-swap="outerHTML"
-       hx-get="/musics/dropdown/{{ music.uuid }}"
-       hx-target="#music-field-selection">
-    <strong>{{ music.title | highlight(search) | safe }}</strong>
-    {% if music.dance %} -
-      <span>{{ music.dance }}</span>
-    {% endif %}
-    {%- if music.composer %} -
-      <span>{{ music.composer | highlight(search) | safe }}</span>
-    {%- endif %}
-    {%- if music.author %} -
-      <span>{{ music.author | highlight(search) | safe }}</span>
-    {%- endif %}
-    {%- if music.musicbrainz_artists %} -
-      <span>{{ music.musicbrainz_artists | highlight(search) | safe }}</span>
-    {%- endif %}
-  </div>
-{% endfor %} {% else %}
+{% if musics_in_band %}
+  <div class="dropdown-divider"></div>
+  <div class="dropdown-item"><strong>{% trans %}Musics in the band{% endtrans %}</strong></div>
+  {% for music in musics_in_band %}
+    <div class="dropdown-item music" hx-swap="outerHTML" hx-get="/musics/dropdown/{{ music.uuid }}"
+         hx-target="#music-field-selection">
+      <strong>{{ music.title | highlight(search) | safe }}</strong>
+      {% if music.dance %} - <span>{{ music.dance }}</span> {% endif %}
+      {%- if music.composer %} - <span>{{ music.composer | highlight(search) | safe }}</span> {%- endif %}
+    </div>
+  {% endfor %}
+{% endif %}
+
+{% if musics_others %}
+  <div class="dropdown-divider"></div>
+  <div class="dropdown-item"><strong>{% trans %}Other musics{% endtrans %}</strong></div>
+  {% for music in musics_others %}
+    <div class="dropdown-item music" hx-swap="outerHTML" hx-get="/musics/dropdown/{{ music.uuid }}"
+         hx-target="#music-field-selection">
+      <strong>{{ music.title | highlight(search) | safe }}</strong>
+      {% if music.dance %} - <span>{{ music.dance }}</span> {% endif %}
+      {%- if music.composer %} - <span>{{ music.composer | highlight(search) | safe }}</span> {%- endif %}
+    </div>
+  {% endfor %}
+{% endif %}
+
+{% if not musics_in_band and not musics_others %}
   <a href="#" class="dropdown-item js-modal-trigger"
      hx-get="/music/prepare?next_action={{ NextAction.EDIT_MODAL_FROM_VIEW }}&music_name={{ search }}"
      hx-target="#music-modal-content" data-target="music-modal" hx-trigger="click" onclick="openModal(this)">

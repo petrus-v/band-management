@@ -15,8 +15,8 @@ class Music:
     )
 
     @classmethod
-    def query_any(cls, search: str):
-        musics_query = super().query_any(search)
+    def query_any(cls, search: str, **kwargs):
+        musics_query = super().query_any(search, **kwargs)
         for where_clause in musics_query.sql_statement._where_criteria:
             if where_clause.description == "or-search-clause":
                 where_clause.clauses += (cls.musicbrainz_artists.ilike(f"%{search}%"),)

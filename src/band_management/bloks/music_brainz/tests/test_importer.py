@@ -142,3 +142,33 @@ def test_parser_03(anyblok, work_file):
     ):
         sync(anyblok_registry=False)
         sync_mock.assert_not_called()
+
+
+def test_import_missing_artist_name(anyblok):
+    import io
+    import json
+    from uuid import uuid4
+
+    # recording with a relation that has NO artist name
+    music_uuid = str(uuid4())
+    data = {
+        "id": music_uuid,
+        "title": "Missing Artist Title",
+        "relations": [
+            {
+                "target-type": "artist",
+                "type": "composer",
+                "artist": {},  # No "name" key here
+            }
+        ],
+    }
+    anyblok.MusicBrainz.synchronize(
+        io.StringIO(json.dumps(data)),
+        commit=False,
+    )
+    music = (
+        anyblok.BandManagement.Music.query()
+        .filter_by(musicbrainz_uuid=music_uuid)
+        .one()
+    )
+    assert music.composer == ""  # should be empty because relation was skipped

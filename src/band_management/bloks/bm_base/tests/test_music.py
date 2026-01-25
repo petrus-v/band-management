@@ -19,8 +19,22 @@ def test_update_bands_add_allowed(
     assert set(elle_music.bands) == set([pamh_band, trib_band])
 
 
-def test_query_any(bm, elle_music):
+def test_query_any(bm, elle_music, pamh_band, trib_band):
+    # 1. basic search
     query = bm.Music.query_any("elle")
+    assert elle_music in query.all()
+
+    # 2. search with band filter
+    # zelda is in pamh_band, elle is NOT in pamh_band (usually)
+    # let's make sure
+    if pamh_band in elle_music.bands:
+        elle_music.bands.remove(pamh_band)
+
+    query = bm.Music.query_any("elle", band=pamh_band)
+    assert elle_music not in query.all()
+
+    # 3. search with band_exclude filter
+    query = bm.Music.query_any("elle", band_exclude=pamh_band)
     assert elle_music in query.all()
 
 
@@ -41,3 +55,14 @@ def test_ensure_musician_active_band_already_present(
     joe_musician.active_band = tradamuse_band
     zelda_music.ensure_musician_active_band(joe_musician)
     assert tradamuse_band in zelda_music.bands
+
+
+def test_ensure_musician_active_band_not_present(elle_music, joe_musician, pamh_band):
+    # joe is member of pamh
+    joe_musician.active_band = pamh_band
+    if pamh_band in elle_music.bands:
+        elle_music.bands.remove(pamh_band)
+
+    assert pamh_band not in elle_music.bands
+    elle_music.ensure_musician_active_band(joe_musician)
+    assert pamh_band in elle_music.bands
