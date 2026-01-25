@@ -150,12 +150,7 @@ class Event(Mixin.PrimaryColumn):
                 )
 
             if not music.is_played_by(self.band):
-                raise ValueError(
-                    _t(
-                        "This music %(music)s is not played by the current band %(band)s"
-                    )
-                    % dict(music=music.title, band=self.band.name)
-                )
+                music.bands.append(self.band)
 
             method(
                 uuid=event_music_uuid,

@@ -25,7 +25,7 @@ setup-tests: ## install python project dependencies for tests
 	uv run anyblok_createdb --with-demo -c app.test.cfg || uv run anyblok_updatedb -c app.test.cfg
 
 test: ## launch unit tests
-	ANYBLOK_CONFIG_FILE=app.test.cfg uv run pytest -v -s src/
+	ANYBLOK_CONFIG_FILE=app.test.cfg uv run pytest -v -s src/ --cov=band_management --cov-report=term-missing
 
 translations: ## Regenerate pot file and merges translations
 	uvx pre-commit run --all-files

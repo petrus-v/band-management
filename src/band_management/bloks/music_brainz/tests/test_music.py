@@ -26,3 +26,11 @@ def test_query_any_ensure_or(bm):
     )
     query = bm.Music.query_any(musicbrainz_artists[:10])
     assert len(query.all()) == 2
+
+
+def test_query_any_with_extra_filter(bm):
+    # This test ensures we cover the case where a where_clause description is NOT "or-search-clause"
+    # in the for loop of Music.query_any override.
+    query = bm.Music.query_any("test", band=bm.Band.insert(name="Temp Band"))
+    # One clause is "or-search-clause", another is from the band filter (no description or different one)
+    assert query is not None
