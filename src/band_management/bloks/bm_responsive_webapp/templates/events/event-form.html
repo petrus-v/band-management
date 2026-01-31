@@ -31,8 +31,8 @@
 <div class="field">
   <label class="label">{{ _t("Comment") }}</label>
   <div class="control">
-    <textarea class="textarea input" form="event-form" name="comment"
-              placeholder="{{ _t('Comment') }}">{{ event.comment | default('', true) }}</textarea>
+    <input type="hidden" form="event-form" name="comment" value="{{ event.comment | default('', true) }}" />
+    <div class="quill-editor" data-input="comment">{{ event.comment | default('', true) | safe }}</div>
   </div>
   <p class="help">{{ _t("Internal notes. These are not shown on the printed document.") }}</p>
 </div>
@@ -40,8 +40,8 @@
 <div class="field">
   <label class="label">{{ _t("Header") }}</label>
   <div class="control">
-    <textarea class="textarea input" form="event-form" name="header"
-              placeholder="{{ _t('Header') }}">{{ event.header | default('', true) }}</textarea>
+    <input type="hidden" form="event-form" name="header" value="{{ event.header | default('', true) }}" />
+    <div class="quill-editor" data-input="header">{{ event.header | default('', true) | safe }}</div>
   </div>
   <p class="help">{{ _t("Event header: shown before the list of musics on the printed document.") }}</p>
 </div>
@@ -60,7 +60,8 @@
         <p class="music-description"></p>
         <input type="hidden" form="event-form" name="event_music_uuids" class="event-music-uuid" />
         <input type="hidden" form="event-form" name="event_music_music_uuids" class="music-uuid" />
-        <textarea class="textarea input" form="event-form" name="event_music_comments"></textarea>
+        <input type="hidden" form="event-form" name="event_music_comments" class="event-music-comment-input" />
+        <div class="quill-editor music-comment-editor"></div>
       </div>
     </div>
     <div class="media-right">
@@ -93,8 +94,8 @@
               <br />
               <input type="hidden" form="event-form" name="event_music_uuids" value="{{event_music.uuid}}" />
               <input type="hidden" form="event-form" name="event_music_music_uuids" value="{{event_music.music.uuid}}" />
-              <textarea class="textarea input" form="event-form"
-                        name="event_music_comments">{{event_music.comment}}</textarea>
+              <input type="hidden" form="event-form" name="event_music_comments" value="{{event_music.comment}}" />
+              <div class="quill-editor music-comment-editor">{{event_music.comment|safe}}</div>
             </p>
           </div>
         </div>
@@ -110,8 +111,8 @@
 <div class="field">
   <label class="label">{{ _t("Footer") }}</label>
   <div class="control">
-    <textarea class="textarea input" form="event-form" name="footer"
-              placeholder="{{ _t('Footer') }}">{{ event.footer | default('', true) }}</textarea>
+    <input type="hidden" form="event-form" name="footer" value="{{ event.footer | default('', true) }}" />
+    <div class="quill-editor" data-input="footer">{{ event.footer | default('', true) | safe }}</div>
   </div>
   <p class="help">{{ _t("Event footer: shown after the list of musics on the printed document.") }}</p>
 </div>

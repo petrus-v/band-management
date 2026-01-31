@@ -78,7 +78,7 @@
                 {% endtrans %}
             </div>
         </div>
-        <p>{{event.header}}</p>
+        <p>{{event.header|safe}}</p>
     </div>
 {% endblock%}
 {% block main_content %}
@@ -98,7 +98,7 @@
                         <th>{{ loop.index }}</th>
                         <td>{{event_music.music.title}}</td>
                         <td>{{event_music.music.dance}}</td>
-                        <td>{{event_music.comment}}</td>
+                        <td>{{event_music.comment|safe}}</td>
                     </tr>
                 {% endfor %}
             </tbody>
@@ -107,6 +107,6 @@
 {% endblock%}
 {% block footer_content %}
     <div id="event_footer">
-        <p>{{event.footer}}</p>
+        <p>{{event.footer|safe}}</p>
     </div>
 {% endblock %}

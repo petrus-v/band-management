@@ -12,6 +12,7 @@ from anyblok.column import String, Text, DateTime
 from random import choices, randint
 
 from band_management import _t
+from band_management.sanitizer import sanitize_html
 
 register = Declarations.register
 Mixin = Declarations.Mixin
@@ -157,7 +158,7 @@ class Event(Mixin.PrimaryColumn):
                 event=self,
                 music_uuid=event_music_music_uuid,
                 sequence=position,
-                comment=event_music_comment,
+                comment=sanitize_html(event_music_comment),
             )
 
     @classmethod
