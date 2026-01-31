@@ -419,6 +419,10 @@ msgstr ""
 msgid "Musics"
 msgstr ""
 
+#: src/band_management/bloks/bm_responsive_webapp/templates/musics/music-field-selection-items.html
+msgid "Musics in the band"
+msgstr ""
+
 #: src/band_management/bloks/bm_responsive_webapp/templates/bands/search-result.html
 #: src/band_management/bloks/bm_responsive_webapp/templates/home.html
 #, python-format
@@ -482,6 +486,10 @@ msgstr ""
 #: src/band_management/bloks/bm_responsive_webapp/templates/login.html
 #: src/band_management/bloks/bm_responsive_webapp/templates/reset-password.html
 msgid "Oops something went wrong"
+msgstr ""
+
+#: src/band_management/bloks/bm_responsive_webapp/templates/musics/music-field-selection-items.html
+msgid "Other musics"
 msgstr ""
 
 #: src/band_management/bloks/bm_responsive_webapp/__init__.py
@@ -642,11 +650,6 @@ msgstr ""
 
 #: src/band_management/bloks/bm_responsive_webapp/templates/musics/music-field-selection.html
 msgid "This is the music linked to the current score"
-msgstr ""
-
-#: src/band_management/bloks/bm_event/event.py
-#, python-format
-msgid "This music %(music)s is not played by the current band %(band)s"
 msgstr ""
 
 #: src/band_management/bloks/bm_responsive_webapp/templates/musics/music-form.html

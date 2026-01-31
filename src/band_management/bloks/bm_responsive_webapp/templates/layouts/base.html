@@ -14,7 +14,8 @@
       <link rel="stylesheet" href="/static/css/sortable.css" />
       <script src="https://unpkg.com/htmx.org@1.9.12/dist/htmx.min.js"></script>
       <script src="https://cdn.jsdelivr.net/npm/sortablejs@v1.15.6/Sortable.min.js"></script>
-      <!-- <script src="https://unpkg.com/uuidv7@1.0.2/dist/index.js"></script> -->
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css" />
+      <script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
     </head>
 {% endif %}
 
@@ -76,7 +77,8 @@
       </aside>
       <main class="column">
         <div id="error-message"></div>
-        {% block main %} {% endblock %}</main>
+        {% block main %} {% endblock %}
+      </main>
     </div>
   </div>
 

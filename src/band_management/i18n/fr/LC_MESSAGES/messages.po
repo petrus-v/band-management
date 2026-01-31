@@ -436,6 +436,10 @@ msgstr "Musiciens : %(count)s"
 msgid "Musics"
 msgstr "Musiques"
 
+#: src/band_management/bloks/bm_responsive_webapp/templates/musics/music-field-selection-items.html
+msgid "Musics in the band"
+msgstr "Musiques du groupe"
+
 #: src/band_management/bloks/bm_responsive_webapp/templates/bands/search-result.html
 #: src/band_management/bloks/bm_responsive_webapp/templates/home.html
 #, python-format
@@ -500,6 +504,10 @@ msgstr "Seules les partitions non liées à une musique peuvent être supprimée
 #: src/band_management/bloks/bm_responsive_webapp/templates/reset-password.html
 msgid "Oops something went wrong"
 msgstr "hoo non ! Quelque chose s'est mal passée…"
+
+#: src/band_management/bloks/bm_responsive_webapp/templates/musics/music-field-selection-items.html
+msgid "Other musics"
+msgstr "Autres musiques"
 
 #: src/band_management/bloks/bm_responsive_webapp/__init__.py
 #, python-format
@@ -663,13 +671,6 @@ msgstr "Crédits à la personne/organisation ayant écrit la partition."
 msgid "This is the music linked to the current score"
 msgstr "Musique liée à cette partition"
 
-#: src/band_management/bloks/bm_event/event.py
-#, python-format
-msgid "This music %(music)s is not played by the current band %(band)s"
-msgstr ""
-"Impossible de lier cette musique %(music)s à l’événement qui n'est pas joué "
-"par le groupe %(band)s."
-
 #: src/band_management/bloks/bm_responsive_webapp/templates/musics/music-form.html
 msgid "Title"
 msgstr "Titre"
@@ -708,8 +709,8 @@ msgid ""
 "You must be part of at least one band, create an other one if you want to "
 "leave the current one"
 msgstr ""
-"Vous devez faire partie d'au moins un groupe, créez-en un autre si vous voulez "
-"quitter le groupe actuel"
+"Vous devez faire partie d'au moins un groupe, créez-en un autre si vous "
+"souhaitez quitter le groupe actuel"
 
 #: src/band_management/bloks/bm_base/member.py
 #, python-format

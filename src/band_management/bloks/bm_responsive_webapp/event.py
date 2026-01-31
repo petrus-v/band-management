@@ -8,6 +8,7 @@ from band_management.bloks.http_auth_base.schemas.auth import (
     TokenDataSchema,
 )
 from band_management import _t
+from band_management.sanitizer import sanitize_html
 from band_management.tools import slugify
 from band_management.bloks.bm_responsive_webapp.paging import paging_query
 from band_management.bloks.bm_responsive_webapp.fastapi_utils import (
@@ -217,9 +218,9 @@ def add_music(
             date=event_date,
             band_uuid=band_uuid,
             place=place,
-            comment=comment,
-            header=header,
-            footer=footer,
+            comment=sanitize_html(comment),
+            header=sanitize_html(header),
+            footer=sanitize_html(footer),
         )
         event.update_event_musics(
             event_music_uuids or [],
@@ -265,9 +266,9 @@ def update_music(
         event.date = event_date
         event.band_uuid = band_uuid
         event.place = place
-        event.comment = comment
-        event.header = header
-        event.footer = footer
+        event.comment = sanitize_html(comment)
+        event.header = sanitize_html(header)
+        event.footer = sanitize_html(footer)
         event.update_event_musics(
             event_music_uuids or [],
             event_music_music_uuids or [],
